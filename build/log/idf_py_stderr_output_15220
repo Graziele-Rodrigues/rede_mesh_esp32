@@ -1,0 +1,60 @@
+CMake Warning at C:/Users/grazi/esp/v5.4/esp-idf/components/partition_table/project_include.cmake:24 (message):
+  Partition table CSV file C:/Users/grazi/rede_mesh_esp32/partitions.csv not
+  found.  Change custom partition CSV path in menuconfig.
+Call Stack (most recent call first):
+  C:/Users/grazi/esp/v5.4/esp-idf/tools/cmake/build.cmake:457 (include)
+  C:/Users/grazi/esp/v5.4/esp-idf/tools/cmake/build.cmake:690 (__build_process_project_includes)
+  C:/Users/grazi/esp/v5.4/esp-idf/tools/cmake/project.cmake:710 (idf_build_process)
+  CMakeLists.txt:6 (project)
+
+
+Traceback (most recent call last):
+  File "C:\Users\grazi\esp\v5.4\esp-idf\components\partition_table\parttool.py", line 362, in <module>
+    main()
+  File "C:\Users\grazi\esp\v5.4\esp-idf\components\partition_table\parttool.py", line 331, in main
+    target = ParttoolTarget(**target_args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grazi\esp\v5.4\esp-idf\components\partition_table\parttool.py", line 86, in __init__
+    with open(partition_table_file, 'rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'C:/Users/grazi/rede_mesh_esp32/partitions.csv'
+Traceback (most recent call last):
+  File "C:\Users\grazi\esp\v5.4\esp-idf\components\partition_table\parttool.py", line 362, in <module>
+    main()
+  File "C:\Users\grazi\esp\v5.4\esp-idf\components\partition_table\parttool.py", line 331, in main
+    target = ParttoolTarget(**target_args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grazi\esp\v5.4\esp-idf\components\partition_table\parttool.py", line 86, in __init__
+    with open(partition_table_file, 'rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'C:/Users/grazi/rede_mesh_esp32/partitions.csv'
+Traceback (most recent call last):
+  File "C:\Users\grazi\esp\v5.4\esp-idf\components\partition_table\parttool.py", line 362, in <module>
+    main()
+  File "C:\Users\grazi\esp\v5.4\esp-idf\components\partition_table\parttool.py", line 331, in main
+    target = ParttoolTarget(**target_args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grazi\esp\v5.4\esp-idf\components\partition_table\parttool.py", line 86, in __init__
+    with open(partition_table_file, 'rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'C:/Users/grazi/rede_mesh_esp32/partitions.csv'
+Traceback (most recent call last):
+  File "C:\Users\grazi\esp\v5.4\esp-idf\components\partition_table\parttool.py", line 362, in <module>
+    main()
+  File "C:\Users\grazi\esp\v5.4\esp-idf\components\partition_table\parttool.py", line 331, in main
+    target = ParttoolTarget(**target_args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grazi\esp\v5.4\esp-idf\components\partition_table\parttool.py", line 86, in __init__
+    with open(partition_table_file, 'rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'C:/Users/grazi/rede_mesh_esp32/partitions.csv'
+Traceback (most recent call last):
+  File "C:\Users\grazi\esp\v5.4\esp-idf\components\partition_table\parttool.py", line 362, in <module>
+    main()
+  File "C:\Users\grazi\esp\v5.4\esp-idf\components\partition_table\parttool.py", line 331, in main
+    target = ParttoolTarget(**target_args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\grazi\esp\v5.4\esp-idf\components\partition_table\parttool.py", line 86, in __init__
+    with open(partition_table_file, 'rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'C:/Users/grazi/rede_mesh_esp32/partitions.csv'

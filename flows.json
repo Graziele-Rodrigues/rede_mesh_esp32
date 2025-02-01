@@ -8,564 +8,6 @@
         "env": []
     },
     {
-        "id": "3d25b288341d60f1",
-        "type": "mqtt in",
-        "z": "fe162edfc74f05cc",
-        "name": "",
-        "topic": "/topic/route_table",
-        "qos": "0",
-        "datatype": "auto-detect",
-        "broker": "38ecf3d13bf18e0a",
-        "nl": false,
-        "rap": false,
-        "inputs": 0,
-        "x": 312,
-        "y": 359,
-        "wires": [
-            [
-                "35cdaf9ceaadee25",
-                "2ce41e7c60751a40"
-            ]
-        ]
-    },
-    {
-        "id": "35cdaf9ceaadee25",
-        "type": "debug",
-        "z": "fe162edfc74f05cc",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 572,
-        "y": 319,
-        "wires": []
-    },
-    {
-        "id": "2ce41e7c60751a40",
-        "type": "ui_template",
-        "z": "fe162edfc74f05cc",
-        "group": "962b785506e46f5c",
-        "name": "",
-        "order": 4,
-        "width": 7,
-        "height": 10,
-        "format": "<!-- Adicione as classes Bootstrap para um melhor estilo -->\n<table class=\"table table-bordered table-striped table-hover\" id=\"routeTable\">\n    <thead>\n        <tr>\n            <th>Endereços MAC</th>\n        </tr>\n    </thead>\n    <tbody></tbody>\n</table>\n\n<!-- Adicione estilos personalizados para ajustes finos -->\n<style>\n    #routeTable th {\n        background-color: #f8f9fa; /* Cor de fundo leve para os cabeçalhos */\n        text-align: center; /* Alinha o texto ao centro */\n    }\n    #routeTable td {\n        text-align: center; /* Alinha o texto ao centro */\n    }\n    #routeTable tr:nth-child(odd) {\n        background-color: #f1f1f1; /* Cor de fundo alternada para linhas ímpares */\n    }\n</style>\n\n<script>\n    (function(scope) {\n        scope.$watch('msg.payload', function(data) {\n            if (!data || !data.route_table) return;\n\n            let tableBody = document.querySelector('#routeTable tbody');\n            tableBody.innerHTML = ''; // Limpa a tabela existente\n\n            data.route_table.forEach((mac, index) => {\n                let row = `<tr>\n                    <td>${mac}</td>\n                </tr>`;\n                tableBody.innerHTML += row;\n            });\n        });\n    })(scope);\n</script>\n",
-        "storeOutMessages": true,
-        "fwdInMessages": true,
-        "resendOnRefresh": true,
-        "templateScope": "local",
-        "className": "",
-        "x": 560,
-        "y": 440,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "74449e3cb4fe5856",
-        "type": "mqtt in",
-        "z": "fe162edfc74f05cc",
-        "name": "",
-        "topic": "/topic/ip_mesh",
-        "qos": "0",
-        "datatype": "auto-detect",
-        "broker": "38ecf3d13bf18e0a",
-        "nl": false,
-        "rap": false,
-        "inputs": 0,
-        "x": 830,
-        "y": 380,
-        "wires": [
-            [
-                "ab8d8459919fc07d",
-                "02b92814b2ea7ad9"
-            ]
-        ]
-    },
-    {
-        "id": "ab8d8459919fc07d",
-        "type": "debug",
-        "z": "fe162edfc74f05cc",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1100,
-        "y": 340,
-        "wires": []
-    },
-    {
-        "id": "02b92814b2ea7ad9",
-        "type": "ui_template",
-        "z": "fe162edfc74f05cc",
-        "group": "962b785506e46f5c",
-        "name": "",
-        "order": 2,
-        "width": 7,
-        "height": 10,
-        "format": "<table class=\"table\" id=\"ipTable\">\n    <thead>\n        <tr>\n            <th>Camada</th>\n            <th>Endereço IP</th>\n        </tr>\n    </thead>\n    <tbody></tbody>\n</table>\n\n<script>\n    (function(scope) {\n        scope.$watch('msg.payload', function(data) {\n            if (!data) return;\n\n            // Extrair valores de 'layer' e 'IP' da string\n            const regex = /layer:(\\d+) IP:(\\d+\\.\\d+\\.\\d+\\.\\d+)/;\n            const match = data.match(regex);\n            if (!match) return;\n\n            const layer = match[1];\n            const ip = match[2];\n\n            // Verifica se já existe uma linha na tabela com o mesmo 'layer' e 'IP'\n            let tableBody = document.querySelector('#ipTable tbody');\n            if (tableBody) {\n                let rows = tableBody.querySelectorAll('tr');\n                let exists = false;\n\n                rows.forEach(row => {\n                    let cells = row.querySelectorAll('td');\n                    if (cells.length > 1 && cells[0].innerText === layer && cells[1].innerText === ip) {\n                        exists = true;\n                    }\n                });\n\n                if (!exists) {\n                    let row = `<tr>\n                        <td>${layer}</td>\n                        <td>${ip}</td>\n                    </tr>`;\n                    tableBody.innerHTML += row; // Adiciona a nova linha somente se não existir\n                }\n            }\n        });\n    })(scope);\n</script>\n",
-        "storeOutMessages": true,
-        "fwdInMessages": true,
-        "resendOnRefresh": true,
-        "templateScope": "local",
-        "className": "",
-        "x": 1080,
-        "y": 480,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "c86e9820181a4138",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 1,
-        "width": 6,
-        "height": 1
-    },
-    {
-        "id": "5bc6effc1ddc7f47",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 3,
-        "width": 1,
-        "height": 1
-    },
-    {
-        "id": "ff37e392e07caee3",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 5,
-        "width": 9,
-        "height": 1
-    },
-    {
-        "id": "989da50077a834fe",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 6,
-        "width": 6,
-        "height": 1
-    },
-    {
-        "id": "7a93f05f60187393",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 7,
-        "width": 1,
-        "height": 1
-    },
-    {
-        "id": "8cf770615c597d5a",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 8,
-        "width": 9,
-        "height": 1
-    },
-    {
-        "id": "0492d31db728a062",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 9,
-        "width": 6,
-        "height": 1
-    },
-    {
-        "id": "168694c739f2d2b0",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 10,
-        "width": 1,
-        "height": 1
-    },
-    {
-        "id": "1c6c7546d12dfb62",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 11,
-        "width": 9,
-        "height": 1
-    },
-    {
-        "id": "709de711085d6dcd",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 12,
-        "width": 6,
-        "height": 1
-    },
-    {
-        "id": "221162159b7adcab",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 13,
-        "width": 1,
-        "height": 1
-    },
-    {
-        "id": "08940351eac58c88",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 14,
-        "width": 9,
-        "height": 1
-    },
-    {
-        "id": "4d39380a373cf62a",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 15,
-        "width": 6,
-        "height": 1
-    },
-    {
-        "id": "ffd87006f40fbf34",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 16,
-        "width": 1,
-        "height": 1
-    },
-    {
-        "id": "07e667a840905c10",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 17,
-        "width": 9,
-        "height": 1
-    },
-    {
-        "id": "e90a7c99921270a5",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 18,
-        "width": 6,
-        "height": 1
-    },
-    {
-        "id": "82e53079e24c1f22",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 19,
-        "width": 1,
-        "height": 1
-    },
-    {
-        "id": "c8e91c262e54c745",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 20,
-        "width": 9,
-        "height": 1
-    },
-    {
-        "id": "dbdbe5b74eb6f5a5",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 21,
-        "width": 6,
-        "height": 1
-    },
-    {
-        "id": "baad2662382425ab",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 22,
-        "width": 1,
-        "height": 1
-    },
-    {
-        "id": "7c4a22717580436c",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 23,
-        "width": 9,
-        "height": 1
-    },
-    {
-        "id": "b12cd4e663867f66",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 24,
-        "width": 6,
-        "height": 1
-    },
-    {
-        "id": "5f9dd37ba5f49037",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 25,
-        "width": 1,
-        "height": 1
-    },
-    {
-        "id": "ddcad68d5b931ac8",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 26,
-        "width": 9,
-        "height": 1
-    },
-    {
-        "id": "e11c2b408d95c45b",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 27,
-        "width": 6,
-        "height": 1
-    },
-    {
-        "id": "f1b18a50a316219f",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 28,
-        "width": 1,
-        "height": 1
-    },
-    {
-        "id": "7377cb8d41a53536",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 29,
-        "width": 9,
-        "height": 1
-    },
-    {
-        "id": "2bc4e3b11d5ef6b4",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 30,
-        "width": 6,
-        "height": 1
-    },
-    {
-        "id": "f66fc3d329be5686",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 31,
-        "width": 1,
-        "height": 1
-    },
-    {
-        "id": "21f76f9b59b138fb",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 32,
-        "width": 9,
-        "height": 1
-    },
-    {
-        "id": "e553a02c2e006abd",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 33,
-        "width": 5,
-        "height": 1
-    },
-    {
-        "id": "ed2c230079a1755e",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 35,
-        "width": 8,
-        "height": 1
-    },
-    {
-        "id": "f294c7dbfe222cb4",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 36,
-        "width": 5,
-        "height": 1
-    },
-    {
-        "id": "6e5999ee31a1f0d1",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 37,
-        "width": 8,
-        "height": 1
-    },
-    {
-        "id": "dda136c29e78837c",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 38,
-        "width": 5,
-        "height": 1
-    },
-    {
-        "id": "6d8805e5580720cf",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 39,
-        "width": 8,
-        "height": 1
-    },
-    {
-        "id": "9823d0dc8e8486c4",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 40,
-        "width": 5,
-        "height": 1
-    },
-    {
-        "id": "8ecbe7658045e6cd",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 41,
-        "width": 8,
-        "height": 1
-    },
-    {
-        "id": "d2c2d9a368d84236",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 42,
-        "width": 5,
-        "height": 1
-    },
-    {
-        "id": "7ce74244c4afb483",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 43,
-        "width": 8,
-        "height": 1
-    },
-    {
-        "id": "421103698a018417",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 44,
-        "width": 5,
-        "height": 1
-    },
-    {
-        "id": "f755e0df1245df2b",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 45,
-        "width": 8,
-        "height": 1
-    },
-    {
-        "id": "8aee5ad0b9d1cc1f",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 46,
-        "width": 5,
-        "height": 1
-    },
-    {
-        "id": "fb7ea115d8126637",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "962b785506e46f5c",
-        "order": 47,
-        "width": 8,
-        "height": 1
-    },
-    {
         "id": "38ecf3d13bf18e0a",
         "type": "mqtt-broker",
         "name": "",
@@ -597,22 +39,707 @@
         "sessionExpiry": ""
     },
     {
-        "id": "962b785506e46f5c",
+        "id": "fd8240562a77573a",
         "type": "ui_group",
-        "name": "Monitoramente rede",
-        "tab": "17c107cbb68e5486",
+        "name": "Rede Mesh",
+        "tab": "31235f87aab3a89d",
         "order": 1,
         "disp": true,
-        "width": 30,
+        "width": 6,
         "collapse": false,
         "className": ""
     },
     {
-        "id": "17c107cbb68e5486",
+        "id": "31235f87aab3a89d",
         "type": "ui_tab",
-        "name": "Rede Mesh",
+        "name": "Home",
         "icon": "dashboard",
         "disabled": false,
         "hidden": false
+    },
+    {
+        "id": "d7cacd98f609ab2b",
+        "type": "ui_base",
+        "theme": {
+            "name": "theme-light",
+            "lightTheme": {
+                "default": "#0094CE",
+                "baseColor": "#0094CE",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": true,
+                "reset": false
+            },
+            "darkTheme": {
+                "default": "#097479",
+                "baseColor": "#953232",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": true,
+                "reset": false
+            },
+            "customTheme": {
+                "name": "Untitled Theme 1",
+                "default": "#4B7930",
+                "baseColor": "#4B7930",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+            },
+            "themeState": {
+                "base-color": {
+                    "default": "#0094CE",
+                    "value": "#0094CE",
+                    "edited": true
+                },
+                "page-titlebar-backgroundColor": {
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-backgroundColor": {
+                    "value": "#fafafa",
+                    "edited": false
+                },
+                "page-sidebar-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-textColor": {
+                    "value": "#1bbfff",
+                    "edited": false
+                },
+                "group-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "widget-textColor": {
+                    "value": "#111111",
+                    "edited": false
+                },
+                "widget-backgroundColor": {
+                    "value": "#0094ce",
+                    "edited": false
+                },
+                "widget-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "base-font": {
+                    "value": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+                }
+            },
+            "angularTheme": {
+                "primary": "indigo",
+                "accents": "blue",
+                "warn": "red",
+                "background": "grey",
+                "palette": "light"
+            }
+        },
+        "site": {
+            "name": "Node-RED Dashboard",
+            "hideToolbar": "false",
+            "allowSwipe": "false",
+            "lockMenu": "false",
+            "allowTempTheme": "true",
+            "dateFormat": "DD/MM/YYYY",
+            "sizes": {
+                "sx": 100,
+                "sy": 50,
+                "gx": 6,
+                "gy": 6,
+                "cx": 6,
+                "cy": 6,
+                "px": 0,
+                "py": 0
+            }
+        }
+    },
+    {
+        "id": "18f9323d04fcc8b2",
+        "type": "mqtt in",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "topic": "/topic/mesh/rssi",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "38ecf3d13bf18e0a",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 220,
+        "y": 200,
+        "wires": [
+            [
+                "4ff73e15e3ada7d4",
+                "bd68437f7ae2ba82",
+                "0f99c5e88d6f4720"
+            ]
+        ]
+    },
+    {
+        "id": "4ff73e15e3ada7d4",
+        "type": "ui_chart",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "group": "fd8240562a77573a",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "label": " Gráfico de RSSI do nó pai",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 550,
+        "y": 200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "fd04755bc7b518fd",
+        "type": "mqtt in",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "topic": "/topic/mesh/latency",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "38ecf3d13bf18e0a",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 230,
+        "y": 360,
+        "wires": [
+            [
+                "cbcb47fee246dfcd",
+                "34f71842cc81f379"
+            ]
+        ]
+    },
+    {
+        "id": "bd68437f7ae2ba82",
+        "type": "ui_gauge",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "group": "fd8240562a77573a",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "rssi",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": 10,
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 510,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "cbcb47fee246dfcd",
+        "type": "ui_numeric",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "label": "Latencia",
+        "tooltip": "",
+        "group": "fd8240562a77573a",
+        "order": 8,
+        "width": 0,
+        "height": 0,
+        "wrap": false,
+        "passthru": true,
+        "topic": "topic",
+        "topicType": "msg",
+        "format": "{{value}}",
+        "min": 0,
+        "max": 10,
+        "step": 1,
+        "className": "",
+        "x": 500,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8411537f177981b8",
+        "type": "mqtt in",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "topic": "/topic/mesh/success_rate",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "38ecf3d13bf18e0a",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 250,
+        "y": 520,
+        "wires": [
+            [
+                "0fcbf8e32df0c1d6",
+                "c03289de6def833a"
+            ]
+        ]
+    },
+    {
+        "id": "0fcbf8e32df0c1d6",
+        "type": "ui_gauge",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "group": "fd8240562a77573a",
+        "order": 7,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Taxa de sucesso de envio",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": 10,
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 570,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "f8d9be4536bf9874",
+        "type": "mqtt in",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "topic": "/topic/mesh/packet_loss",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "38ecf3d13bf18e0a",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 220,
+        "y": 660,
+        "wires": [
+            [
+                "b68c2916027c8918",
+                "2a21d4d355dd5946"
+            ]
+        ]
+    },
+    {
+        "id": "b68c2916027c8918",
+        "type": "ui_numeric",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "label": "Perda Pacotes",
+        "tooltip": "",
+        "group": "fd8240562a77573a",
+        "order": 6,
+        "width": 0,
+        "height": 0,
+        "wrap": false,
+        "passthru": true,
+        "topic": "topic",
+        "topicType": "msg",
+        "format": "{{value}}",
+        "min": 0,
+        "max": 10,
+        "step": 1,
+        "className": "",
+        "x": 480,
+        "y": 660,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "49be58bd62379053",
+        "type": "mqtt in",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "topic": "/topic/mesh/hops",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "38ecf3d13bf18e0a",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 220,
+        "y": 820,
+        "wires": [
+            [
+                "5c2eac5c186b6472",
+                "035188d8b8c0b290"
+            ]
+        ]
+    },
+    {
+        "id": "5c2eac5c186b6472",
+        "type": "ui_chart",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "group": "fd8240562a77573a",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "label": "Número de Saltos (Hops)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 550,
+        "y": 820,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "06fc49e8d668be09",
+        "type": "mqtt in",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "topic": "/topic/mesh/transmission_frequency",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "38ecf3d13bf18e0a",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 220,
+        "y": 960,
+        "wires": [
+            [
+                "2988a7dff4e4aa96",
+                "33fe4b8fea3b3a0c"
+            ]
+        ]
+    },
+    {
+        "id": "2988a7dff4e4aa96",
+        "type": "ui_chart",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "group": "fd8240562a77573a",
+        "order": 9,
+        "width": 0,
+        "height": 0,
+        "label": "Frequência de Transmissão",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 560,
+        "y": 960,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "0f99c5e88d6f4720",
+        "type": "debug",
+        "z": "fe162edfc74f05cc",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 440,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "34f71842cc81f379",
+        "type": "debug",
+        "z": "fe162edfc74f05cc",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 460,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "c03289de6def833a",
+        "type": "debug",
+        "z": "fe162edfc74f05cc",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 460,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "2a21d4d355dd5946",
+        "type": "debug",
+        "z": "fe162edfc74f05cc",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 440,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "035188d8b8c0b290",
+        "type": "debug",
+        "z": "fe162edfc74f05cc",
+        "name": "debug 7",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 440,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "33fe4b8fea3b3a0c",
+        "type": "debug",
+        "z": "fe162edfc74f05cc",
+        "name": "debug 8",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 460,
+        "y": 900,
+        "wires": []
+    },
+    {
+        "id": "573d67a861533f26",
+        "type": "mqtt in",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "topic": "/topic/route_table",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "38ecf3d13bf18e0a",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 910,
+        "y": 220,
+        "wires": [
+            [
+                "8b0ea0339583dd80",
+                "61c636f4b158bb0a"
+            ]
+        ]
+    },
+    {
+        "id": "8b0ea0339583dd80",
+        "type": "debug",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1170,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "21fb2f687c873502",
+        "type": "mqtt in",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "topic": "/topic/ip_mesh",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "38ecf3d13bf18e0a",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 860,
+        "y": 440,
+        "wires": [
+            [
+                "97aee0cc7523e74f",
+                "1eafb341a22a1bf9"
+            ]
+        ]
+    },
+    {
+        "id": "97aee0cc7523e74f",
+        "type": "debug",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1130,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "61c636f4b158bb0a",
+        "type": "ui_template",
+        "z": "fe162edfc74f05cc",
+        "group": "fd8240562a77573a",
+        "name": "Roteamento",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "format": "<!-- Adicione as classes Bootstrap para um melhor estilo -->\n<table class=\"table table-bordered table-striped table-hover\" id=\"routeTable\">\n    <thead>\n        <tr>\n            <th>Endereços MAC</th>\n        </tr>\n    </thead>\n    <tbody></tbody>\n</table>\n\n<!-- Adicione estilos personalizados para ajustes finos -->\n<style>\n    #routeTable th {\n        background-color: #f8f9fa;\n        /* Cor de fundo leve para os cabeçalhos */\n        text-align: center;\n        /* Alinha o texto ao centro */\n    }\n\n    #routeTable td {\n        text-align: center;\n        /* Alinha o texto ao centro */\n    }\n\n    #routeTable tr:nth-child(odd) {\n        background-color: #f1f1f1;\n        /* Cor de fundo alternada para linhas ímpares */\n    }\n</style>\n\n<script>\n    (function(scope) {\n        scope.$watch('msg.payload', function(data) {\n            if (!data || !data.route_table) return;\n\n            let tableBody = document.querySelector('#routeTable tbody');\n            tableBody.innerHTML = ''; // Limpa a tabela existente\n\n            data.route_table.forEach((mac, index) => {\n                let row = `<tr>\n                    <td>${mac}</td>\n                </tr>`;\n                tableBody.innerHTML += row;\n            });\n        });\n    })(scope);\n</script>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 1170,
+        "y": 280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1eafb341a22a1bf9",
+        "type": "ui_template",
+        "z": "fe162edfc74f05cc",
+        "group": "fd8240562a77573a",
+        "name": "No mensagem",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "format": "<table class=\"table\" id=\"ipTable\">\n    <thead>\n        <tr>\n            <th>Camada</th>\n            <th>Endereço IP</th>\n        </tr>\n    </thead>\n    <tbody></tbody>\n</table>\n\n<script>\n    (function(scope) {\n        scope.$watch('msg.payload', function(data) {\n            if (!data) return;\n\n            // Extrair valores de 'layer' e 'IP' da string\n            const regex = /layer:(\\d+) IP:(\\d+\\.\\d+\\.\\d+\\.\\d+)/;\n            const match = data.match(regex);\n            if (!match) return;\n\n            const layer = match[1];\n            const ip = match[2];\n\n            // Verifica se já existe uma linha na tabela com o mesmo 'layer' e 'IP'\n            let tableBody = document.querySelector('#ipTable tbody');\n            if (tableBody) {\n                let rows = tableBody.querySelectorAll('tr');\n                let exists = false;\n\n                rows.forEach(row => {\n                    let cells = row.querySelectorAll('td');\n                    if (cells.length > 1 && cells[0].innerText === layer && cells[1].innerText === ip) {\n                        exists = true;\n                    }\n                });\n\n                if (!exists) {\n                    let row = `<tr>\n                        <td>${layer}</td>\n                        <td>${ip}</td>\n                    </tr>`;\n                    tableBody.innerHTML += row; // Adiciona a nova linha somente se não existir\n                }\n            }\n        });\n    })(scope);\n</script>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 1160,
+        "y": 500,
+        "wires": [
+            []
+        ]
     }
 ]
