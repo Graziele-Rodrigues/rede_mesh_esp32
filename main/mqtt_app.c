@@ -17,12 +17,27 @@
 static const char *TAG = "mesh_mqtt";
 static esp_mqtt_client_handle_t s_client = NULL;
 
+// Função de callback para processar mensagens MQTT
+void mqtt_callback(char* topic, char* payload) {
+    if (strcmp(topic, "/topic/mesh/restart") == 0) {
+        if (strcmp(payload, "restart_mesh") == 0) {
+            ESP_LOGW(TAG, "Reiniciando a rede Mesh...");
+            vTaskDelay(1000 / portTICK_PERIOD_MS);
+            esp_restart();
+        }
+    }
+}
+
 static esp_err_t mqtt_event_handler_cb(esp_mqtt_event_handle_t event)
 {
     switch (event->event_id) {
         case MQTT_EVENT_CONNECTED:
             ESP_LOGI(TAG, "MQTT_EVENT_CONNECTED");
             if (esp_mqtt_client_subscribe(s_client, "/topic/ip_mesh/key_pressed", 0) < 0) {
+                // Disconnect to retry the subscribe after auto-reconnect timeout
+                esp_mqtt_client_disconnect(s_client);
+            }
+            if (esp_mqtt_client_subscribe(s_client, "/topic/mesh/restart", 0) < 0) {
                 // Disconnect to retry the subscribe after auto-reconnect timeout
                 esp_mqtt_client_disconnect(s_client);
             }
@@ -41,9 +56,22 @@ static esp_err_t mqtt_event_handler_cb(esp_mqtt_event_handle_t event)
             ESP_LOGI(TAG, "MQTT_EVENT_PUBLISHED, msg_id=%d", event->msg_id);
             break;
         case MQTT_EVENT_DATA:
-            ESP_LOGI(TAG, "MQTT_EVENT_DATA");
-            ESP_LOGI(TAG, "TOPIC=%.*s", event->topic_len, event->topic);
-            ESP_LOGI(TAG, "DATA=%.*s", event->data_len, event->data);
+            {
+                ESP_LOGI(TAG, "MQTT_EVENT_DATA");
+                ESP_LOGI(TAG, "TOPIC=%.*s", event->topic_len, event->topic);
+                ESP_LOGI(TAG, "DATA=%.*s", event->data_len, event->data);
+
+                char topic[event->topic_len + 1];
+                char data[event->data_len + 1];
+
+                memcpy(topic, event->topic, event->topic_len);
+                topic[event->topic_len] = '\0';
+
+                memcpy(data, event->data, event->data_len);
+                data[event->data_len] = '\0';
+
+                mqtt_callback(topic, data);
+            }
             break;
         case MQTT_EVENT_ERROR:
             ESP_LOGI(TAG, "MQTT_EVENT_ERROR");

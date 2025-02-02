@@ -24,7 +24,7 @@
 /*******************************************************
  *                Macros
  *******************************************************/
-#define EXAMPLE_BUTTON_GPIO     15
+#define EXAMPLE_BUTTON_GPIO     21
 
 // commands for internal mesh communication:
 // <CMD> <PAYLOAD>, where CMD is one character, payload is variable dep. on command
@@ -302,7 +302,7 @@ static void check_button(void* args)
     vTaskDelete(NULL);
 }
 
-// Chamada a cada 1 minuto para publicar métricas via MQTT
+// Chamada a cada 5 segundos para publicar métricas via MQTT
 void esp_mesh_mqtt_task(void *arg) {
     is_running = true;
     char *print;
@@ -319,22 +319,21 @@ void esp_mesh_mqtt_task(void *arg) {
         mqtt_app_publish("/topic/ip_mesh", print);
         free(print);
 
-        // Atualiza e publica as métricas
-        update_parent_rssi();
-        calculate_success_rate();
-        publish_network_load();
-        publish_hops();
-        publish_transmission_frequency();
-        calculate_packet_loss();
-
         // Apenas o root executa as funções abaixo
-        if (esp_mesh_is_root()) {            
+        if (esp_mesh_is_root()) {    
+            // Atualiza e publica as métricas
+            update_parent_rssi();
+            calculate_success_rate();
+            publish_network_load();
+            publish_hops();
+            publish_transmission_frequency();
+            calculate_packet_loss();        
             // Envia a tabela de roteamento
             send_routing_table();
         }
 
         // Aguarda antes de repetir
-        vTaskDelay(6 * 100000 / portTICK_PERIOD_MS);
+        vTaskDelay(5 * 1000 / portTICK_PERIOD_MS);
     }
 
     // Finaliza a tarefa
