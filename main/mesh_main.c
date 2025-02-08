@@ -1,11 +1,3 @@
-/* Mesh Internal Communication Example
-
-   This example code is in the Public Domain (or CC0 licensed, at your option.)
-
-   Unless required by applicable law or agreed to in writing, this
-   software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-   CONDITIONS OF ANY KIND, either express or implied.
-*/
 #include <string.h>
 #include <inttypes.h>
 #include "esp_wifi.h"
@@ -36,6 +28,7 @@
  *                Constants
  *******************************************************/
 static const char *MESH_TAG = "mesh_main";
+
 static const uint8_t MESH_ID[6] = { 0x77, 0x77, 0x77, 0x77, 0x77, 0x76};
 
 /*******************************************************
@@ -54,11 +47,15 @@ static uint8_t s_mesh_tx_payload[CONFIG_MESH_ROUTE_TABLE_SIZE*6+1];
 
 static int8_t parent_rssi = 0;
 static uint64_t timestamp_send = 0;
-static int packets_sent_per_interval = 0;
 static int packets_sent = 0;
 static int packets_received = 0;
-static size_t bytes_sent = 0;
-static size_t bytes_received = 0;
+static int retransmissions = 0;
+static uint64_t timestamp_last_parent_change = 0;
+static int parent_changes = 0;
+static int parent_children_count = 0;
+int child_count = 0;
+int children_count = 0;
+uint64_t timestamp_recv;
 
 // Estrutura para armazenar RSSI de cada nó
 typedef struct {
@@ -67,7 +64,6 @@ typedef struct {
 } node_rssi_t;
 
 static node_rssi_t node_rssi_table[CONFIG_MESH_ROUTE_TABLE_SIZE];
-static int node_rssi_table_size = 0;
 
 
 /*******************************************************
@@ -81,32 +77,77 @@ void mqtt_app_publish(char* topic, char *publish_string);
  *                Function Definitions
  *******************************************************/
 
-// funcao rssi no pai - ok 
-void update_parent_rssi() {
+ // funcao mac
+ void get_mac_str(char *mac_str, size_t len) {
+    uint8_t mac[6];
+    esp_err_t err = esp_wifi_get_mac(WIFI_IF_STA, mac);
+    if (err == ESP_OK) {
+        snprintf(mac_str, len, "%02x:%02x:%02x:%02x:%02x:%02x",
+                 mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+    } else {
+        strcpy(mac_str, "UNKNOWN_MAC");
+        ESP_LOGE(MESH_TAG, "Failed to get MAC address");
+    }
+}
+
+// funcao rssi no pai 
+void update_rssi() {
     int rssi;
     esp_wifi_sta_get_rssi(&rssi); // Corrigido para usar int
     parent_rssi = (int8_t)rssi;   // Converte para int8_t
     char rssi_str[10];
     snprintf(rssi_str, sizeof(rssi_str), "%d", parent_rssi);
+    mqtt_app_publish("/topic/mesh/rssi_pai", rssi_str);
+    ESP_LOGI(MESH_TAG, "RSSI do nó pai atualizado: %d dBm", parent_rssi);
+}
+
+// RSSI geral
+void update_parent_rssi() {
+    int rssi;
+    esp_wifi_sta_get_rssi(&rssi);
+    parent_rssi = (int8_t)rssi;
+
+    char mac_str[18];
+    get_mac_str(mac_str, sizeof(mac_str));
+
+    char rssi_str[50];
+    snprintf(rssi_str, sizeof(rssi_str), "%s - RSSI: %d", mac_str, parent_rssi);
     mqtt_app_publish("/topic/mesh/rssi", rssi_str);
 }
 
 
-// funcoes latencia comunicação
+// Envia pacote com timestamp para cálculo de latência
 void send_with_timestamp(mesh_addr_t *addr, mesh_data_t *data) {
     struct timeval tv_send;
     gettimeofday(&tv_send, NULL);
     timestamp_send = (uint64_t)tv_send.tv_sec * 1000000 + tv_send.tv_usec;
 
-    esp_mesh_send(addr, data, MESH_DATA_P2P, NULL, 0);
+    packets_sent++;
+    esp_err_t err = esp_mesh_send(addr, data, MESH_DATA_P2P, NULL, 0);
+
+    if (err != ESP_OK) {
+        retransmissions++;
+        ESP_LOGW(MESH_TAG, "Falha ao enviar pacote. Retransmissões: %d", retransmissions);
+    } else {
+        ESP_LOGI(MESH_TAG, "Pacote enviado com sucesso. Total enviados: %d", packets_sent);
+    }
 }
 
-void calculate_latency(uint64_t timestamp_recv) {
+
+// Calcula a latência com base no tempo de recepção
+void calculate_latency() {
     uint64_t latency = timestamp_recv - timestamp_send;
-    char latency_str[20];
-    snprintf(latency_str, sizeof(latency_str), "%" PRIu64, latency);
+
+    char mac_str[18];
+    get_mac_str(mac_str, sizeof(mac_str));
+
+    ESP_LOGI(MESH_TAG, "Latência calculada: %" PRIu64 " µs | Nó: %s", latency, mac_str);
+
+    char latency_str[50];
+    snprintf(latency_str, sizeof(latency_str), "%s - Latency: %" PRIu64 " us", mac_str, latency);
     mqtt_app_publish("/topic/mesh/latency", latency_str);
 }
+
 
 // funcao taxa de sucesso de envio
 void calculate_success_rate() {
@@ -114,6 +155,8 @@ void calculate_success_rate() {
     char success_rate_str[10];
     snprintf(success_rate_str, sizeof(success_rate_str), "%.2f", success_rate);
     mqtt_app_publish("/topic/mesh/success_rate", success_rate_str);
+    ESP_LOGI(MESH_TAG, "Taxa de sucesso de pacotes: %.2f%%", success_rate);
+
 }
 
 // funcao taxa de perda de pacotes
@@ -127,35 +170,59 @@ void calculate_packet_loss() {
     char packet_loss_str[20];
     snprintf(packet_loss_str, sizeof(packet_loss_str), "%.2f", packet_loss);
     mqtt_app_publish("/topic/mesh/packet_loss", packet_loss_str);
+    ESP_LOGI(MESH_TAG, "Taxa de perda de pacotes: %.2f%%", packet_loss);
+
 }
 
-// funcao carga de rede
-void publish_network_load() {
-    char bytes_sent_str[20];
-    char bytes_received_str[20];
-    snprintf(bytes_sent_str, sizeof(bytes_sent_str), "%zu", bytes_sent);
-    snprintf(bytes_received_str, sizeof(bytes_received_str), "%zu", bytes_received);
-    mqtt_app_publish("/topic/mesh/bytes_sent", bytes_sent_str);
-    mqtt_app_publish("/topic/mesh/bytes_received", bytes_received_str);
-}
-
-// funcao numero de saltos 
+// Publica número de saltos até o nó raiz
 void publish_hops() {
-    char hops_str[10];
-    snprintf(hops_str, sizeof(hops_str), "%d", mesh_layer);
+    char mac_str[18];
+    get_mac_str(mac_str, sizeof(mac_str));
+
+    char hops_str[50];
+    snprintf(hops_str, sizeof(hops_str), "%s - Hops: %d", mac_str, mesh_layer);
     mqtt_app_publish("/topic/mesh/hops", hops_str);
+    ESP_LOGI(MESH_TAG, "Número de saltos até o nó raiz: %d", mesh_layer);
+
 }
 
-// funcao taxa de transmissao
-void reset_packets_sent_per_interval() {
-    packets_sent_per_interval = 0;
+// Mede o tempo de troca de nó pai
+void update_parent_change_time() {
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    uint64_t timestamp_now = (uint64_t)tv.tv_sec * 1000000 + tv.tv_usec;
+    
+    if (timestamp_last_parent_change > 0) {
+        uint64_t reconnection_time = timestamp_now - timestamp_last_parent_change;
+        char reconnection_str[20];
+        snprintf(reconnection_str, sizeof(reconnection_str), "%" PRIu64, reconnection_time);
+        mqtt_app_publish("/topic/mesh/reconnection_time", reconnection_str);
+
+        ESP_LOGI(MESH_TAG, "Tempo de reconexão: %" PRIu64 " µs", reconnection_time);
+    }
+
+    timestamp_last_parent_change = timestamp_now;
+    parent_changes++;
 }
 
-void publish_transmission_frequency() {
-    char frequency_str[20];
-    snprintf(frequency_str, sizeof(frequency_str), "%d", packets_sent_per_interval);
-    mqtt_app_publish("/topic/mesh/transmission_frequency", frequency_str);
-    reset_packets_sent_per_interval();
+// Publica número de trocas de nó pai
+void publish_parent_changes() {
+    char parent_changes_str[10];
+    snprintf(parent_changes_str, sizeof(parent_changes_str), "%d", parent_changes);
+    mqtt_app_publish("/topic/mesh/parent_changes", parent_changes_str);
+
+    ESP_LOGI(MESH_TAG, "Número de trocas de nó pai: %d", parent_changes);
+}
+
+// Conta o número de filhos do nó pai
+void update_parent_children_count(int children_count) {
+    parent_children_count = children_count;
+
+    char children_str[10];
+    snprintf(children_str, sizeof(children_str), "%d", parent_children_count);
+    mqtt_app_publish("/topic/mesh/parent_children_count", children_str);
+
+    ESP_LOGI(MESH_TAG, "Número de filhos do nó pai: %d", parent_children_count);
 }
 
 // funcao tabela roteamento
@@ -201,9 +268,7 @@ void send_routing_table() {
         ESP_LOGI(MESH_TAG, "Sending routing table to [%d] "
                 MACSTR ": sent with err code: %d",
         i, MAC2STR(s_route_table[i].addr), err);
-        packets_sent_per_interval++;
         packets_sent++;  
-        bytes_sent++;
     }
 }
 
@@ -227,7 +292,6 @@ void static recv_cb(mesh_addr_t *from, mesh_data_t *data)
     gettimeofday(&tv_recv, NULL); // Captura o timestamp de recepção
     uint64_t timestamp_recv = (uint64_t)tv_recv.tv_sec * 1000000 + tv_recv.tv_usec;
 
-    bytes_received += data->size; // Atualiza os bytes recebidos
     packets_received++;           // Incrementa o contador de pacotes recebidos
 
     if (data->data[0] == CMD_ROUTE_TABLE) {
@@ -287,9 +351,7 @@ static void check_button(void* args)
                         continue;
                     }
                     err = esp_mesh_send(&s_route_table[i], &data, MESH_DATA_P2P, NULL, 0);
-                    packets_sent_per_interval++;
                     packets_sent++;  
-                    bytes_sent++;
                     ESP_LOGI(MESH_TAG, "Sending to [%d] "
                             MACSTR ": sent with err code: %d", i, MAC2STR(s_route_table[i].addr), err);
                 }
@@ -321,16 +383,16 @@ void esp_mesh_mqtt_task(void *arg) {
 
         // Apenas o root executa as funções abaixo
         if (esp_mesh_is_root()) {    
-            // Atualiza e publica as métricas
-            update_parent_rssi();
-            calculate_success_rate();
-            publish_network_load();
-            publish_hops();
-            publish_transmission_frequency();
-            calculate_packet_loss();        
-            // Envia a tabela de roteamento
-            send_routing_table();
+            update_rssi();             // O root pode medir o RSSI do seu pai
+            calculate_success_rate();  // O root tem uma visão global da taxa de sucesso  
+            calculate_packet_loss();   // O root pode calcular a taxa de perda da rede  
+            send_routing_table();      // Somente o root pode enviar a tabela de roteamento  
+            publish_parent_changes();  // O root pode monitorar mudanças globais de conexão  
         }
+        update_parent_rssi();      // Cada nó pode medir o RSSI do seu pai
+        publish_hops();            // Cada nó pode publicar sua própria camada na rede
+        calculate_latency();       // Cada nó calcula a latência com base no tempo de recepção
+
 
         // Aguarda antes de repetir
         vTaskDelay(5 * 1000 / portTICK_PERIOD_MS);
@@ -379,6 +441,8 @@ void mesh_event_handler(void *arg, esp_event_base_t event_base,
         ESP_LOGI(MESH_TAG, "<MESH_EVENT_CHILD_CONNECTED>aid:%d, "MACSTR"",
                  child_connected->aid,
                  MAC2STR(child_connected->mac));
+        children_count = esp_mesh_get_total_node_num();
+        update_parent_children_count(children_count);
     }
     break;
     case MESH_EVENT_CHILD_DISCONNECTED: {
@@ -386,6 +450,8 @@ void mesh_event_handler(void *arg, esp_event_base_t event_base,
         ESP_LOGI(MESH_TAG, "<MESH_EVENT_CHILD_DISCONNECTED>aid:%d, "MACSTR"",
                  child_disconnected->aid,
                  MAC2STR(child_disconnected->mac));
+        children_count = esp_mesh_get_total_node_num();
+        update_parent_children_count(children_count);
     }
     break;
     case MESH_EVENT_ROUTING_TABLE_ADD: {
@@ -420,6 +486,8 @@ void mesh_event_handler(void *arg, esp_event_base_t event_base,
                  esp_mesh_is_root() ? "<ROOT>" :
                  (mesh_layer == 2) ? "<layer2>" : "", MAC2STR(id.addr));
         last_layer = mesh_layer;
+        ESP_LOGI(MESH_TAG, "Nó mudou de pai.");
+        update_parent_change_time();  // Atualiza o tempo de troca do nó pai
         mesh_netifs_start(esp_mesh_is_root());
     }
     break;

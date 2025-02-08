@@ -8,78 +8,159 @@
         "env": []
     },
     {
+        "id": "38ecf3d13bf18e0a",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "mqtt://mqtt.eclipseprojects.io",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "31235f87aab3a89d",
+        "type": "ui_tab",
+        "name": "Home",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "d7cacd98f609ab2b",
+        "type": "ui_base",
+        "theme": {
+            "name": "theme-light",
+            "lightTheme": {
+                "default": "#0094CE",
+                "baseColor": "#750b20",
+                "baseFont": "Arial,Arial,Helvetica,sans-serif",
+                "edited": true,
+                "reset": false
+            },
+            "darkTheme": {
+                "default": "#097479",
+                "baseColor": "#953232",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": true,
+                "reset": false
+            },
+            "customTheme": {
+                "name": "Untitled Theme 1",
+                "default": "#4B7930",
+                "baseColor": "#4B7930",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+            },
+            "themeState": {
+                "base-color": {
+                    "default": "#0094CE",
+                    "value": "#750b20",
+                    "edited": true
+                },
+                "page-titlebar-backgroundColor": {
+                    "value": "#750b20",
+                    "edited": false
+                },
+                "page-backgroundColor": {
+                    "value": "#fafafa",
+                    "edited": false
+                },
+                "page-sidebar-backgroundColor": {
+                    "value": "#333333",
+                    "edited": false
+                },
+                "group-textColor": {
+                    "value": "#bb1233",
+                    "edited": false
+                },
+                "group-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "widget-textColor": {
+                    "value": "#111111",
+                    "edited": false
+                },
+                "widget-backgroundColor": {
+                    "value": "#750b20",
+                    "edited": false
+                },
+                "widget-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "base-font": {
+                    "value": "Arial,Arial,Helvetica,sans-serif"
+                }
+            },
+            "angularTheme": {
+                "primary": "indigo",
+                "accents": "blue",
+                "warn": "red",
+                "background": "grey",
+                "palette": "light"
+            }
+        },
+        "site": {
+            "name": "Node-RED Dashboard",
+            "hideToolbar": "false",
+            "allowSwipe": "false",
+            "lockMenu": "false",
+            "allowTempTheme": "true",
+            "dateFormat": "DD/MM/YYYY",
+            "sizes": {
+                "sx": 100,
+                "sy": 50,
+                "gx": 6,
+                "gy": 6,
+                "cx": 6,
+                "cy": 6,
+                "px": 0,
+                "py": 0
+            }
+        }
+    },
+    {
+        "id": "fd8240562a77573a",
+        "type": "ui_group",
+        "name": "Rede Mesh",
+        "tab": "31235f87aab3a89d",
+        "order": 1,
+        "disp": true,
+        "width": 12,
+        "collapse": false,
+        "className": ""
+    },
+    {
         "id": "18f9323d04fcc8b2",
         "type": "mqtt in",
         "z": "fe162edfc74f05cc",
         "name": "",
-        "topic": "/topic/mesh/rssi",
-        "qos": "2",
-        "datatype": "auto-detect",
-        "broker": "38ecf3d13bf18e0a",
-        "nl": false,
-        "rap": true,
-        "rh": 0,
-        "inputs": 0,
-        "x": 220,
-        "y": 200,
-        "wires": [
-            [
-                "4ff73e15e3ada7d4",
-                "bd68437f7ae2ba82",
-                "0f99c5e88d6f4720"
-            ]
-        ]
-    },
-    {
-        "id": "4ff73e15e3ada7d4",
-        "type": "ui_chart",
-        "z": "fe162edfc74f05cc",
-        "name": "",
-        "group": "fd8240562a77573a",
-        "order": 4,
-        "width": 0,
-        "height": 0,
-        "label": " Gráfico de RSSI do nó pai",
-        "chartType": "line",
-        "legend": "false",
-        "xformat": "HH:mm:ss",
-        "interpolate": "linear",
-        "nodata": "",
-        "dot": false,
-        "ymin": "",
-        "ymax": "",
-        "removeOlder": 1,
-        "removeOlderPoints": "",
-        "removeOlderUnit": "3600",
-        "cutout": 0,
-        "useOneColor": false,
-        "useUTC": false,
-        "colors": [
-            "#1f77b4",
-            "#aec7e8",
-            "#ff7f0e",
-            "#2ca02c",
-            "#98df8a",
-            "#d62728",
-            "#ff9896",
-            "#9467bd",
-            "#c5b0d5"
-        ],
-        "outputs": 1,
-        "useDifferentColor": false,
-        "className": "",
-        "x": 550,
-        "y": 200,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "fd04755bc7b518fd",
-        "type": "mqtt in",
-        "z": "fe162edfc74f05cc",
-        "name": "",
-        "topic": "/topic/mesh/latency",
+        "topic": "/topic/mesh/rssi_pai",
         "qos": "2",
         "datatype": "auto-detect",
         "broker": "38ecf3d13bf18e0a",
@@ -88,229 +169,13 @@
         "rh": 0,
         "inputs": 0,
         "x": 230,
-        "y": 360,
+        "y": 160,
         "wires": [
             [
-                "cbcb47fee246dfcd",
-                "34f71842cc81f379"
+                "9f5b22e9ad32515b",
+                "58b4f3318e88a353"
             ]
         ]
-    },
-    {
-        "id": "bd68437f7ae2ba82",
-        "type": "ui_gauge",
-        "z": "fe162edfc74f05cc",
-        "name": "",
-        "group": "fd8240562a77573a",
-        "order": 5,
-        "width": 0,
-        "height": 0,
-        "gtype": "gage",
-        "title": "rssi",
-        "label": "units",
-        "format": "{{value}}",
-        "min": 0,
-        "max": 10,
-        "colors": [
-            "#00b500",
-            "#e6e600",
-            "#ca3838"
-        ],
-        "seg1": "",
-        "seg2": "",
-        "diff": false,
-        "className": "",
-        "x": 510,
-        "y": 240,
-        "wires": []
-    },
-    {
-        "id": "cbcb47fee246dfcd",
-        "type": "ui_numeric",
-        "z": "fe162edfc74f05cc",
-        "name": "",
-        "label": "Latencia",
-        "tooltip": "",
-        "group": "fd8240562a77573a",
-        "order": 10,
-        "width": 0,
-        "height": 0,
-        "wrap": false,
-        "passthru": true,
-        "topic": "topic",
-        "topicType": "msg",
-        "format": "{{value}}",
-        "min": 0,
-        "max": 10,
-        "step": 1,
-        "className": "",
-        "x": 500,
-        "y": 360,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "8411537f177981b8",
-        "type": "mqtt in",
-        "z": "fe162edfc74f05cc",
-        "name": "",
-        "topic": "/topic/mesh/success_rate",
-        "qos": "2",
-        "datatype": "auto-detect",
-        "broker": "38ecf3d13bf18e0a",
-        "nl": false,
-        "rap": true,
-        "rh": 0,
-        "inputs": 0,
-        "x": 250,
-        "y": 520,
-        "wires": [
-            [
-                "0fcbf8e32df0c1d6",
-                "c03289de6def833a"
-            ]
-        ]
-    },
-    {
-        "id": "0fcbf8e32df0c1d6",
-        "type": "ui_gauge",
-        "z": "fe162edfc74f05cc",
-        "name": "",
-        "group": "fd8240562a77573a",
-        "order": 7,
-        "width": 0,
-        "height": 0,
-        "gtype": "gage",
-        "title": "Taxa de sucesso ",
-        "label": "units",
-        "format": "{{value}}",
-        "min": 0,
-        "max": 10,
-        "colors": [
-            "#00b500",
-            "#e6e600",
-            "#ca3838"
-        ],
-        "seg1": "",
-        "seg2": "",
-        "diff": false,
-        "className": "",
-        "x": 550,
-        "y": 520,
-        "wires": []
-    },
-    {
-        "id": "f8d9be4536bf9874",
-        "type": "mqtt in",
-        "z": "fe162edfc74f05cc",
-        "name": "",
-        "topic": "/topic/mesh/packet_loss",
-        "qos": "2",
-        "datatype": "auto-detect",
-        "broker": "38ecf3d13bf18e0a",
-        "nl": false,
-        "rap": true,
-        "rh": 0,
-        "inputs": 0,
-        "x": 220,
-        "y": 660,
-        "wires": [
-            [
-                "b68c2916027c8918",
-                "2a21d4d355dd5946"
-            ]
-        ]
-    },
-    {
-        "id": "b68c2916027c8918",
-        "type": "ui_numeric",
-        "z": "fe162edfc74f05cc",
-        "name": "",
-        "label": "Perda Pacotes",
-        "tooltip": "",
-        "group": "fd8240562a77573a",
-        "order": 6,
-        "width": 0,
-        "height": 0,
-        "wrap": false,
-        "passthru": true,
-        "topic": "topic",
-        "topicType": "msg",
-        "format": "{{value}}",
-        "min": 0,
-        "max": 10,
-        "step": 1,
-        "className": "",
-        "x": 480,
-        "y": 660,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "0f99c5e88d6f4720",
-        "type": "debug",
-        "z": "fe162edfc74f05cc",
-        "name": "debug 3",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 440,
-        "y": 140,
-        "wires": []
-    },
-    {
-        "id": "34f71842cc81f379",
-        "type": "debug",
-        "z": "fe162edfc74f05cc",
-        "name": "debug 4",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 460,
-        "y": 320,
-        "wires": []
-    },
-    {
-        "id": "c03289de6def833a",
-        "type": "debug",
-        "z": "fe162edfc74f05cc",
-        "name": "debug 5",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 460,
-        "y": 460,
-        "wires": []
-    },
-    {
-        "id": "2a21d4d355dd5946",
-        "type": "debug",
-        "z": "fe162edfc74f05cc",
-        "name": "debug 6",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 440,
-        "y": 600,
-        "wires": []
     },
     {
         "id": "573d67a861533f26",
@@ -395,9 +260,9 @@
         "group": "fd8240562a77573a",
         "name": "Tabela Roteamento",
         "order": 2,
-        "width": "12",
-        "height": "6",
-        "format": "<table class=\"table\" id=\"routingTable\">\n    <thead>\n        <tr>\n            <th>MAC Address</th>\n        </tr>\n    </thead>\n    <tbody></tbody>\n</table>\n\n<script>\n    (function(scope) {\n        // Atualiza a tabela com os dados recebidos\n        scope.$watch('msg.payload', function(data) {\n            if (!data || !data.route_table || !Array.isArray(data.route_table)) {\n                console.error(\"Dados de tabela inválidos:\", data);\n                return;\n            }\n\n            // Limpa a tabela antes de adicionar novas linhas\n            const tableBody = document.querySelector(\"#routingTable tbody\");\n            tableBody.innerHTML = \"\";\n\n            // Adiciona cada MAC Address à tabela\n            data.route_table.forEach((mac) => {\n                const row = document.createElement(\"tr\");\n                const macCell = document.createElement(\"td\");\n\n                macCell.textContent = mac;\n                row.appendChild(macCell);\n                tableBody.appendChild(row);\n            });\n        });\n    })(scope);\n</script>\n\n<style>\n.table {\n    width: 100%;\n    overflow-y: auto; /* Permite rolagem apenas se necessário */\n    border-spacing: 5px; /* Espaço entre as células */\n    text-align: center;\n}\n\n.table th, .table td {\n    border: 1px solid #000;\n    padding: 12px; /* Aumenta o espaço interno */\n    height: 20px; /* Define uma altura mínima para as células */\n    vertical-align: middle; /* Garante alinhamento vertical centralizado */\n}\n\n.table th {\n    background-color: #f2f2f2;\n}\n</style>",
+        "width": 12,
+        "height": 6,
+        "format": "\n\n<table class=\"table\" id=\"routingTable\">\n    <thead>\n        <tr>\n            <th>MAC Address</th>\n        </tr>\n    </thead>\n    <tbody></tbody>\n</table>\n\n<script>\n    (function(scope) {\n        // Atualiza a tabela com os dados recebidos\n        scope.$watch('msg.payload', function(data) {\n            if (!data || !data.route_table || !Array.isArray(data.route_table)) {\n                console.error(\"Dados de tabela inválidos:\", data);\n                return;\n            }\n\n            // Limpa a tabela antes de adicionar novas linhas\n            const tableBody = document.querySelector(\"#routingTable tbody\");\n            tableBody.innerHTML = \"\";\n\n            // Adiciona cada MAC Address à tabela\n            data.route_table.forEach((mac) => {\n                const row = document.createElement(\"tr\");\n                const macCell = document.createElement(\"td\");\n\n                macCell.textContent = mac;\n                row.appendChild(macCell);\n                tableBody.appendChild(row);\n            });\n        });\n    })(scope);\n</script>\n\n<style>\n.table {\n    width: 100%;\n    overflow-y: auto; /* Permite rolagem apenas se necessário */\n    border-spacing: 5px; /* Espaço entre as células */\n    text-align: center;\n}\n\n.table th, .table td {\n    border: 1px solid #000;\n    padding: 12px; /* Aumenta o espaço interno */\n    height: 20px; /* Define uma altura mínima para as células */\n    vertical-align: middle; /* Garante alinhamento vertical centralizado */\n}\n\n.table th {\n    background-color: #f2f2f2;\n}\n</style>",
         "storeOutMessages": true,
         "fwdInMessages": true,
         "resendOnRefresh": true,
@@ -416,9 +281,9 @@
         "group": "fd8240562a77573a",
         "name": "Nós na rede",
         "order": 3,
-        "width": "12",
-        "height": "6",
-        "format": "<table class=\"table\" id=\"NosRede\">\n    <thead>\n        <tr>\n            <th>Layer</th>\n            <th>IP Address</th>\n        </tr>\n    </thead>\n    <tbody></tbody>\n</table>\n\n<script>\n    (function(scope) {\n        const tableBody = document.querySelector(\"#NosRede tbody\");\n        const ipMap = new Map(); // Armazena os IPs e suas layers\n\n        // Atualiza a tabela com os dados recebidos\n        scope.$watch('msg.payload', function(data) {\n            if (!data || typeof data !== 'string') {\n                console.error(\"Dados inválidos:\", data);\n                return;\n            }\n\n            const match = data.match(/layer:(\\d+) IP:([\\d\\.]+)/);\n            if (!match) {\n                console.error(\"Formato inesperado de dados:\", data);\n                return;\n            }\n\n            const layer = match[1];\n            const ip = match[2];\n\n            // Só adiciona ou atualiza se o IP for novo ou a layer mudar\n            if (!ipMap.has(ip) || ipMap.get(ip) !== layer) {\n                ipMap.set(ip, layer);\n                atualizarTabela();\n            }\n        });\n\n        function atualizarTabela() {\n            tableBody.innerHTML = \"\";\n            ipMap.forEach((layer, ip) => {\n                const row = document.createElement(\"tr\");\n                    row.innerHTML = `\n                    <td>${layer}</td>\n                    <td>${ip}</td>\n                    `;\n                tableBody.appendChild(row);\n            });\n        }\n    })(scope);\n</script>\n\n<style>\n.table {\n    width: 100%;\n    overflow-y: auto; /* Permite rolagem apenas se necessário */\n    border-spacing: 5px; /* Espaço entre as células */\n    text-align: center;\n}\n\n.table th, .table td {\n    border: 1px solid #000;\n    padding: 12px; /* Aumenta o espaço interno */\n    height: 20px; /* Define uma altura mínima para as células */\n    vertical-align: middle; /* Garante alinhamento vertical centralizado */\n}\n\n.table th {\n    background-color: #f2f2f2;\n}\n</style>",
+        "width": 12,
+        "height": 6,
+        "format": "\n\n<table class=\"table\" id=\"NosRede\">\n    <thead>\n        <tr>\n            <th>Layer</th>\n            <th>IP Address</th>\n        </tr>\n    </thead>\n    <tbody></tbody>\n</table>\n\n<script>\n    (function(scope) {\n        const tableBody = document.querySelector(\"#NosRede tbody\");\n        const ipMap = new Map(); // Armazena os IPs e suas layers\n\n        // Atualiza a tabela com os dados recebidos\n        scope.$watch('msg.payload', function(data) {\n            if (!data || typeof data !== 'string') {\n                console.error(\"Dados inválidos:\", data);\n                return;\n            }\n\n            const match = data.match(/layer:(\\d+) IP:([\\d\\.]+)/);\n            if (!match) {\n                console.error(\"Formato inesperado de dados:\", data);\n                return;\n            }\n\n            const layer = match[1];\n            const ip = match[2];\n\n            // Só adiciona ou atualiza se o IP for novo ou a layer mudar\n            if (!ipMap.has(ip) || ipMap.get(ip) !== layer) {\n                ipMap.set(ip, layer);\n                atualizarTabela();\n            }\n        });\n\n        function atualizarTabela() {\n            tableBody.innerHTML = \"\";\n            ipMap.forEach((layer, ip) => {\n                const row = document.createElement(\"tr\");\n                    row.innerHTML = `\n                    <td>${layer}</td>\n                    <td>${ip}</td>\n                    `;\n                tableBody.appendChild(row);\n            });\n        }\n    })(scope);\n</script>\n\n<style>\n.table {\n    width: 100%;\n    overflow-y: auto; /* Permite rolagem apenas se necessário */\n    border-spacing: 5px; /* Espaço entre as células */\n    text-align: center;\n}\n\n.table th, .table td {\n    border: 1px solid #000;\n    padding: 12px; /* Aumenta o espaço interno */\n    height: 20px; /* Define uma altura mínima para as células */\n    vertical-align: middle; /* Garante alinhamento vertical centralizado */\n}\n\n.table th {\n    background-color: #f2f2f2;\n}\n</style>",
         "storeOutMessages": true,
         "fwdInMessages": true,
         "resendOnRefresh": true,
@@ -426,70 +291,6 @@
         "className": "",
         "x": 1150,
         "y": 500,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "78d73264acfcb5a2",
-        "type": "mqtt in",
-        "z": "fe162edfc74f05cc",
-        "name": "",
-        "topic": "/topic/mesh/bytes_received",
-        "qos": "2",
-        "datatype": "auto-detect",
-        "broker": "38ecf3d13bf18e0a",
-        "nl": false,
-        "rap": true,
-        "rh": 0,
-        "inputs": 0,
-        "x": 210,
-        "y": 940,
-        "wires": [
-            [
-                "72f805c1424aa461",
-                "c83b5404dfcef93b"
-            ]
-        ]
-    },
-    {
-        "id": "72f805c1424aa461",
-        "type": "debug",
-        "z": "fe162edfc74f05cc",
-        "name": "debug 2",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 380,
-        "y": 880,
-        "wires": []
-    },
-    {
-        "id": "c83b5404dfcef93b",
-        "type": "ui_numeric",
-        "z": "fe162edfc74f05cc",
-        "name": "",
-        "label": "Bytes Recebidos",
-        "tooltip": "",
-        "group": "fd8240562a77573a",
-        "order": 9,
-        "width": 0,
-        "height": 0,
-        "wrap": false,
-        "passthru": true,
-        "topic": "topic",
-        "topicType": "msg",
-        "format": "{{value}}",
-        "min": 0,
-        "max": 10,
-        "step": 1,
-        "className": "",
-        "x": 450,
-        "y": 980,
         "wires": [
             []
         ]
@@ -537,11 +338,11 @@
         "type": "ui_text",
         "z": "fe162edfc74f05cc",
         "group": "fd8240562a77573a",
-        "order": 11,
+        "order": 13,
         "width": 0,
         "height": 0,
         "name": "",
-        "label": "MAC botao acionado",
+        "label": "MAC botao acionado: ",
         "format": "{{msg.payload}}",
         "layout": "row-left",
         "className": "",
@@ -578,8 +379,8 @@
         "name": "",
         "group": "fd8240562a77573a",
         "order": 1,
-        "width": "0",
-        "height": "0",
+        "width": 0,
+        "height": 0,
         "passthru": false,
         "label": "Reinicia Rede Mesh",
         "tooltip": "",
@@ -600,11 +401,11 @@
         ]
     },
     {
-        "id": "8ac6e56597713494",
+        "id": "a189ee1c058cbaa8",
         "type": "mqtt in",
         "z": "fe162edfc74f05cc",
         "name": "",
-        "topic": "/topic/mesh/hops",
+        "topic": "/topic/mesh/rssi",
         "qos": "2",
         "datatype": "auto-detect",
         "broker": "38ecf3d13bf18e0a",
@@ -612,25 +413,165 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 180,
-        "y": 800,
+        "x": 220,
+        "y": 300,
         "wires": [
             [
-                "c5bdf1cb2df5c205",
-                "7b184e8ebf3bd40b"
+                "68a14ce84025a3fc",
+                "1ce86d203d2ee430"
             ]
         ]
     },
     {
-        "id": "c5bdf1cb2df5c205",
+        "id": "9f5b22e9ad32515b",
+        "type": "ui_gauge",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "group": "fd8240562a77573a",
+        "order": 4,
+        "width": 5,
+        "height": 3,
+        "gtype": "donut",
+        "title": "Rssi Nó Pai",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": 10,
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 510,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "68a14ce84025a3fc",
+        "type": "function",
+        "z": "fe162edfc74f05cc",
+        "name": "function 1",
+        "func": "// Divida a string para separar o MAC e o RSSI\nconst parts = msg.payload.split(\" - \");\nif (parts.length === 2) {\n    const mac = parts[0].trim(); // Endereço MAC\n    const rssi = parseInt(parts[1].replace(\"RSSI: \", \"\"), 10); // Valor do RSSI\n\n    // Formate os dados como objeto para o gráfico\n    msg.payload = { mac, rssi };\n    return msg;\n}\nreturn null; // Ignora mensagens inválidas\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 440,
+        "y": 300,
+        "wires": [
+            [
+                "9ecd05f319746cd3"
+            ]
+        ]
+    },
+    {
+        "id": "58b4f3318e88a353",
+        "type": "debug",
+        "z": "fe162edfc74f05cc",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 440,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "07d942ab291ede68",
+        "type": "mqtt in",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "topic": "/topic/mesh/success_rate",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "38ecf3d13bf18e0a",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 170,
+        "y": 420,
+        "wires": [
+            [
+                "b8bb45e934637356",
+                "27133cd363d90eed"
+            ]
+        ]
+    },
+    {
+        "id": "b8bb45e934637356",
+        "type": "debug",
+        "z": "fe162edfc74f05cc",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 400,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "14b9253a60d6a42a",
+        "type": "debug",
+        "z": "fe162edfc74f05cc",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 440,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "548d7d1655b35456",
+        "type": "mqtt in",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "topic": "/topic/mesh/packet_loss",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "38ecf3d13bf18e0a",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 160,
+        "y": 520,
+        "wires": [
+            [
+                "14b9253a60d6a42a",
+                "1c1b7c736bf339c2"
+            ]
+        ]
+    },
+    {
+        "id": "27133cd363d90eed",
         "type": "ui_chart",
         "z": "fe162edfc74f05cc",
         "name": "",
         "group": "fd8240562a77573a",
-        "order": 8,
-        "width": 0,
-        "height": 0,
-        "label": "Numero de saltos",
+        "order": 6,
+        "width": 6,
+        "height": 5,
+        "label": "Taxa de Sucesso",
         "chartType": "line",
         "legend": "false",
         "xformat": "HH:mm:ss",
@@ -646,30 +587,159 @@
         "useOneColor": false,
         "useUTC": false,
         "colors": [
-            "#1f77b4",
-            "#aec7e8",
-            "#ff7f0e",
-            "#2ca02c",
-            "#98df8a",
-            "#d62728",
-            "#ff9896",
-            "#9467bd",
-            "#c5b0d5"
+            "#1eb328",
+            "#f2ec26",
+            "#ff1f0f",
+            "#14cc42",
+            "#eee720",
+            "#d72830",
+            "#5bec51",
+            "#f7fb0e",
+            "#bf3a0d"
         ],
         "outputs": 1,
         "useDifferentColor": false,
         "className": "",
-        "x": 550,
-        "y": 800,
+        "x": 470,
+        "y": 460,
         "wires": [
             []
         ]
     },
     {
-        "id": "7b184e8ebf3bd40b",
+        "id": "1c1b7c736bf339c2",
+        "type": "ui_chart",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "group": "fd8240562a77573a",
+        "order": 7,
+        "width": 6,
+        "height": 5,
+        "label": "Perda de Pacotes",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#77b31e",
+            "#f2ec26",
+            "#b00c0c",
+            "#2acc14",
+            "#eee720",
+            "#d74b28",
+            "#83e633",
+            "#f7fb0e",
+            "#ab3007"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 430,
+        "y": 580,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "cbdaf088e5503c89",
+        "type": "mqtt in",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "topic": "/topic/mesh/latency",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "38ecf3d13bf18e0a",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 150,
+        "y": 660,
+        "wires": [
+            [
+                "323e75df78f0db09",
+                "8bbde8f50934ab01"
+            ]
+        ]
+    },
+    {
+        "id": "b2873f80e991bca9",
+        "type": "mqtt in",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "topic": "/topic/mesh/hops",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "38ecf3d13bf18e0a",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 140,
+        "y": 820,
+        "wires": [
+            [
+                "59aca781e64d75b0",
+                "2933f56e647a9dfe"
+            ]
+        ]
+    },
+    {
+        "id": "59aca781e64d75b0",
+        "type": "function",
+        "z": "fe162edfc74f05cc",
+        "name": "function 3",
+        "func": "// Divida a string para separar o MAC e o número de saltos\nconst parts = msg.payload.split(\" - \");\nif (parts.length === 2) {\n    const mac = parts[0].trim(); // Endereço MAC\n    const hopsStr = parts[1].replace(\"Hops: \", \"\").trim(); // Remove \"Hops: \"\n    const hops = parseInt(hopsStr, 10); // Converte o número de saltos para inteiro\n\n    // Verifique se o número de saltos foi convertido corretamente\n    if (!isNaN(hops)) {\n        // Formate os dados como objeto para o gráfico\n        msg.payload = { mac, hops };\n        return msg;\n    }\n}\nreturn null; // Ignora mensagens inválidas\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 860,
+        "wires": [
+            [
+                "461a5fe17e251a58"
+            ]
+        ]
+    },
+    {
+        "id": "cab1cd20988212a0",
+        "type": "mqtt in",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "topic": "/topic/mesh/reconnection_time",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "38ecf3d13bf18e0a",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 880,
+        "y": 660,
+        "wires": [
+            [
+                "dc2d162a1f77f7b2",
+                "446ff595bcbbd13b"
+            ]
+        ]
+    },
+    {
+        "id": "dc2d162a1f77f7b2",
         "type": "debug",
         "z": "fe162edfc74f05cc",
-        "name": "debug 1",
+        "name": "",
         "active": true,
         "tosidebar": true,
         "console": false,
@@ -678,58 +748,281 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 480,
-        "y": 740,
+        "x": 1100,
+        "y": 620,
         "wires": []
     },
     {
-        "id": "38ecf3d13bf18e0a",
-        "type": "mqtt-broker",
+        "id": "446ff595bcbbd13b",
+        "type": "ui_text",
+        "z": "fe162edfc74f05cc",
+        "group": "fd8240562a77573a",
+        "order": 12,
+        "width": 0,
+        "height": 0,
         "name": "",
-        "broker": "mqtt://mqtt.eclipseprojects.io",
-        "port": "1883",
-        "clientid": "",
-        "autoConnect": true,
-        "usetls": false,
-        "protocolVersion": "4",
-        "keepalive": "60",
-        "cleansession": true,
-        "autoUnsubscribe": true,
-        "birthTopic": "",
-        "birthQos": "0",
-        "birthRetain": "false",
-        "birthPayload": "",
-        "birthMsg": {},
-        "closeTopic": "",
-        "closeQos": "0",
-        "closeRetain": "false",
-        "closePayload": "",
-        "closeMsg": {},
-        "willTopic": "",
-        "willQos": "0",
-        "willRetain": "false",
-        "willPayload": "",
-        "willMsg": {},
-        "userProps": "",
-        "sessionExpiry": ""
+        "label": "Tempo Reconexão Troca Pai:",
+        "format": "{{msg.payload}}",
+        "layout": "row-left",
+        "className": "",
+        "style": false,
+        "font": "Verdana,Verdana,Geneva,sans-serif",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 1210,
+        "y": 700,
+        "wires": []
     },
     {
-        "id": "fd8240562a77573a",
-        "type": "ui_group",
-        "name": "Rede Mesh",
-        "tab": "31235f87aab3a89d",
-        "order": 1,
-        "disp": true,
+        "id": "476cd26013492e64",
+        "type": "mqtt in",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "topic": "topic/mesh/parent_children_count",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "38ecf3d13bf18e0a",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 1580,
+        "y": 660,
+        "wires": [
+            [
+                "1bec2a3665910126",
+                "7e4dfe14785e67cb"
+            ]
+        ]
+    },
+    {
+        "id": "1bec2a3665910126",
+        "type": "debug",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1790,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "7e4dfe14785e67cb",
+        "type": "ui_text",
+        "z": "fe162edfc74f05cc",
+        "group": "fd8240562a77573a",
+        "order": 11,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Número de filhos nó pai:",
+        "format": "{{msg.payload}}",
+        "layout": "row-left",
+        "className": "",
+        "style": false,
+        "font": "Verdana,Verdana,Geneva,sans-serif",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 1880,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "91b866a39ac192e6",
+        "type": "mqtt in",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "topic": "/topic/mesh/parent_changes",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "38ecf3d13bf18e0a",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 900,
+        "y": 840,
+        "wires": [
+            [
+                "c6d42ba378f4cd89",
+                "cb74b69cb1934798"
+            ]
+        ]
+    },
+    {
+        "id": "c6d42ba378f4cd89",
+        "type": "debug",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1120,
+        "y": 800,
+        "wires": []
+    },
+    {
+        "id": "cb74b69cb1934798",
+        "type": "ui_text",
+        "z": "fe162edfc74f05cc",
+        "group": "fd8240562a77573a",
+        "order": 10,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Trocas Nó Pai: ",
+        "format": "{{msg.payload}}",
+        "layout": "row-left",
+        "className": "",
+        "style": false,
+        "font": "Verdana,Verdana,Geneva,sans-serif",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 1180,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "1ce86d203d2ee430",
+        "type": "debug",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 430,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "323e75df78f0db09",
+        "type": "debug",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 424.1999816894531,
+        "y": 632,
+        "wires": []
+    },
+    {
+        "id": "2933f56e647a9dfe",
+        "type": "debug",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 404.1999816894531,
+        "y": 804,
+        "wires": []
+    },
+    {
+        "id": "68586d9eb214e7fd",
+        "type": "ui_template",
+        "z": "fe162edfc74f05cc",
+        "group": "fd8240562a77573a",
+        "name": "Latência",
+        "order": 9,
+        "width": 0,
+        "height": 0,
+        "format": "<script src=\"https://cdn.jsdelivr.net/npm/moment@2.29.4\"></script>\n<script src=\"https://cdn.jsdelivr.net/npm/chartjs-adapter-moment\"></script>\n\n<div style=\"width: 100%; max-width: 600px; margin: 0 auto;\">\n    <canvas id=\"latencyChart\" style=\"height: 300px;\"></canvas>\n</div>\n\n<script>\n    var ctx = document.getElementById(\"latencyChart\").getContext(\"2d\");\n\n    var latencyData = {}; // Armazena dados por MAC\n    var chart = new Chart(ctx, {\n        type: \"line\",\n        data: {\n            datasets: []\n        },\n        options: {\n            responsive: true,\n            scales: {\n                x: {\n                    type: \"time\",\n                    time: { unit: \"second\" },\n                    title: { display: true, text: \"Time\" }\n                },\n                y: {\n                    title: { display: true, text: \"Latência (us)\" }\n                }\n            }\n        }\n    });\n\n    // Recebe os dados do Node-RED\n    (function() {\n        window.addEventListener(\"message\", function(event) {\n            var data = event.data;\n\n            if (!data) return;\n\n            var mac = data.mac;\n            var latency = data.latency;\n            var time = new Date(); // Armazena a hora atual\n\n            // Verifica se o MAC já existe nos dados do gráfico\n            if (!latencyData[mac]) {\n                latencyData[mac] = {\n                    label: mac,\n                    data: [],\n                    borderColor: \"#\" + Math.floor(Math.random() * 16777215).toString(16),\n                    fill: false\n                };\n                chart.data.datasets.push(latencyData[mac]);\n            }\n\n            // Adiciona o novo valor de latência com o timestamp\n            latencyData[mac].data.push({ x: time, y: latency });\n\n            // Limita o número de pontos no gráfico a 50\n            if (latencyData[mac].data.length > 50) {\n                latencyData[mac].data.shift(); // Remove o primeiro ponto de dados (mais antigo)\n            }\n\n            chart.update(); // Atualiza o gráfico\n        }, false);\n    })();\n</script>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 560,
+        "y": 720,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "461a5fe17e251a58",
+        "type": "ui_template",
+        "z": "fe162edfc74f05cc",
+        "group": "fd8240562a77573a",
+        "name": "Número de Saltos",
+        "order": 8,
         "width": 12,
-        "collapse": false,
-        "className": ""
+        "height": 5,
+        "format": "<div style=\"width: 100%; max-width: 600px; margin: 0 auto;\">\n    <canvas id=\"hopsChart\" style=\"height: 300px;\"></canvas>\n</div>\n\n<script>\n    (function(scope) {\n    const ctx = document.getElementById(\"hopsChart\").getContext(\"2d\");\n\n    const chart = new Chart(ctx, {\n        type: \"bar\",\n        data: {\n            labels: [],\n            datasets: [\n                {\n                    label: \"Number of Hops\",\n                    backgroundColor: \"rgba(255, 159, 64, 0.5)\",\n                    borderColor: \"rgba(255, 159, 64, 1)\",\n                    borderWidth: 1,\n                    data: []\n                }\n            ]\n        },\n        options: {\n            responsive: true,\n            maintainAspectRatio: false,\n            scales: {\n                x: {\n                    title: { display: true, text: \"MAC Address\" }\n                },\n                y: {\n                    title: { display: true, text: \"Number of Hops\" },\n                    beginAtZero: true\n                }\n            }\n        }\n    });\n\n    scope.$watch(\"msg.payload\", function(payload) {\n        if (payload) {\n            const macIndex = chart.data.labels.indexOf(payload.mac);\n\n            if (macIndex === -1) {\n                chart.data.labels.push(payload.mac);\n                chart.data.datasets[0].data.push(payload.hops);\n            } else {\n                chart.data.datasets[0].data[macIndex] = payload.hops;\n            }\n\n            chart.update();\n        }\n    });\n})(scope);\n</script>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 610,
+        "y": 860,
+        "wires": [
+            []
+        ]
     },
     {
-        "id": "31235f87aab3a89d",
-        "type": "ui_tab",
-        "name": "Home",
-        "icon": "dashboard",
-        "disabled": false,
-        "hidden": false
+        "id": "9ecd05f319746cd3",
+        "type": "ui_template",
+        "z": "fe162edfc74f05cc",
+        "group": "fd8240562a77573a",
+        "name": "RSSI",
+        "order": 5,
+        "width": 7,
+        "height": 3,
+        "format": "<div style=\"width: 100%; max-width: 600px; margin: 0 auto;\">\n    <canvas id=\"rssiChart\" style=\"height: 300px;\"></canvas>\n</div>\n\n<script>\n    (function(scope) {\n    const ctx = document.getElementById(\"rssiChart\").getContext(\"2d\");\n\n    const chart = new Chart(ctx, {\n        type: \"bar\",\n        data: {\n            labels: [],\n            datasets: [\n                {\n                    label: \"RSSI\",\n                    backgroundColor: \"rgba(54, 162, 235, 0.5)\",\n                    borderColor: \"rgba(54, 162, 235, 1)\",\n                    borderWidth: 1,\n                    data: []\n                }\n            ]\n        },\n        options: {\n            responsive: true,\n            maintainAspectRatio: false,\n            scales: {\n                x: {\n                    title: { display: true, text: \"MAC Address\" }\n                },\n                y: {\n                    title: { display: true, text: \"RSSI (dBm)\" },\n                    min: -100, // Sinal mais fraco possível\n                    max: 0, // Sinal mais forte possível\n                }\n            }\n        }\n    });\n\n    scope.$watch(\"msg.payload\", function(payload) {\n        if (payload) {\n            const macIndex = chart.data.labels.indexOf(payload.mac);\n\n            if (macIndex === -1) {\n                chart.data.labels.push(payload.mac);\n                chart.data.datasets[0].data.push(payload.rssi);\n            } else {\n                chart.data.datasets[0].data[macIndex] = payload.rssi;\n            }\n\n            chart.update();\n        }\n    });\n})(scope);\n</script>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 610,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8bbde8f50934ab01",
+        "type": "function",
+        "z": "fe162edfc74f05cc",
+        "name": "function 2",
+        "func": "// Divide a string para separar o MAC e a Latência\nconst parts = msg.payload.split(\" - \");\nif (parts.length === 2) {\n    const mac = parts[0].trim(); // Endereço MAC\n    const latencyStr = parts[1].replace(\"Latency: \", \"\").replace(\" us\", \"\").trim(); // Remove \"Latency: \" e \" us\"\n    const latency = parseInt(latencyStr, 10); // Converte a latência para número inteiro\n\n    // Verifica se a latência foi convertida corretamente\n    if (!isNaN(latency)) {\n        // Formate os dados como objeto para o gráfico\n        msg.payload = { mac, latency };\n        return msg;\n    }\n}\nreturn null; // Ignora mensagens inválidas\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 700,
+        "wires": [
+            [
+                "68586d9eb214e7fd"
+            ]
+        ]
     }
 ]
