@@ -40,11 +40,12 @@ typedef struct mesh_netif_driver {
  *                Constants
  *******************************************************/
 static const char* TAG = "mesh_netif";
-const esp_netif_ip_info_t g_mesh_netif_subnet_ip = {        // mesh subnet IP info
-        .ip = { .addr = ESP_IP4TOADDR( 10, 0, 0, 1) },
-        .gw = { .addr = ESP_IP4TOADDR( 10, 0, 0, 1) },
-        .netmask = { .addr = ESP_IP4TOADDR( 255, 255, 0, 0) },
+const esp_netif_ip_info_t g_mesh_netif_subnet_ip = {
+    .ip      = { .addr = ESP_IP4TOADDR(10, 0, 0, 1) },
+    .gw      = { .addr = ESP_IP4TOADDR(10, 0, 0, 1) },
+    .netmask = { .addr = ESP_IP4TOADDR(255, 255, 0, 0) },
 };
+
 
 /*******************************************************
  *                Variable Definitions
@@ -62,14 +63,45 @@ static mesh_raw_recv_cb_t *s_mesh_raw_recv_cb = NULL;
 //
 static esp_err_t set_dhcps_dns(esp_netif_t *netif, uint32_t addr)
 {
-    esp_netif_dns_info_t dns;
-    dns.ip.u_addr.ip4.addr = addr;
-    dns.ip.type = IPADDR_TYPE_V4;
+    if (netif == NULL) {
+        ESP_LOGE(TAG, "netif is NULL");
+        return ESP_ERR_INVALID_ARG;
+    }
+
+    // Configura o DNS que será oferecido pelo DHCP Server
+    esp_netif_dns_info_t dns = {
+        .ip = {
+            .type = IPADDR_TYPE_V4,
+            .u_addr.ip4.addr = addr,
+        }
+    };
+
+    // Habilita a oferta de DNS via DHCP Server
     dhcps_offer_t dhcps_dns_value = OFFER_DNS;
-    ESP_ERROR_CHECK_WITHOUT_ABORT(esp_netif_dhcps_stop(netif));
-    ESP_ERROR_CHECK(esp_netif_dhcps_option(netif, ESP_NETIF_OP_SET, ESP_NETIF_DOMAIN_NAME_SERVER, &dhcps_dns_value, sizeof(dhcps_dns_value)));
-    ESP_ERROR_CHECK(esp_netif_set_dns_info(netif, ESP_NETIF_DNS_MAIN, &dns));
-    ESP_ERROR_CHECK_WITHOUT_ABORT(esp_netif_dhcps_start(netif));
+    esp_err_t err;
+
+    err = esp_netif_dhcps_option(netif, ESP_NETIF_OP_SET, ESP_NETIF_DOMAIN_NAME_SERVER,
+                                  &dhcps_dns_value, sizeof(dhcps_dns_value));
+    if (err != ESP_OK) {
+        ESP_LOGE(TAG, "Failed to set DHCP option for DNS: %s", esp_err_to_name(err));
+        return err;
+    }
+
+    // Define o DNS principal
+    err = esp_netif_set_dns_info(netif, ESP_NETIF_DNS_MAIN, &dns);
+    if (err != ESP_OK) {
+        ESP_LOGE(TAG, "Failed to set DNS info: %s", esp_err_to_name(err));
+        return err;
+    }
+
+    // Inicia o servidor DHCP se ainda não estiver em execução
+    err = esp_netif_dhcps_start(netif);
+    if (err != ESP_OK && err != ESP_ERR_ESP_NETIF_DHCP_ALREADY_STARTED) {
+        ESP_LOGE(TAG, "Failed to start DHCP server: %s", esp_err_to_name(err));
+        return err;
+    }
+
+    ESP_LOGI(TAG, "DNS server set successfully via DHCP");
     return ESP_OK;
 }
 
@@ -351,6 +383,20 @@ static esp_netif_t* create_mesh_link_ap(void)
 }
 
 /**
+ * @brief Destroy esp-netif for AP interface over mesh
+ */
+static void destory_mesh_link_ap(void)
+{
+    if (netif_ap) {
+        ESP_ERROR_CHECK_WITHOUT_ABORT(esp_netif_dhcps_stop(netif_ap));
+        esp_netif_action_disconnected(netif_ap, NULL, 0, NULL);
+        mesh_delete_if_driver(esp_netif_get_io_driver(netif_ap));
+        esp_netif_destroy(netif_ap);
+        netif_ap = NULL;
+    }
+}
+
+/**
  * @brief Creates esp-netif for station interface over mesh
  *
  * @note Interface needs to be started (later) using the above APIs
@@ -376,12 +422,7 @@ static esp_netif_t* create_mesh_link_sta(void)
 esp_err_t mesh_netif_start_root_ap(bool is_root, uint32_t addr)
 {
     if (is_root) {
-        if (netif_ap) {
-            esp_netif_action_disconnected(netif_ap, NULL, 0, NULL);
-            mesh_delete_if_driver(esp_netif_get_io_driver(netif_ap));
-            esp_netif_destroy(netif_ap);
-            netif_ap = NULL;
-        }
+        destory_mesh_link_ap();
         netif_ap = create_mesh_link_ap();
         mesh_netif_driver_t driver = mesh_create_if_driver(true, true);
         if (driver == NULL) {
@@ -389,7 +430,7 @@ esp_err_t mesh_netif_start_root_ap(bool is_root, uint32_t addr)
             return ESP_FAIL;
         }
         esp_netif_attach(netif_ap, driver);
-        set_dhcps_dns(netif_ap, addr);
+        set_dhcps_dns(netif_ap, ipaddr_addr("8.8.8.8")); // Google DNS
         start_mesh_link_ap();
         ip_napt_enable(g_mesh_netif_subnet_ip.ip.addr, 1);
     }
@@ -445,13 +486,7 @@ esp_err_t mesh_netifs_start(bool is_root)
         esp_netif_attach(netif_sta, driver);
         start_mesh_link_sta();
         // If we have a AP on NODE -> stop and remove it!
-        if (netif_ap) {
-            esp_netif_action_disconnected(netif_ap, NULL, 0, NULL);
-            mesh_delete_if_driver(esp_netif_get_io_driver(netif_ap));
-            esp_netif_destroy(netif_ap);
-            netif_ap = NULL;
-        }
-
+        destory_mesh_link_ap();
     }
     return ESP_OK;
 }
@@ -475,12 +510,7 @@ esp_err_t mesh_netifs_stop(void)
         netif_sta = NULL;
     }
 
-    if (netif_ap) {
-        esp_netif_action_disconnected(netif_ap, NULL, 0, NULL);
-        mesh_delete_if_driver(esp_netif_get_io_driver(netif_ap));
-        esp_netif_destroy(netif_ap);
-        netif_ap = NULL;
-    }
+    destory_mesh_link_ap();
     // reserve the default (STA gets ready to become root)
     mesh_netif_init_station();
     start_wifi_link_sta();

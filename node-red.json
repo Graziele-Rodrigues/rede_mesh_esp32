@@ -1,0 +1,787 @@
+[
+    {
+        "id": "fe162edfc74f05cc",
+        "type": "tab",
+        "label": "Rede MESH",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "31235f87aab3a89d",
+        "type": "ui_tab",
+        "name": "Home",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "d7cacd98f609ab2b",
+        "type": "ui_base",
+        "theme": {
+            "name": "theme-light",
+            "lightTheme": {
+                "default": "#0094CE",
+                "baseColor": "#8b0433",
+                "baseFont": "Arial Black,Arial Black,Gadget,sans-serif",
+                "edited": true,
+                "reset": false
+            },
+            "darkTheme": {
+                "default": "#097479",
+                "baseColor": "#953232",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": true,
+                "reset": false
+            },
+            "customTheme": {
+                "name": "Untitled Theme 1",
+                "default": "#4B7930",
+                "baseColor": "#4B7930",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "reset": false
+            },
+            "themeState": {
+                "base-color": {
+                    "default": "#0094CE",
+                    "value": "#8b0433",
+                    "edited": true
+                },
+                "page-titlebar-backgroundColor": {
+                    "value": "#8b0433",
+                    "edited": false
+                },
+                "page-backgroundColor": {
+                    "value": "#fafafa",
+                    "edited": false
+                },
+                "page-sidebar-backgroundColor": {
+                    "value": "#333333",
+                    "edited": false
+                },
+                "group-textColor": {
+                    "value": "#d5064e",
+                    "edited": false
+                },
+                "group-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "widget-textColor": {
+                    "value": "#111111",
+                    "edited": false
+                },
+                "widget-backgroundColor": {
+                    "value": "#8b0433",
+                    "edited": false
+                },
+                "widget-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "base-font": {
+                    "value": "Arial Black,Arial Black,Gadget,sans-serif"
+                }
+            },
+            "angularTheme": {
+                "primary": "indigo",
+                "accents": "blue",
+                "warn": "red",
+                "background": "grey",
+                "palette": "light"
+            }
+        },
+        "site": {
+            "name": "Node-RED Dashboard",
+            "hideToolbar": "false",
+            "allowSwipe": "false",
+            "lockMenu": "false",
+            "allowTempTheme": "true",
+            "dateFormat": "DD/MM/YYYY",
+            "sizes": {
+                "sx": 100,
+                "sy": 50,
+                "gx": 6,
+                "gy": 6,
+                "cx": 6,
+                "cy": 6,
+                "px": 0,
+                "py": 0
+            }
+        }
+    },
+    {
+        "id": "fd8240562a77573a",
+        "type": "ui_group",
+        "name": "Rede Mesh",
+        "tab": "31235f87aab3a89d",
+        "order": 1,
+        "disp": true,
+        "width": "13",
+        "collapse": true,
+        "className": ""
+    },
+    {
+        "id": "6ec4dcef.913b24",
+        "type": "mqtt-broker",
+        "name": "eclipse",
+        "broker": "mqtt://mqtt.eclipseprojects.io",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "15",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "34f7d58bd9d5abbd",
+        "type": "ui_spacer",
+        "z": "fe162edfc74f05cc",
+        "name": "spacer",
+        "group": "fd8240562a77573a",
+        "order": 7,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "1ae8d6e28342dd97",
+        "type": "ui_spacer",
+        "z": "fe162edfc74f05cc",
+        "name": "spacer",
+        "group": "fd8240562a77573a",
+        "order": 10,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "6476a8036ddcb4d3",
+        "type": "ui_spacer",
+        "z": "fe162edfc74f05cc",
+        "name": "spacer",
+        "group": "fd8240562a77573a",
+        "order": 11,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "87f2bee27702dbd9",
+        "type": "ui_spacer",
+        "z": "fe162edfc74f05cc",
+        "name": "spacer",
+        "group": "fd8240562a77573a",
+        "order": 12,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "c3597e913f61b82a",
+        "type": "ui_spacer",
+        "z": "fe162edfc74f05cc",
+        "name": "spacer",
+        "group": "fd8240562a77573a",
+        "order": 13,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "552f9f8215069105",
+        "type": "ui_spacer",
+        "z": "fe162edfc74f05cc",
+        "name": "spacer",
+        "group": "fd8240562a77573a",
+        "order": 14,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "24730378b99b48a8",
+        "type": "ui_spacer",
+        "z": "fe162edfc74f05cc",
+        "name": "spacer",
+        "group": "fd8240562a77573a",
+        "order": 15,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "3d30cd226133c080",
+        "type": "ui_spacer",
+        "z": "fe162edfc74f05cc",
+        "name": "spacer",
+        "group": "fd8240562a77573a",
+        "order": 17,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "188a35a9c030bdb9",
+        "type": "ui_spacer",
+        "z": "fe162edfc74f05cc",
+        "name": "spacer",
+        "group": "fd8240562a77573a",
+        "order": 18,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "34bed5ce176c1f99",
+        "type": "ui_spacer",
+        "z": "fe162edfc74f05cc",
+        "name": "spacer",
+        "group": "fd8240562a77573a",
+        "order": 20,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "21fb2f687c873502",
+        "type": "mqtt in",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "topic": "/topic/ip_mesh",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "6ec4dcef.913b24",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 210,
+        "y": 360,
+        "wires": [
+            [
+                "97aee0cc7523e74f",
+                "1eafb341a22a1bf9"
+            ]
+        ]
+    },
+    {
+        "id": "97aee0cc7523e74f",
+        "type": "debug",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 480,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "1eafb341a22a1bf9",
+        "type": "ui_template",
+        "z": "fe162edfc74f05cc",
+        "group": "fd8240562a77573a",
+        "name": "Nós na rede",
+        "order": 3,
+        "width": 13,
+        "height": 4,
+        "format": "\n\n<table class=\"table\" id=\"NosRede\">\n    <thead>\n        <tr>\n            <th>Layer</th>\n            <th>IP Address</th>\n        </tr>\n    </thead>\n    <tbody></tbody>\n</table>\n\n<script>\n    (function(scope) {\n        const tableBody = document.querySelector(\"#NosRede tbody\");\n        const ipMap = new Map(); // Armazena os IPs e suas layers\n\n        // Atualiza a tabela com os dados recebidos\n        scope.$watch('msg.payload', function(data) {\n            if (!data || typeof data !== 'string') {\n                console.error(\"Dados inválidos:\", data);\n                return;\n            }\n\n            const match = data.match(/layer:(\\d+) IP:([\\d\\.]+)/);\n            if (!match) {\n                console.error(\"Formato inesperado de dados:\", data);\n                return;\n            }\n\n            const layer = match[1];\n            const ip = match[2];\n\n            // Só adiciona ou atualiza se o IP for novo ou a layer mudar\n            if (!ipMap.has(ip) || ipMap.get(ip) !== layer) {\n                ipMap.set(ip, layer);\n                atualizarTabela();\n            }\n        });\n\n        function atualizarTabela() {\n            tableBody.innerHTML = \"\";\n            ipMap.forEach((layer, ip) => {\n                const row = document.createElement(\"tr\");\n                    row.innerHTML = `\n                    <td>${layer}</td>\n                    <td>${ip}</td>\n                    `;\n                tableBody.appendChild(row);\n            });\n        }\n    })(scope);\n</script>\n\n<style>\n    .table {\n        width: 100%;\n        border-collapse: collapse;\n        /* Remove espaços entre células */\n        margin: 10px 0;\n        font-family: Arial, sans-serif;\n    }\n\n    .table th,\n    .table td {\n        border: 1px solid #ddd;\n        padding: 12px;\n        text-align: center;\n    }\n\n    .table th {\n        background-color: #ba5358;\n        /* Cor do cabeçalho */\n        color: white;\n    }\n\n    /* Estilo para linhas alternadas */\n    .table tbody tr:nth-child(even) {\n        background-color: #f2f2f2;\n        /* Cinza claro para linhas pares */\n    }\n\n    .table tbody tr:nth-child(odd) {\n        background-color: white;\n        /* Branco para linhas ímpares */\n    }\n\n    /* Estilo para hover */\n    .table tbody tr:hover {\n        background-color: #e6e6e6;\n    }\n</style>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 500,
+        "y": 420,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b95c6de7b9a07bd5",
+        "type": "mqtt out",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "topic": "/topic/mesh/restart",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "6ec4dcef.913b24",
+        "x": 950,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "82f56e61572fb8e0",
+        "type": "ui_button",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "group": "fd8240562a77573a",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Reinicia Rede Mesh",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "restart_mesh",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 760,
+        "y": 120,
+        "wires": [
+            [
+                "b95c6de7b9a07bd5"
+            ]
+        ]
+    },
+    {
+        "id": "14fd78d246c6c3b5",
+        "type": "mqtt in",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "topic": "/topic/mesh/sensor_data",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "6ec4dcef.913b24",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 810,
+        "y": 340,
+        "wires": [
+            [
+                "71f1310f16913cb3",
+                "b6e156717e6dc495"
+            ]
+        ]
+    },
+    {
+        "id": "71f1310f16913cb3",
+        "type": "debug",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1060,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "b6e156717e6dc495",
+        "type": "ui_template",
+        "z": "fe162edfc74f05cc",
+        "group": "fd8240562a77573a",
+        "name": "Dados Sensores",
+        "order": 2,
+        "width": 13,
+        "height": 4,
+        "format": "<table class=\"table\" id=\"sensorTable\">\n    <thead>\n        <tr>\n            <th>MAC Address</th>\n            <th>Temperatura (°C)</th>\n            <th>Umidade (%)</th>\n            <th>Latência (ms)</th>\n        </tr>\n    </thead>\n    <tbody></tbody>\n</table>\n\n<script>\n    (function(scope) {\n        const tableBody = document.querySelector(\"#sensorTable tbody\");\n        const sensorData = {}; // Armazena os dados por MAC\n\n        scope.$watch('msg.payload', function(data) {\n            if (!data) return;\n            \n            // Verifica se é o objeto direto com os dados\n            if (typeof data === 'object' && data.mac && data.temp !== undefined && \n                data.hum !== undefined && data.latency_ms !== undefined) {\n                \n                const mac = data.mac;\n                const temp = parseFloat(data.temp).toFixed(2);\n                const hum = parseFloat(data.hum).toFixed(2);\n                const lat = data.latency_ms.toString();\n                \n                // Atualiza ou adiciona os dados\n                sensorData[mac] = {\n                    mac: mac,\n                    temperatura: temp,\n                    umidade: hum,\n                    latencia: lat\n                };\n                \n                atualizarTabela();\n            }\n        });\n\n        function atualizarTabela() {\n            tableBody.innerHTML = \"\";\n            \n            // Ordena por MAC address antes de exibir\n            const sortedMacs = Object.keys(sensorData).sort();\n            \n            sortedMacs.forEach(mac => {\n                const item = sensorData[mac];\n                const row = document.createElement(\"tr\");\n\n                const macCell = document.createElement(\"td\");\n                const tempCell = document.createElement(\"td\");\n                const humCell = document.createElement(\"td\");\n                const latCell = document.createElement(\"td\");\n\n                macCell.textContent = item.mac;\n                tempCell.textContent = item.temperatura;\n                humCell.textContent = item.umidade;\n                latCell.textContent = item.latencia;\n\n                row.appendChild(macCell);\n                row.appendChild(tempCell);\n                row.appendChild(humCell);\n                row.appendChild(latCell);\n                tableBody.appendChild(row);\n            });\n        }\n    })(scope);\n</script>\n\n<style>\n    .table {\n        width: 100%;\n        border-collapse: collapse;\n        margin: 10px 0;\n        font-family: Arial, sans-serif;\n    }\n\n    .table th,\n    .table td {\n        border: 1px solid #ddd;\n        padding: 12px;\n        text-align: center;\n    }\n\n    .table th {\n        background-color: #ba5358;\n        color: white;\n    }\n\n    .table tbody tr:nth-child(even) {\n        background-color: #f2f2f2;\n    }\n\n    .table tbody tr:nth-child(odd) {\n        background-color: white;\n    }\n\n    .table tbody tr:hover {\n        background-color: #e6e6e6;\n    }\n</style>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 1080,
+        "y": 400,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "cc90ac8d96627ca4",
+        "type": "mqtt in",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "topic": "/topic/mesh/success_rate",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "6ec4dcef.913b24",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 250,
+        "y": 560,
+        "wires": [
+            [
+                "e73c6cefdfa57c62",
+                "7ab7fa38b83badc6"
+            ]
+        ]
+    },
+    {
+        "id": "e73c6cefdfa57c62",
+        "type": "ui_gauge",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "group": "fd8240562a77573a",
+        "order": 8,
+        "width": 5,
+        "height": 3,
+        "gtype": "compass",
+        "title": "Taxa de Sucesso",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": true,
+        "className": "",
+        "x": 530,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "7ab7fa38b83badc6",
+        "type": "debug",
+        "z": "fe162edfc74f05cc",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 520,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "56d4d46dda5f71e3",
+        "type": "mqtt in",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "topic": "/topic/mesh/packet_loss",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "6ec4dcef.913b24",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 240,
+        "y": 680,
+        "wires": [
+            [
+                "6e4b07d7691408f2",
+                "6824732e7ace6ff2"
+            ]
+        ]
+    },
+    {
+        "id": "6e4b07d7691408f2",
+        "type": "ui_gauge",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "group": "fd8240562a77573a",
+        "order": 9,
+        "width": 5,
+        "height": 3,
+        "gtype": "compass",
+        "title": "Perda de Pacotes",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": true,
+        "className": "",
+        "x": 530,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "6824732e7ace6ff2",
+        "type": "debug",
+        "z": "fe162edfc74f05cc",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 520,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "ec1215e45a3752fc",
+        "type": "mqtt in",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "topic": "/topic/mesh/hops",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "6ec4dcef.913b24",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 780,
+        "y": 560,
+        "wires": [
+            [
+                "9daa5a355f096730",
+                "a85f8035ca6860cc"
+            ]
+        ]
+    },
+    {
+        "id": "9daa5a355f096730",
+        "type": "debug",
+        "z": "fe162edfc74f05cc",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1080,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "09a386911eb5e6be",
+        "type": "mqtt in",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "topic": "/topic/mesh/parent_changes",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "6ec4dcef.913b24",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 820,
+        "y": 740,
+        "wires": [
+            [
+                "d945a2217a661ec1",
+                "52bc7c35e9e9eb9b"
+            ]
+        ]
+    },
+    {
+        "id": "d945a2217a661ec1",
+        "type": "debug",
+        "z": "fe162edfc74f05cc",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1080,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "52bc7c35e9e9eb9b",
+        "type": "ui_text",
+        "z": "fe162edfc74f05cc",
+        "group": "fd8240562a77573a",
+        "order": 16,
+        "width": 10,
+        "height": 1,
+        "name": "",
+        "label": "Trocas Nó Pai",
+        "format": "{{msg.payload}}",
+        "layout": "col-center",
+        "className": "",
+        "style": true,
+        "font": "Courier,monospace",
+        "fontSize": 16,
+        "color": "#093877",
+        "x": 1100,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "b28b32199b8455b0",
+        "type": "mqtt in",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "topic": "/topic/mesh/reconnection_time",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "6ec4dcef.913b24",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 820,
+        "y": 920,
+        "wires": [
+            [
+                "21055d2a357f1147",
+                "1110ca6766629f01"
+            ]
+        ]
+    },
+    {
+        "id": "21055d2a357f1147",
+        "type": "debug",
+        "z": "fe162edfc74f05cc",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1080,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "1110ca6766629f01",
+        "type": "ui_text",
+        "z": "fe162edfc74f05cc",
+        "group": "fd8240562a77573a",
+        "order": 19,
+        "width": 10,
+        "height": 1,
+        "name": "",
+        "label": "Tempo reconexão ",
+        "format": "{{msg.payload}}",
+        "layout": "col-center",
+        "className": "",
+        "style": true,
+        "font": "Courier,monospace",
+        "fontSize": 16,
+        "color": "#4c72a4",
+        "x": 1110,
+        "y": 960,
+        "wires": []
+    },
+    {
+        "id": "a47dcbe00263b4eb",
+        "type": "mqtt in",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "topic": "/topic/mesh/rssi",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "6ec4dcef.913b24",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 260,
+        "y": 1040,
+        "wires": [
+            [
+                "4763d34c1db8b10a",
+                "a37ed992cb642a0f"
+            ]
+        ]
+    },
+    {
+        "id": "4763d34c1db8b10a",
+        "type": "debug",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 520,
+        "y": 1000,
+        "wires": []
+    },
+    {
+        "id": "a37ed992cb642a0f",
+        "type": "ui_template",
+        "z": "fe162edfc74f05cc",
+        "group": "fd8240562a77573a",
+        "name": "RSSI na rede",
+        "order": 4,
+        "width": 13,
+        "height": 4,
+        "format": "<table class=\"table\" id=\"rssiTable\">\n    <thead>\n        <tr>\n            <th>MAC Address</th>\n            <th>RSSI (dBm)</th>\n        </tr>\n    </thead>\n    <tbody></tbody>\n</table>\n\n<script>\n    (function(scope) {\n        // Objeto para armazenar dados por MAC\n        const rssiData = {};\n\n        scope.$watch('msg.payload', function(data) {\n            if (!data || typeof data !== 'string') return;\n\n            // Espera o formato \"AA:BB:CC:DD:EE:FF - RSSI: -60\"\n            const parts = data.split(\" - RSSI: \");\n            if (parts.length !== 2) return;\n\n            const mac = parts[0].trim();\n            const rssi = parseInt(parts[1]);\n\n            if (!mac || isNaN(rssi)) return;\n\n            // Atualiza o dado\n            rssiData[mac] = rssi;\n\n            // Atualiza a tabela\n            const tableBody = document.querySelector(\"#rssiTable tbody\");\n            tableBody.innerHTML = \"\";\n\n            Object.keys(rssiData).forEach(macAddr => {\n                const row = document.createElement(\"tr\");\n                \n                const macCell = document.createElement(\"td\");\n                const rssiCell = document.createElement(\"td\");\n\n                macCell.textContent = macAddr;\n                rssiCell.textContent = rssiData[macAddr];\n\n                row.appendChild(macCell);\n                row.appendChild(rssiCell);\n                tableBody.appendChild(row);\n            });\n        });\n    })(scope);\n</script>\n\n<style>\n    .table {\n        width: 100%;\n        border-collapse: collapse;\n        /* Remove espaços entre células */\n        margin: 10px 0;\n        font-family: Arial, sans-serif;\n    }\n\n    .table th,\n    .table td {\n        border: 1px solid #ddd;\n        padding: 12px;\n        text-align: center;\n    }\n\n    .table th {\n        background-color: #ba5358;\n        /* Cor do cabeçalho */\n        color: white;\n    }\n\n    /* Estilo para linhas alternadas */\n    .table tbody tr:nth-child(even) {\n        background-color: #f2f2f2;\n        /* Cinza claro para linhas pares */\n    }\n\n    .table tbody tr:nth-child(odd) {\n        background-color: white;\n        /* Branco para linhas ímpares */\n    }\n\n    /* Estilo para hover */\n    .table tbody tr:hover {\n        background-color: #e6e6e6;\n    }\n</style>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 550,
+        "y": 1100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a85f8035ca6860cc",
+        "type": "ui_template",
+        "z": "fe162edfc74f05cc",
+        "group": "fd8240562a77573a",
+        "name": "N° Saltos",
+        "order": 5,
+        "width": 13,
+        "height": 4,
+        "format": "<table class=\"table\" id=\"hopsTable\">\n    <thead>\n        <tr>\n            <th>MAC Address</th>\n            <th>Saltos (Hops)</th>\n        </tr>\n    </thead>\n    <tbody></tbody>\n</table>\n\n<script>\n    (function(scope) {\n        const tableBody = document.querySelector(\"#hopsTable tbody\");\n        const hopsData = {}; // Armazena apenas os dados de hops por MAC\n\n        scope.$watch('msg.payload', function(data) {\n            if (!data) return;\n            \n            // Verifica se é a mensagem de hops no formato esperado\n            if (typeof data === 'string' && data.includes(\" - Hops:\") && \n                data.match(/([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})/)) {\n                \n                // Extrai MAC e número de saltos\n                const mac = data.match(/(([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2}))/)[0];\n                const hops = data.match(/Hops: (\\d+)/)[1];\n                \n                // Atualiza ou adiciona os dados\n                hopsData[mac] = {\n                    mac: mac,\n                    hops: hops\n                };\n                \n                atualizarTabela();\n            }\n        });\n\n        function atualizarTabela() {\n            tableBody.innerHTML = \"\";\n            \n            // Ordena por MAC address antes de exibir\n            const sortedMacs = Object.keys(hopsData).sort();\n            \n            sortedMacs.forEach(mac => {\n                const item = hopsData[mac];\n                const row = document.createElement(\"tr\");\n\n                const macCell = document.createElement(\"td\");\n                const hopsCell = document.createElement(\"td\");\n\n                macCell.textContent = item.mac;\n                hopsCell.textContent = item.hops;\n\n                row.appendChild(macCell);\n                row.appendChild(hopsCell);\n                tableBody.appendChild(row);\n            });\n        }\n    })(scope);\n</script>\n\n<style>\n    .table {\n        width: 100%;\n        border-collapse: collapse;\n        margin: 10px 0;\n        font-family: Arial, sans-serif;\n    }\n\n    .table th,\n    .table td {\n        border: 1px solid #ddd;\n        padding: 12px;\n        text-align: center;\n    }\n\n    .table th {\n        background-color: #ba5358;\n        /* Cor verde para diferenciar */\n        color: white;\n    }\n\n    .table tbody tr:nth-child(even) {\n        background-color: #f2f2f2;\n    }\n\n    .table tbody tr:nth-child(odd) {\n        background-color: white;\n    }\n\n    .table tbody tr:hover {\n        background-color: #e6e6e6;\n    }\n</style>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 1060,
+        "y": 600,
+        "wires": [
+            []
+        ]
+    }
+]
