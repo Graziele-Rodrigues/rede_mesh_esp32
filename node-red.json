@@ -153,7 +153,7 @@
         "sessionExpiry": ""
     },
     {
-        "id": "362289d3fec07326",
+        "id": "7dcbe993eec56826",
         "type": "ui_spacer",
         "z": "fe162edfc74f05cc",
         "name": "spacer",
@@ -163,7 +163,7 @@
         "height": 1
     },
     {
-        "id": "8f5ce948b723077f",
+        "id": "6dab376e1cd4f090",
         "type": "ui_spacer",
         "z": "fe162edfc74f05cc",
         "name": "spacer",
@@ -173,7 +173,7 @@
         "height": 1
     },
     {
-        "id": "ea8e42f284eadcdb",
+        "id": "eef3c6b6baa7adb4",
         "type": "ui_spacer",
         "z": "fe162edfc74f05cc",
         "name": "spacer",
@@ -183,7 +183,7 @@
         "height": 1
     },
     {
-        "id": "fec5d99a92e18c6d",
+        "id": "bd57454c3bf98609",
         "type": "ui_spacer",
         "z": "fe162edfc74f05cc",
         "name": "spacer",
@@ -193,7 +193,7 @@
         "height": 1
     },
     {
-        "id": "6ead3099f1d433d9",
+        "id": "38c0a27bf6751563",
         "type": "ui_spacer",
         "z": "fe162edfc74f05cc",
         "name": "spacer",
@@ -203,7 +203,7 @@
         "height": 1
     },
     {
-        "id": "18a30113b49a5799",
+        "id": "aa8de861582359bd",
         "type": "ui_spacer",
         "z": "fe162edfc74f05cc",
         "name": "spacer",
@@ -213,44 +213,50 @@
         "height": 1
     },
     {
-        "id": "90c3d9330a106fae",
+        "id": "6078fc4dcbafa8fb",
         "type": "ui_spacer",
         "z": "fe162edfc74f05cc",
         "name": "spacer",
         "group": "fd8240562a77573a",
-        "order": 14,
+        "order": 15,
         "width": 1,
         "height": 1
     },
     {
-        "id": "a7da82cb0b97452c",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "fd8240562a77573a",
-        "order": 16,
-        "width": 2,
-        "height": 1
-    },
-    {
-        "id": "ee08190886b9d96b",
+        "id": "cef56d74388eb76b",
         "type": "ui_spacer",
         "z": "fe162edfc74f05cc",
         "name": "spacer",
         "group": "fd8240562a77573a",
         "order": 17,
-        "width": 1,
+        "width": 2,
         "height": 1
     },
     {
-        "id": "5e81f0d35dc7e7e8",
+        "id": "314b6306dd12a2b8",
         "type": "ui_spacer",
         "z": "fe162edfc74f05cc",
         "name": "spacer",
         "group": "fd8240562a77573a",
-        "order": 19,
+        "order": 18,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "c20b99c15fdaf7b2",
+        "type": "ui_spacer",
+        "z": "fe162edfc74f05cc",
+        "name": "spacer",
+        "group": "fd8240562a77573a",
+        "order": 20,
         "width": 2,
         "height": 1
+    },
+    {
+        "id": "b931a41ca7c16188",
+        "type": "sqlitedb",
+        "db": "C:/Users/grazi/TCC/rede_mesh.db",
+        "mode": "RWC"
     },
     {
         "id": "21fb2f687c873502",
@@ -268,27 +274,9 @@
         "y": 360,
         "wires": [
             [
-                "97aee0cc7523e74f",
                 "1eafb341a22a1bf9"
             ]
         ]
-    },
-    {
-        "id": "97aee0cc7523e74f",
-        "type": "debug",
-        "z": "fe162edfc74f05cc",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 480,
-        "y": 320,
-        "wires": []
     },
     {
         "id": "1eafb341a22a1bf9",
@@ -299,14 +287,14 @@
         "order": 5,
         "width": 13,
         "height": 5,
-        "format": "\n\n<table class=\"table\" id=\"NosRede\">\n    <thead>\n        <tr>\n            <th>Layer</th>\n            <th>IP Address</th>\n        </tr>\n    </thead>\n    <tbody></tbody>\n</table>\n\n<script>\n    (function(scope) {\n        const tableBody = document.querySelector(\"#NosRede tbody\");\n        const ipMap = new Map(); // Armazena os IPs e suas layers\n\n        // Atualiza a tabela com os dados recebidos\n        scope.$watch('msg.payload', function(data) {\n            if (!data || typeof data !== 'string') {\n                console.error(\"Dados inválidos:\", data);\n                return;\n            }\n\n            const match = data.match(/layer:(\\d+) IP:([\\d\\.]+)/);\n            if (!match) {\n                console.error(\"Formato inesperado de dados:\", data);\n                return;\n            }\n\n            const layer = match[1];\n            const ip = match[2];\n\n            // Só adiciona ou atualiza se o IP for novo ou a layer mudar\n            if (!ipMap.has(ip) || ipMap.get(ip) !== layer) {\n                ipMap.set(ip, layer);\n                atualizarTabela();\n            }\n        });\n\n        function atualizarTabela() {\n            tableBody.innerHTML = \"\";\n            ipMap.forEach((layer, ip) => {\n                const row = document.createElement(\"tr\");\n                    row.innerHTML = `\n                    <td>${layer}</td>\n                    <td>${ip}</td>\n                    `;\n                tableBody.appendChild(row);\n            });\n        }\n    })(scope);\n</script>\n\n<style>\n    .table {\n        width: 100%;\n        border-collapse: collapse;\n        /* Remove espaços entre células */\n        margin: 10px 0;\n        font-family: Arial, sans-serif;\n    }\n\n    .table th,\n    .table td {\n        border: 1px solid #ddd;\n        padding: 12px;\n        text-align: center;\n    }\n\n    .table th {\n        background-color: #ba5358;\n        /* Cor do cabeçalho */\n        color: white;\n    }\n\n    /* Estilo para linhas alternadas */\n    .table tbody tr:nth-child(even) {\n        background-color: #f2f2f2;\n        /* Cinza claro para linhas pares */\n    }\n\n    .table tbody tr:nth-child(odd) {\n        background-color: white;\n        /* Branco para linhas ímpares */\n    }\n\n    /* Estilo para hover */\n    .table tbody tr:hover {\n        background-color: #e6e6e6;\n    }\n</style>",
+        "format": "\n\n<table class=\"table\" id=\"NosRede\">\n    <thead>\n        <tr>\n            <th>Layer</th>\n            <th>IP Address</th>\n        </tr>\n    </thead>\n    <tbody></tbody>\n</table>\n\n<script>\n    (function(scope) {\n        const tableBody = document.querySelector(\"#NosRede tbody\");\n        const ipMap = new Map(); // Armazena os IPs e suas layers\n\n        // Atualiza a tabela com os dados recebidos\n        scope.$watch('msg.payload', function(data) {\n            if (!data || typeof data !== 'string') {\n                console.error(\"Dados inválidos:\", data);\n                return;\n            }\n\n            const match = data.match(/layer:(\\d+) IP:([\\d\\.]+)/);\n            if (!match) {\n                console.error(\"Formato inesperado de dados:\", data);\n                return;\n            }\n\n            const layer = match[1];\n            const ip = match[2];\n\n            // Só adiciona ou atualiza se o IP for novo ou a layer mudar\n            if (!ipMap.has(ip) || ipMap.get(ip) !== layer) {\n                ipMap.set(ip, layer);\n                atualizarTabela();\n            }\n        });\n\n        function atualizarTabela() {\n            tableBody.innerHTML = \"\";\n            ipMap.forEach((layer, ip) => {\n                const row = document.createElement(\"tr\");\n                    row.innerHTML = `\n                    <td>${layer}</td>\n                    <td>${ip}</td>\n                    `;\n                tableBody.appendChild(row);\n            });\n        }\n    })(scope);\n</script>\n\n<style>\n    .table {\n        width: 100%;\n        border-collapse: collapse;\n        /* Remove espaços entre células */\n        margin: 10px 0;\n        font-family: Arial, sans-serif;\n        font-size: 20px; \n\n    }\n\n    .table th,\n    .table td {\n        border: 1px solid #ddd;\n        padding: 12px;\n        text-align: center;\n    }\n\n    .table th {\n        background-color: #ba5358;\n        /* Cor do cabeçalho */\n        color: white;\n    }\n\n    /* Estilo para linhas alternadas */\n    .table tbody tr:nth-child(even) {\n        background-color: #f2f2f2;\n        /* Cinza claro para linhas pares */\n    }\n\n    .table tbody tr:nth-child(odd) {\n        background-color: white;\n        /* Branco para linhas ímpares */\n    }\n\n    /* Estilo para hover */\n    .table tbody tr:hover {\n        background-color: #e6e6e6;\n    }\n</style>",
         "storeOutMessages": true,
         "fwdInMessages": true,
         "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
-        "x": 500,
-        "y": 420,
+        "x": 510,
+        "y": 360,
         "wires": [
             []
         ]
@@ -325,8 +313,8 @@
         "correl": "",
         "expiry": "",
         "broker": "6ec4dcef.913b24",
-        "x": 950,
-        "y": 180,
+        "x": 1030,
+        "y": 120,
         "wires": []
     },
     {
@@ -373,27 +361,9 @@
         "y": 340,
         "wires": [
             [
-                "71f1310f16913cb3",
                 "b6e156717e6dc495"
             ]
         ]
-    },
-    {
-        "id": "71f1310f16913cb3",
-        "type": "debug",
-        "z": "fe162edfc74f05cc",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1060,
-        "y": 300,
-        "wires": []
     },
     {
         "id": "b6e156717e6dc495",
@@ -404,14 +374,14 @@
         "order": 2,
         "width": 13,
         "height": 5,
-        "format": "<table class=\"table\" id=\"sensorTable\">\n    <thead>\n        <tr>\n            <th>MAC Address</th>\n            <th>Temperatura (°C)</th>\n            <th>Umidade (%)</th>\n            <th>Latência (ms)</th>\n        </tr>\n    </thead>\n    <tbody></tbody>\n</table>\n\n<script>\n    (function(scope) {\n        const tableBody = document.querySelector(\"#sensorTable tbody\");\n        const sensorData = {}; // Armazena os dados por MAC\n\n        scope.$watch('msg.payload', function(data) {\n            if (!data) return;\n            \n            // Verifica se é o objeto direto com os dados\n            if (typeof data === 'object' && data.mac && data.temp !== undefined && \n                data.hum !== undefined && data.latency_ms !== undefined) {\n                \n                const mac = data.mac;\n                const temp = parseFloat(data.temp).toFixed(2);\n                const hum = parseFloat(data.hum).toFixed(2);\n                const lat = data.latency_ms.toString();\n                \n                // Atualiza ou adiciona os dados\n                sensorData[mac] = {\n                    mac: mac,\n                    temperatura: temp,\n                    umidade: hum,\n                    latencia: lat\n                };\n                \n                atualizarTabela();\n            }\n        });\n\n        function atualizarTabela() {\n            tableBody.innerHTML = \"\";\n            \n            // Ordena por MAC address antes de exibir\n            const sortedMacs = Object.keys(sensorData).sort();\n            \n            sortedMacs.forEach(mac => {\n                const item = sensorData[mac];\n                const row = document.createElement(\"tr\");\n\n                const macCell = document.createElement(\"td\");\n                const tempCell = document.createElement(\"td\");\n                const humCell = document.createElement(\"td\");\n                const latCell = document.createElement(\"td\");\n\n                macCell.textContent = item.mac;\n                tempCell.textContent = item.temperatura;\n                humCell.textContent = item.umidade;\n                latCell.textContent = item.latencia;\n\n                row.appendChild(macCell);\n                row.appendChild(tempCell);\n                row.appendChild(humCell);\n                row.appendChild(latCell);\n                tableBody.appendChild(row);\n            });\n        }\n    })(scope);\n</script>\n\n<style>\n    .table {\n        width: 100%;\n        border-collapse: collapse;\n        margin: 10px 0;\n        font-family: Arial, sans-serif;\n    }\n\n    .table th,\n    .table td {\n        border: 1px solid #ddd;\n        padding: 12px;\n        text-align: center;\n    }\n\n    .table th {\n        background-color: #ba5358;\n        color: white;\n    }\n\n    .table tbody tr:nth-child(even) {\n        background-color: #f2f2f2;\n    }\n\n    .table tbody tr:nth-child(odd) {\n        background-color: white;\n    }\n\n    .table tbody tr:hover {\n        background-color: #e6e6e6;\n    }\n</style>",
+        "format": "<table class=\"table\" id=\"sensorTable\">\n    <thead>\n        <tr>\n            <th>MAC Address</th>\n            <th>Temperatura (°C)</th>\n            <th>Umidade (%)</th>\n            <th>Latência (ms)</th>\n        </tr>\n    </thead>\n    <tbody></tbody>\n</table>\n\n<script>\n    (function(scope) {\n        const tableBody = document.querySelector(\"#sensorTable tbody\");\n        const sensorData = {}; // Armazena os dados por MAC\n\n        scope.$watch('msg.payload', function(data) {\n            if (!data) return;\n            \n            // Verifica se é o objeto direto com os dados\n            if (typeof data === 'object' && data.mac && data.temp !== undefined && \n                data.hum !== undefined && data.latency_ms !== undefined) {\n                \n                const mac = data.mac;\n                const temp = parseFloat(data.temp).toFixed(2);\n                const hum = parseFloat(data.hum).toFixed(2);\n                const lat = data.latency_ms.toString();\n                \n                // Atualiza ou adiciona os dados\n                sensorData[mac] = {\n                    mac: mac,\n                    temperatura: temp,\n                    umidade: hum,\n                    latencia: lat\n                };\n                \n                atualizarTabela();\n            }\n        });\n\n        function atualizarTabela() {\n            tableBody.innerHTML = \"\";\n            \n            // Ordena por MAC address antes de exibir\n            const sortedMacs = Object.keys(sensorData).sort();\n            \n            sortedMacs.forEach(mac => {\n                const item = sensorData[mac];\n                const row = document.createElement(\"tr\");\n\n                const macCell = document.createElement(\"td\");\n                const tempCell = document.createElement(\"td\");\n                const humCell = document.createElement(\"td\");\n                const latCell = document.createElement(\"td\");\n\n                macCell.textContent = item.mac;\n                tempCell.textContent = item.temperatura;\n                humCell.textContent = item.umidade;\n                latCell.textContent = item.latencia;\n\n                row.appendChild(macCell);\n                row.appendChild(tempCell);\n                row.appendChild(humCell);\n                row.appendChild(latCell);\n                tableBody.appendChild(row);\n            });\n        }\n    })(scope);\n</script>\n\n<style>\n    .table {\n        width: 100%;\n        border-collapse: collapse;\n        margin: 10px 0;\n        font-family: Arial, sans-serif;\n        font-size: 20px;\n    }\n\n    .table th,\n    .table td {\n        border: 1px solid #ddd;\n        padding: 12px;\n        text-align: center;\n    }\n\n    .table th {\n        background-color: #ba5358;\n        color: white;\n    }\n\n    .table tbody tr:nth-child(even) {\n        background-color: #f2f2f2;\n    }\n\n    .table tbody tr:nth-child(odd) {\n        background-color: white;\n    }\n\n    .table tbody tr:hover {\n        background-color: #e6e6e6;\n    }\n</style>",
         "storeOutMessages": true,
         "fwdInMessages": true,
         "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
-        "x": 1080,
-        "y": 400,
+        "x": 1070,
+        "y": 340,
         "wires": [
             []
         ]
@@ -433,8 +403,7 @@
         "y": 560,
         "wires": [
             [
-                "e73c6cefdfa57c62",
-                "7ab7fa38b83badc6"
+                "e73c6cefdfa57c62"
             ]
         ]
     },
@@ -463,23 +432,7 @@
         "diff": true,
         "className": "",
         "x": 530,
-        "y": 580,
-        "wires": []
-    },
-    {
-        "id": "7ab7fa38b83badc6",
-        "type": "debug",
-        "z": "fe162edfc74f05cc",
-        "name": "debug 2",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 520,
-        "y": 520,
+        "y": 560,
         "wires": []
     },
     {
@@ -499,8 +452,7 @@
         "y": 680,
         "wires": [
             [
-                "6e4b07d7691408f2",
-                "6824732e7ace6ff2"
+                "6e4b07d7691408f2"
             ]
         ]
     },
@@ -533,22 +485,6 @@
         "wires": []
     },
     {
-        "id": "6824732e7ace6ff2",
-        "type": "debug",
-        "z": "fe162edfc74f05cc",
-        "name": "debug 3",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 520,
-        "y": 640,
-        "wires": []
-    },
-    {
         "id": "ec1215e45a3752fc",
         "type": "mqtt in",
         "z": "fe162edfc74f05cc",
@@ -565,26 +501,9 @@
         "y": 560,
         "wires": [
             [
-                "9daa5a355f096730",
                 "a85f8035ca6860cc"
             ]
         ]
-    },
-    {
-        "id": "9daa5a355f096730",
-        "type": "debug",
-        "z": "fe162edfc74f05cc",
-        "name": "debug 4",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1080,
-        "y": 520,
-        "wires": []
     },
     {
         "id": "09a386911eb5e6be",
@@ -603,33 +522,16 @@
         "y": 740,
         "wires": [
             [
-                "d945a2217a661ec1",
                 "52bc7c35e9e9eb9b"
             ]
         ]
-    },
-    {
-        "id": "d945a2217a661ec1",
-        "type": "debug",
-        "z": "fe162edfc74f05cc",
-        "name": "debug 5",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1080,
-        "y": 700,
-        "wires": []
     },
     {
         "id": "52bc7c35e9e9eb9b",
         "type": "ui_text",
         "z": "fe162edfc74f05cc",
         "group": "fd8240562a77573a",
-        "order": 15,
+        "order": 16,
         "width": 10,
         "height": 1,
         "name": "",
@@ -641,8 +543,8 @@
         "font": "Courier,monospace",
         "fontSize": 16,
         "color": "#093877",
-        "x": 1100,
-        "y": 780,
+        "x": 1120,
+        "y": 740,
         "wires": []
     },
     {
@@ -659,36 +561,19 @@
         "rh": 0,
         "inputs": 0,
         "x": 820,
-        "y": 920,
+        "y": 820,
         "wires": [
             [
-                "21055d2a357f1147",
                 "1110ca6766629f01"
             ]
         ]
-    },
-    {
-        "id": "21055d2a357f1147",
-        "type": "debug",
-        "z": "fe162edfc74f05cc",
-        "name": "debug 6",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1080,
-        "y": 880,
-        "wires": []
     },
     {
         "id": "1110ca6766629f01",
         "type": "ui_text",
         "z": "fe162edfc74f05cc",
         "group": "fd8240562a77573a",
-        "order": 18,
+        "order": 19,
         "width": 10,
         "height": 1,
         "name": "",
@@ -700,8 +585,8 @@
         "font": "Courier,monospace",
         "fontSize": 16,
         "color": "#4c72a4",
-        "x": 1110,
-        "y": 960,
+        "x": 1130,
+        "y": 820,
         "wires": []
     },
     {
@@ -716,31 +601,13 @@
         "nl": false,
         "rap": false,
         "inputs": 0,
-        "x": 260,
-        "y": 1040,
+        "x": 220,
+        "y": 820,
         "wires": [
             [
-                "4763d34c1db8b10a",
                 "a37ed992cb642a0f"
             ]
         ]
-    },
-    {
-        "id": "4763d34c1db8b10a",
-        "type": "debug",
-        "z": "fe162edfc74f05cc",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 520,
-        "y": 1000,
-        "wires": []
     },
     {
         "id": "a37ed992cb642a0f",
@@ -751,14 +618,14 @@
         "order": 3,
         "width": 13,
         "height": 5,
-        "format": "<table class=\"table\" id=\"rssiTable\">\n    <thead>\n        <tr>\n            <th>MAC Address</th>\n            <th>RSSI (dBm)</th>\n        </tr>\n    </thead>\n    <tbody></tbody>\n</table>\n\n<script>\n    (function(scope) {\n        // Objeto para armazenar dados por MAC\n        const rssiData = {};\n\n        scope.$watch('msg.payload', function(data) {\n            if (!data || typeof data !== 'string') return;\n\n            // Espera o formato \"AA:BB:CC:DD:EE:FF - RSSI: -60\"\n            const parts = data.split(\" - RSSI: \");\n            if (parts.length !== 2) return;\n\n            const mac = parts[0].trim();\n            const rssi = parseInt(parts[1]);\n\n            if (!mac || isNaN(rssi)) return;\n\n            // Atualiza o dado\n            rssiData[mac] = rssi;\n\n            // Atualiza a tabela\n            const tableBody = document.querySelector(\"#rssiTable tbody\");\n            tableBody.innerHTML = \"\";\n\n            Object.keys(rssiData).forEach(macAddr => {\n                const row = document.createElement(\"tr\");\n                \n                const macCell = document.createElement(\"td\");\n                const rssiCell = document.createElement(\"td\");\n\n                macCell.textContent = macAddr;\n                rssiCell.textContent = rssiData[macAddr];\n\n                row.appendChild(macCell);\n                row.appendChild(rssiCell);\n                tableBody.appendChild(row);\n            });\n        });\n    })(scope);\n</script>\n\n<style>\n    .table {\n        width: 100%;\n        border-collapse: collapse;\n        /* Remove espaços entre células */\n        margin: 10px 0;\n        font-family: Arial, sans-serif;\n    }\n\n    .table th,\n    .table td {\n        border: 1px solid #ddd;\n        padding: 12px;\n        text-align: center;\n    }\n\n    .table th {\n        background-color: #ba5358;\n        /* Cor do cabeçalho */\n        color: white;\n    }\n\n    /* Estilo para linhas alternadas */\n    .table tbody tr:nth-child(even) {\n        background-color: #f2f2f2;\n        /* Cinza claro para linhas pares */\n    }\n\n    .table tbody tr:nth-child(odd) {\n        background-color: white;\n        /* Branco para linhas ímpares */\n    }\n\n    /* Estilo para hover */\n    .table tbody tr:hover {\n        background-color: #e6e6e6;\n    }\n</style>",
+        "format": "<table class=\"table\" id=\"rssiTable\">\n    <thead>\n        <tr>\n            <th>MAC Address</th>\n            <th>RSSI (dBm)</th>\n        </tr>\n    </thead>\n    <tbody></tbody>\n</table>\n\n<script>\n    (function(scope) {\n        // Objeto para armazenar dados por MAC\n        const rssiData = {};\n\n        scope.$watch('msg.payload', function(data) {\n            if (!data || typeof data !== 'string') return;\n\n            // Espera o formato \"AA:BB:CC:DD:EE:FF - RSSI: -60\"\n            const parts = data.split(\" - RSSI: \");\n            if (parts.length !== 2) return;\n\n            const mac = parts[0].trim();\n            const rssi = parseInt(parts[1]);\n\n            if (!mac || isNaN(rssi)) return;\n\n            // Atualiza o dado\n            rssiData[mac] = rssi;\n\n            // Atualiza a tabela\n            const tableBody = document.querySelector(\"#rssiTable tbody\");\n            tableBody.innerHTML = \"\";\n\n            Object.keys(rssiData).forEach(macAddr => {\n                const row = document.createElement(\"tr\");\n                \n                const macCell = document.createElement(\"td\");\n                const rssiCell = document.createElement(\"td\");\n\n                macCell.textContent = macAddr;\n                rssiCell.textContent = rssiData[macAddr];\n\n                row.appendChild(macCell);\n                row.appendChild(rssiCell);\n                tableBody.appendChild(row);\n            });\n        });\n    })(scope);\n</script>\n\n<style>\n    .table {\n        width: 100%;\n        border-collapse: collapse;\n        /* Remove espaços entre células */\n        margin: 10px 0;\n        font-family: Arial, sans-serif;\n        font-size: 18px; \n    }\n\n    .table th,\n    .table td {\n        border: 1px solid #ddd;\n        padding: 12px;\n        text-align: center;\n    }\n\n    .table th {\n        background-color: #ba5358;\n        /* Cor do cabeçalho */\n        color: white;\n    }\n\n    /* Estilo para linhas alternadas */\n    .table tbody tr:nth-child(even) {\n        background-color: #f2f2f2;\n        /* Cinza claro para linhas pares */\n    }\n\n    .table tbody tr:nth-child(odd) {\n        background-color: white;\n        /* Branco para linhas ímpares */\n    }\n\n    /* Estilo para hover */\n    .table tbody tr:hover {\n        background-color: #e6e6e6;\n    }\n</style>",
         "storeOutMessages": true,
         "fwdInMessages": true,
         "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
-        "x": 550,
-        "y": 1100,
+        "x": 460,
+        "y": 820,
         "wires": [
             []
         ]
@@ -772,14 +639,14 @@
         "order": 4,
         "width": 13,
         "height": 5,
-        "format": "<table class=\"table\" id=\"hopsTable\">\n    <thead>\n        <tr>\n            <th>MAC Address</th>\n            <th>Saltos (Hops)</th>\n        </tr>\n    </thead>\n    <tbody></tbody>\n</table>\n\n<script>\n    (function(scope) {\n        const tableBody = document.querySelector(\"#hopsTable tbody\");\n        const hopsData = {}; // Armazena apenas os dados de hops por MAC\n\n        scope.$watch('msg.payload', function(data) {\n            if (!data) return;\n            \n            // Verifica se é a mensagem de hops no formato esperado\n            if (typeof data === 'string' && data.includes(\" - Hops:\") && \n                data.match(/([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})/)) {\n                \n                // Extrai MAC e número de saltos\n                const mac = data.match(/(([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2}))/)[0];\n                const hops = data.match(/Hops: (\\d+)/)[1];\n                \n                // Atualiza ou adiciona os dados\n                hopsData[mac] = {\n                    mac: mac,\n                    hops: hops\n                };\n                \n                atualizarTabela();\n            }\n        });\n\n        function atualizarTabela() {\n            tableBody.innerHTML = \"\";\n            \n            // Ordena por MAC address antes de exibir\n            const sortedMacs = Object.keys(hopsData).sort();\n            \n            sortedMacs.forEach(mac => {\n                const item = hopsData[mac];\n                const row = document.createElement(\"tr\");\n\n                const macCell = document.createElement(\"td\");\n                const hopsCell = document.createElement(\"td\");\n\n                macCell.textContent = item.mac;\n                hopsCell.textContent = item.hops;\n\n                row.appendChild(macCell);\n                row.appendChild(hopsCell);\n                tableBody.appendChild(row);\n            });\n        }\n    })(scope);\n</script>\n\n<style>\n    .table {\n        width: 100%;\n        border-collapse: collapse;\n        margin: 10px 0;\n        font-family: Arial, sans-serif;\n    }\n\n    .table th,\n    .table td {\n        border: 1px solid #ddd;\n        padding: 12px;\n        text-align: center;\n    }\n\n    .table th {\n        background-color: #ba5358;\n        /* Cor verde para diferenciar */\n        color: white;\n    }\n\n    .table tbody tr:nth-child(even) {\n        background-color: #f2f2f2;\n    }\n\n    .table tbody tr:nth-child(odd) {\n        background-color: white;\n    }\n\n    .table tbody tr:hover {\n        background-color: #e6e6e6;\n    }\n</style>",
+        "format": "<table class=\"table\" id=\"hopsTable\">\n    <thead>\n        <tr>\n            <th>MAC Address</th>\n            <th>Saltos (Hops)</th>\n        </tr>\n    </thead>\n    <tbody></tbody>\n</table>\n\n<script>\n    (function(scope) {\n        const tableBody = document.querySelector(\"#hopsTable tbody\");\n        const hopsData = {}; // Armazena apenas os dados de hops por MAC\n\n        scope.$watch('msg.payload', function(data) {\n            if (!data) return;\n            \n            // Verifica se é a mensagem de hops no formato esperado\n            if (typeof data === 'string' && data.includes(\" - Hops:\") && \n                data.match(/([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})/)) {\n                \n                // Extrai MAC e número de saltos\n                const mac = data.match(/(([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2}))/)[0];\n                const hops = data.match(/Hops: (\\d+)/)[1];\n                \n                // Atualiza ou adiciona os dados\n                hopsData[mac] = {\n                    mac: mac,\n                    hops: hops\n                };\n                \n                atualizarTabela();\n            }\n        });\n\n        function atualizarTabela() {\n            tableBody.innerHTML = \"\";\n            \n            // Ordena por MAC address antes de exibir\n            const sortedMacs = Object.keys(hopsData).sort();\n            \n            sortedMacs.forEach(mac => {\n                const item = hopsData[mac];\n                const row = document.createElement(\"tr\");\n\n                const macCell = document.createElement(\"td\");\n                const hopsCell = document.createElement(\"td\");\n\n                macCell.textContent = item.mac;\n                hopsCell.textContent = item.hops;\n\n                row.appendChild(macCell);\n                row.appendChild(hopsCell);\n                tableBody.appendChild(row);\n            });\n        }\n    })(scope);\n</script>\n\n<style>\n    .table {\n        width: 100%;\n        border-collapse: collapse;\n        margin: 10px 0;\n        font-family: Arial, sans-serif;\n        font-size: 20px;\n    }\n\n    .table th,\n    .table td {\n        border: 1px solid #ddd;\n        padding: 12px;\n        text-align: center;\n    }\n\n    .table th {\n        background-color: #ba5358;\n        /* Cor verde para diferenciar */\n        color: white;\n    }\n\n    .table tbody tr:nth-child(even) {\n        background-color: #f2f2f2;\n    }\n\n    .table tbody tr:nth-child(odd) {\n        background-color: white;\n    }\n\n    .table tbody tr:hover {\n        background-color: #e6e6e6;\n    }\n</style>",
         "storeOutMessages": true,
         "fwdInMessages": true,
         "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
         "x": 1060,
-        "y": 600,
+        "y": 560,
         "wires": [
             []
         ]
@@ -796,20 +663,104 @@
         "nl": false,
         "rap": false,
         "inputs": 0,
-        "x": 1370,
-        "y": 300,
+        "x": 810,
+        "y": 420,
         "wires": [
             [
-                "4007e97111842c2a",
                 "d912d806d898c021"
             ]
         ]
     },
     {
-        "id": "4007e97111842c2a",
-        "type": "debug",
+        "id": "d912d806d898c021",
+        "type": "ui_template",
+        "z": "fe162edfc74f05cc",
+        "group": "fd8240562a77573a",
+        "name": "Gráficos",
+        "order": 14,
+        "width": 13,
+        "height": 12,
+        "format": "<script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n\n<style>\n    .chart-container {\n        display: flex;\n        flex-wrap: wrap;\n        gap: 20px;\n        justify-content: center;\n        align-items: flex-start;\n        margin-top: 20px;\n    }\n\n    .chart-box {\n        flex: 1 1 300px;\n        min-width: 300px;\n        max-width: 500px;\n    }\n\n    canvas {\n        width: 100% !important;\n        height: 300px !important;\n    }\n</style>\n\n<div class=\"chart-container\">\n    <div class=\"chart-box\">\n        <h4>Temperatura por MAC</h4>\n        <canvas id=\"chartTemp\"></canvas>\n    </div>\n    <div class=\"chart-box\">\n        <h4>Umidade por MAC</h4>\n        <canvas id=\"chartHum\"></canvas>\n    </div>\n    <div class=\"chart-box\">\n        <h4>Latência por MAC</h4>\n        <canvas id=\"chartLat\"></canvas>\n    </div>\n</div>\n\n<script>\n    const macColors = {};\n\n    function getColorForMac(mac) {\n        if (macColors[mac]) return macColors[mac];\n\n        function getRandomColor() {\n            const r = Math.floor(Math.random() * 200);\n            const g = Math.floor(Math.random() * 200);\n            const b = Math.floor(Math.random() * 200);\n            return `rgba(${r}, ${g}, ${b}, 0.6)`;\n        }\n\n        macColors[mac] = getRandomColor();\n        return macColors[mac];\n    }\n\n    // Variáveis para armazenar as instâncias dos gráficos globalmente no escopo do template\n    let chartTempInstance;\n    let chartHumInstance;\n    let chartLatInstance;\n\n    // Função para criar a configuração básica de cada gráfico\n    function createChartConfig(label) {\n        return {\n            type: 'line',\n            data: {\n                labels: [],\n                datasets: []\n            },\n            options: {\n                responsive: true,\n                animation: false, // Pode ser 'false' para gráficos em tempo real\n                plugins: {\n                    legend: { display: true },\n                    title: { display: false }\n                },\n                scales: {\n                    y: { beginAtZero: true },\n                    x: { ticks: { autoSkip: true, maxTicksLimit: 10 } }\n                }\n            }\n        };\n    }\n\n    // Função para adicionar um novo dataset (linha) ao gráfico\n    function addDataset(chart, label, color) {\n        // Evita adicionar o mesmo dataset múltiplas vezes\n        if (!chart.data.datasets.some(d => d.label === label)) {\n            chart.data.datasets.push({\n                label: label,\n                data: [],\n                borderColor: color,\n                backgroundColor: color,\n                fill: false,\n                tension: 0.1\n            });\n            chart.update(); // Atualiza o gráfico após adicionar o dataset\n            console.log(`[Chart] Dataset '${label}' adicionado.`);\n        }\n    }\n\n    // Função para atualizar os dados de um dataset existente\n    function updateChartData(chart, label, labels, data) {\n        const dataset = chart.data.datasets.find(d => d.label === label);\n        if (dataset) {\n            dataset.data = data;\n            // Atualiza os labels do eixo X para todos os datasets no gráfico\n            chart.data.labels = labels;\n            chart.update(); // Atualiza o gráfico\n            // console.log(`[Chart] Dados para '${label}' atualizados.`);\n        }\n    }\n\n    // O código principal dentro do escopo do Node-RED UI-Template\n    (function(scope) {\n        const chartData = {}; // Histórico por MAC\n\n        // Função de inicialização dos gráficos, a ser chamada quando o DOM estiver pronto\n        function initCharts() {\n            const chartTempCtx = document.getElementById('chartTemp');\n            const chartHumCtx = document.getElementById('chartHum');\n            const chartLatCtx = document.getElementById('chartLat');\n\n            if (chartTempCtx && chartHumCtx && chartLatCtx) {\n                console.log(\"[Chart Init] Canvas elements found. Initializing charts.\");\n                chartTempInstance = new Chart(chartTempCtx.getContext('2d'), createChartConfig(\"Temperatura (°C)\"));\n                chartHumInstance = new Chart(chartHumCtx.getContext('2d'), createChartConfig(\"Umidade (%)\"));\n                chartLatInstance = new Chart(chartLatCtx.getContext('2d'), createChartConfig(\"Latência (ms)\"));\n            } else {\n                console.error(\"[Chart Init] Canvas elements NOT found. Charts will not be initialized.\");\n                // Tenta novamente após um pequeno atraso se não encontrar\n                setTimeout(initCharts, 100);\n            }\n        }\n\n        // --- Evento de Pronto do Node-RED UI-Template ---\n        // Garante que o DOM esteja carregado antes de tentar criar os gráficos\n        scope.$on('ready', function() {\n            console.log(\"[Node-RED UI] 'ready' event fired. Attempting to initialize charts.\");\n            initCharts();\n        });\n\n        // --- Listener para mensagens do Node-RED ---\n        scope.$watch('msg.payload', function(data) {\n            console.log(\"[Msg Watch] Message received:\", data);\n\n            // Verifica se a mensagem é válida e contém as propriedades necessárias\n            if (!data || typeof data !== 'object' || !data.mac || isNaN(data.temp) || isNaN(data.hum) || isNaN(data.latency_ms)) {\n                console.warn(\"[Msg Watch] Invalid or incomplete data received. Skipping update.\", data);\n                return;\n            }\n\n            // Garante que as instâncias dos gráficos existem antes de tentar atualizá-los\n            if (!chartTempInstance || !chartHumInstance || !chartLatInstance) {\n                console.warn(\"[Msg Watch] Charts not yet initialized. Data will be processed once charts are ready.\");\n                // Se os gráficos não estão prontos, podemos armazenar os dados e tentar processar depois\n                // (Para este exemplo, vamos apenas retornar, pois o initCharts já tem um retry)\n                return;\n            }\n\n            const mac = String(data.mac); // Garante que MAC seja string\n            const temp = parseFloat(data.temp);\n            const hum = parseFloat(data.hum);\n            const lat = parseFloat(data.latency_ms);\n            const timestamp = new Date().toLocaleTimeString();\n\n            if (!chartData[mac]) {\n                chartData[mac] = {\n                    labels: [],\n                    temp: [],\n                    hum: [],\n                    lat: []\n                };\n                console.log(`[Msg Watch] New MAC detected: ${mac}. Adding datasets.`);\n                const color = getColorForMac(mac);\n                addDataset(chartTempInstance, mac, color);\n                addDataset(chartHumInstance, mac, color);\n                addDataset(chartLatInstance, mac, color);\n            }\n\n            const maxPoints = 20; // Limite de pontos no gráfico\n            const macData = chartData[mac];\n\n            // Garante que os arrays de dados e labels não cresçam indefinidamente\n            if (macData.labels.length >= maxPoints) {\n                macData.labels.shift();\n                macData.temp.shift();\n                macData.hum.shift();\n                macData.lat.shift();\n            }\n\n            macData.labels.push(timestamp);\n            macData.temp.push(temp);\n            macData.hum.push(hum);\n            macData.lat.push(lat);\n\n            updateChartData(chartTempInstance, mac, macData.labels, macData.temp);\n            updateChartData(chartHumInstance, mac, macData.labels, macData.hum);\n            updateChartData(chartLatInstance, mac, macData.labels, macData.lat);\n        });\n\n        // --- Limpeza quando o template é removido/reimplantado ---\n        scope.$on('$destroy', function() {\n            console.log(\"[Node-RED UI] '$destroy' event fired. Destroying charts.\");\n            if (chartTempInstance) chartTempInstance.destroy();\n            if (chartHumInstance) chartHumInstance.destroy();\n            if (chartLatInstance) chartLatInstance.destroy();\n        });\n\n    })(scope);\n</script>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 1160,
+        "y": 420,
+        "wires": [
+            [
+                "4f0f1abe1414e5d9"
+            ]
+        ]
+    },
+    {
+        "id": "edf5f9ddb51046dc",
+        "type": "mqtt in",
         "z": "fe162edfc74f05cc",
         "name": "",
+        "topic": "/topic/mesh/#",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "6ec4dcef.913b24",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 1410,
+        "y": 440,
+        "wires": [
+            [
+                "832fb7bd208b5c25"
+            ]
+        ]
+    },
+    {
+        "id": "832fb7bd208b5c25",
+        "type": "function",
+        "z": "fe162edfc74f05cc",
+        "name": "parse_rssi_or_hops",
+        "func": "const topic = msg.topic;\nconst payload = msg.payload;\nlet mac, rssi, hops;\n\nif (topic.endsWith(\"/rssi\")) {\n    const parts = payload.split(\" - RSSI: \");\n    mac = parts[0].trim();\n    rssi = parseInt(parts[1].trim(), 10);\n\n    // Salva temporariamente\n    flow.set(mac + \"_rssi\", rssi);\n\n} else if (topic.endsWith(\"/hops\")) {\n    const parts = payload.split(\" - Hops: \");\n    mac = parts[0].trim();\n    hops = parseInt(parts[1].trim(), 10);\n\n    // Salva temporariamente\n    flow.set(mac + \"_hops\", hops);\n}\n\n// Verifica se os dois dados já chegaram\nconst savedRssi = flow.get(mac + \"_rssi\");\nconst savedHops = flow.get(mac + \"_hops\");\n\nif (savedRssi !== undefined && savedHops !== undefined) {\n    msg.mac_address = mac;\n    msg.rssi = savedRssi;\n    msg.hops = savedHops;\n\n    // Limpa os dados temporários\n    flow.set(mac + \"_rssi\", undefined);\n    flow.set(mac + \"_hops\", undefined);\n\n    return msg; // envia msg somente quando ambos estiverem presentes\n}\n\nreturn null; // ainda não recebeu ambos, então descarta por agora\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1610,
+        "y": 440,
+        "wires": [
+            [
+                "deaa022d813d7274"
+            ]
+        ]
+    },
+    {
+        "id": "deaa022d813d7274",
+        "type": "function",
+        "z": "fe162edfc74f05cc",
+        "name": "generate_sql",
+        "func": "const mac = msg.mac_address;\nconst rssi = msg.rssi;\nconst hops = msg.hops;\n\nmsg.topic = `INSERT INTO mesh_connectivity_data (mac_address, rssi, hops) VALUES ('${mac}', ${rssi}, ${hops})`;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1830,
+        "y": 440,
+        "wires": [
+            [
+                "f0fecad94115037f",
+                "a99536ae7f9f8a45"
+            ]
+        ]
+    },
+    {
+        "id": "f0fecad94115037f",
+        "type": "debug",
+        "z": "fe162edfc74f05cc",
+        "name": "sql",
         "active": true,
         "tosidebar": true,
         "console": false,
@@ -818,27 +769,302 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1620,
-        "y": 260,
+        "x": 1990,
+        "y": 520,
         "wires": []
     },
     {
-        "id": "d912d806d898c021",
-        "type": "ui_template",
+        "id": "bb27c3a59889686d",
+        "type": "sqlite",
         "z": "fe162edfc74f05cc",
-        "group": "fd8240562a77573a",
-        "name": "Gráficos",
-        "order": 20,
-        "width": 13,
-        "height": 12,
-        "format": "<!-- Chart.js CDN -->\n<script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n\n<style>\n    .chart-container {\n        display: flex;\n        flex-wrap: wrap;\n        gap: 20px;\n        justify-content: center;\n        align-items: flex-start;\n        margin-top: 20px;\n    }\n\n    .chart-box {\n        flex: 1 1 300px;\n        min-width: 300px;\n        max-width: 500px;\n    }\n\n    canvas {\n        width: 100% !important;\n        height: 300px !important;\n    }\n</style>\n\n<div class=\"chart-container\">\n    <div class=\"chart-box\">\n        <h4>Temperatura por MAC</h4>\n        <canvas id=\"chartTemp\"></canvas>\n    </div>\n    <div class=\"chart-box\">\n        <h4>Umidade por MAC</h4>\n        <canvas id=\"chartHum\"></canvas>\n    </div>\n    <div class=\"chart-box\">\n        <h4>Latência por MAC</h4>\n        <canvas id=\"chartLat\"></canvas>\n    </div>\n</div>\n\n<script>\n    const macColors = {};\n    \n    function getColorForMac(mac) {\n    if (macColors[mac]) return macColors[mac];\n    \n    // Função para gerar cor randômica\n    function getRandomColor() {\n    const r = Math.floor(Math.random() * 200);\n    const g = Math.floor(Math.random() * 200);\n    const b = Math.floor(Math.random() * 200);\n    return `rgba(${r}, ${g}, ${b}, 0.6)`;\n    }\n    \n    macColors[mac] = getRandomColor();\n    return macColors[mac];\n    }\n    \n    (function(scope) {\n    const chartData = {};  // Histórico por MAC\n\n    const chartTempCtx = document.getElementById('chartTemp').getContext('2d');\n    const chartHumCtx = document.getElementById('chartHum').getContext('2d');\n    const chartLatCtx = document.getElementById('chartLat').getContext('2d');\n\n    const chartTemp = new Chart(chartTempCtx, createChartConfig(\"Temperatura (°C)\"));\n    const chartHum = new Chart(chartHumCtx, createChartConfig(\"Umidade (%)\"));\n    const chartLat = new Chart(chartLatCtx, createChartConfig(\"Latência (ms)\"));\n\n    scope.$watch('msg.payload', function(data) {\n        if (!data || typeof data !== 'object' || !data.mac) return;\n\n        const mac = data.mac;\n        const temp = parseFloat(data.temp).toFixed(2);\n        const hum = parseFloat(data.hum).toFixed(2);\n        const lat = parseFloat(data.latency_ms).toFixed(0);\n        const timestamp = new Date().toLocaleTimeString();\n\n        if (!chartData[mac]) {\n            chartData[mac] = {\n                labels: [],\n                temp: [],\n                hum: [],\n                lat: []\n            };\n\n            const color = getColorForMac(mac);\n            addDataset(chartTemp, mac, color);\n            addDataset(chartHum, mac, color);\n            addDataset(chartLat, mac, color);\n        }\n\n        const maxPoints = 20;\n        const macData = chartData[mac];\n\n        if (macData.labels.length >= maxPoints) {\n            macData.labels.shift();\n            macData.temp.shift();\n            macData.hum.shift();\n            macData.lat.shift();\n        }\n\n        macData.labels.push(timestamp);\n        macData.temp.push(temp);\n        macData.hum.push(hum);\n        macData.lat.push(lat);\n\n        updateChart(chartTemp, mac, macData.labels, macData.temp);\n        updateChart(chartHum, mac, macData.labels, macData.hum);\n        updateChart(chartLat, mac, macData.labels, macData.lat);\n    });\n\n    function createChartConfig(label) {\n        return {\n            type: 'line',\n            data: {\n                labels: [],\n                datasets: []\n            },\n            options: {\n                responsive: true,\n                animation: false,\n                plugins: {\n                    legend: { display: true },\n                    title: { display: false }\n                },\n                scales: {\n                    y: { beginAtZero: true },\n                    x: { ticks: { autoSkip: true, maxTicksLimit: 10 } }\n                }\n            }\n        };\n    }\n\n    function addDataset(chart, label, color) {\n        chart.data.datasets.push({\n            label: label,\n            data: [],\n            borderColor: color,\n            backgroundColor: color,\n            fill: false,\n            tension: 0.1\n        });\n        chart.update();\n    }\n\n    function updateChart(chart, label, labels, data) {\n        const dataset = chart.data.datasets.find(d => d.label === label);\n        if (dataset) {\n            dataset.data = data;\n            chart.data.labels = labels;\n            chart.update();\n        }\n    }\n})(scope);\n</script>",
-        "storeOutMessages": true,
-        "fwdInMessages": true,
-        "resendOnRefresh": true,
-        "templateScope": "local",
-        "className": "",
-        "x": 1610,
-        "y": 360,
+        "mydb": "b931a41ca7c16188",
+        "sqlquery": "msg.topic",
+        "sql": "",
+        "name": "mesh_connectivity_data",
+        "x": 2230,
+        "y": 440,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1cd19e45625d8080",
+        "type": "mqtt in",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "topic": "/topic/mesh/#",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "6ec4dcef.913b24",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 1410,
+        "y": 660,
+        "wires": [
+            [
+                "c26a9b0dc087a1cf"
+            ]
+        ]
+    },
+    {
+        "id": "c26a9b0dc087a1cf",
+        "type": "function",
+        "z": "fe162edfc74f05cc",
+        "name": "parse_sucess_or_loss",
+        "func": "const topic = msg.topic;\nconst payload = msg.payload;\n\n// Garante que é número mesmo\nif (topic.endsWith(\"/success_rate\")) {\n    flow.set(\"success_rate\", Number(payload));\n} else if (topic.endsWith(\"/packet_loss\")) {\n    flow.set(\"packet_loss\", Number(payload));\n}\n\n// Verifica se já tem os dois\nconst success = flow.get(\"success_rate\");\nconst loss = flow.get(\"packet_loss\");\n\n// Só envia quando tiver ambos e forem válidos\nif (\n    success !== undefined &&\n    loss !== undefined &&\n    !isNaN(success) &&\n    !isNaN(loss)\n) {\n    // Cria um objeto payload para o nó SQL\n    msg.payload = {\n        success_rate: success,\n        packet_loss: loss\n    };\n\n    // Limpa depois de usar\n    flow.set(\"success_rate\", undefined);\n    flow.set(\"packet_loss\", undefined);\n\n    return msg; \n}\n\nreturn null; // Espera o outro valor chegar",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1620,
+        "y": 660,
+        "wires": [
+            [
+                "921517ebfc490f28"
+            ]
+        ]
+    },
+    {
+        "id": "921517ebfc490f28",
+        "type": "function",
+        "z": "fe162edfc74f05cc",
+        "name": "generate_sql",
+        "func": "const success = msg.payload.success_rate;\nconst loss = msg.payload.packet_loss;\n\nmsg.topic = `INSERT INTO mesh_packet_stats (success_rate, packet_loss) VALUES (${success}, ${loss})`;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1830,
+        "y": 660,
+        "wires": [
+            [
+                "a508381d0a3e2e05",
+                "42a719818739b6e2"
+            ]
+        ]
+    },
+    {
+        "id": "a508381d0a3e2e05",
+        "type": "debug",
+        "z": "fe162edfc74f05cc",
+        "name": "sql2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2030,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "2bcf070dacadec23",
+        "type": "sqlite",
+        "z": "fe162edfc74f05cc",
+        "mydb": "b931a41ca7c16188",
+        "sqlquery": "msg.topic",
+        "sql": "",
+        "name": "mesh_packet_stats",
+        "x": 2210,
+        "y": 660,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a99536ae7f9f8a45",
+        "type": "delay",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "1",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 2020,
+        "y": 440,
+        "wires": [
+            [
+                "bb27c3a59889686d"
+            ]
+        ]
+    },
+    {
+        "id": "42a719818739b6e2",
+        "type": "delay",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "1",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 2020,
+        "y": 660,
+        "wires": [
+            [
+                "2bcf070dacadec23"
+            ]
+        ]
+    },
+    {
+        "id": "327fb546a6199664",
+        "type": "inject",
+        "z": "fe162edfc74f05cc",
+        "name": "start_grafico",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{     \"mac\": \"00:00:00:00:00:00\",     \"temp\": 0,     \"hum\": 0,     \"latency_ms\": 0 }",
+        "payloadType": "json",
+        "x": 970,
+        "y": 480,
+        "wires": [
+            [
+                "d912d806d898c021"
+            ]
+        ]
+    },
+    {
+        "id": "4f0f1abe1414e5d9",
+        "type": "debug",
+        "z": "fe162edfc74f05cc",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1320,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "8173a03d782c85a8",
+        "type": "mqtt in",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "topic": "/topic/mesh/sensor_data",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "6ec4dcef.913b24",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 1470,
+        "y": 860,
+        "wires": [
+            [
+                "77780803333d047e"
+            ]
+        ]
+    },
+    {
+        "id": "77780803333d047e",
+        "type": "function",
+        "z": "fe162edfc74f05cc",
+        "name": "data_sensor",
+        "func": "const payload = msg.payload;\n\n// Validação básica para garantir que os dados existem e são do tipo correto\nif (!payload || typeof payload !== 'object' || !payload.mac || isNaN(payload.temp) || isNaN(payload.hum) || isNaN(payload.latency_ms)) {\n    node.warn(\"Dados de sensor inválidos ou incompletos. Pulando inserção no banco de dados.\");\n    return null; // Não envia a mensagem adiante se os dados forem inválidos\n}\n\nconst macAddress = payload.mac;\nconst temperature = parseFloat(payload.temp).toFixed(2); // Formata para 2 casas decimais\nconst humidity = parseFloat(payload.hum).toFixed(2);     // Formata para 2 casas decimais\nconst latencyMs = parseInt(payload.latency_ms, 10);      // Garante que é um inteiro\n\n// Monta a query SQL\n// Usamos aspas simples para os valores STRING (mac_address) e sem aspas para números\nmsg.topic = `INSERT INTO mesh_sensor_data (mac_address, temperature, humidity, latency_ms) VALUES ('${macAddress}', ${temperature}, ${humidity}, ${latencyMs});`;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1730,
+        "y": 880,
+        "wires": [
+            [
+                "74d4896c87f33411",
+                "593e41980ff52d20"
+            ]
+        ]
+    },
+    {
+        "id": "593e41980ff52d20",
+        "type": "debug",
+        "z": "fe162edfc74f05cc",
+        "name": "sql3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1910,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "74d4896c87f33411",
+        "type": "delay",
+        "z": "fe162edfc74f05cc",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "1",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 2020,
+        "y": 880,
+        "wires": [
+            [
+                "404fbcdc53afa1a6"
+            ]
+        ]
+    },
+    {
+        "id": "404fbcdc53afa1a6",
+        "type": "sqlite",
+        "z": "fe162edfc74f05cc",
+        "mydb": "b931a41ca7c16188",
+        "sqlquery": "msg.topic",
+        "sql": "",
+        "name": "mesh_sensor_data",
+        "x": 2230,
+        "y": 880,
         "wires": [
             []
         ]
