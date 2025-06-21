@@ -1,129 +1,896 @@
 [
     {
-        "id": "fe162edfc74f05cc",
+        "id": "tab1",
         "type": "tab",
-        "label": "Rede MESH",
+        "label": "Painel Mesh",
         "disabled": false,
-        "info": "",
-        "env": []
+        "info": ""
     },
     {
-        "id": "31235f87aab3a89d",
-        "type": "ui_tab",
-        "name": "Home",
-        "icon": "dashboard",
-        "disabled": false,
-        "hidden": false
+        "id": "mqtt_rssi",
+        "type": "mqtt in",
+        "z": "tab1",
+        "name": "RSSI MQTT",
+        "topic": "/topic/mesh/rssi",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "6ec4dcef.913b24",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 390,
+        "y": 560,
+        "wires": [
+            [
+                "cd2ca644d1528406"
+            ]
+        ]
     },
     {
-        "id": "d7cacd98f609ab2b",
-        "type": "ui_base",
-        "theme": {
-            "name": "theme-light",
-            "lightTheme": {
-                "default": "#0094CE",
-                "baseColor": "#8b0433",
-                "baseFont": "Arial Black,Arial Black,Gadget,sans-serif",
-                "edited": true,
-                "reset": false
-            },
-            "darkTheme": {
-                "default": "#097479",
-                "baseColor": "#953232",
-                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
-                "edited": true,
-                "reset": false
-            },
-            "customTheme": {
-                "name": "Untitled Theme 1",
-                "default": "#4B7930",
-                "baseColor": "#4B7930",
-                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
-                "reset": false
-            },
-            "themeState": {
-                "base-color": {
-                    "default": "#0094CE",
-                    "value": "#8b0433",
-                    "edited": true
-                },
-                "page-titlebar-backgroundColor": {
-                    "value": "#8b0433",
-                    "edited": false
-                },
-                "page-backgroundColor": {
-                    "value": "#fafafa",
-                    "edited": false
-                },
-                "page-sidebar-backgroundColor": {
-                    "value": "#333333",
-                    "edited": false
-                },
-                "group-textColor": {
-                    "value": "#d5064e",
-                    "edited": false
-                },
-                "group-borderColor": {
-                    "value": "#ffffff",
-                    "edited": false
-                },
-                "group-backgroundColor": {
-                    "value": "#ffffff",
-                    "edited": false
-                },
-                "widget-textColor": {
-                    "value": "#111111",
-                    "edited": false
-                },
-                "widget-backgroundColor": {
-                    "value": "#8b0433",
-                    "edited": false
-                },
-                "widget-borderColor": {
-                    "value": "#ffffff",
-                    "edited": false
-                },
-                "base-font": {
-                    "value": "Arial Black,Arial Black,Gadget,sans-serif"
+        "id": "table_rssi",
+        "type": "ui_table",
+        "z": "tab1",
+        "group": "grupo_rssi",
+        "name": "Tabela RSSI",
+        "order": 1,
+        "width": 15,
+        "height": 3,
+        "columns": [
+            {
+                "field": "mac",
+                "title": "MAC",
+                "width": "",
+                "align": "left",
+                "formatter": "plaintext",
+                "formatterParams": {
+                    "target": "_blank"
                 }
             },
-            "angularTheme": {
-                "primary": "indigo",
-                "accents": "blue",
-                "warn": "red",
-                "background": "grey",
-                "palette": "light"
+            {
+                "field": "rssi",
+                "title": "RSSI",
+                "width": "",
+                "align": "left",
+                "formatter": "plaintext",
+                "formatterParams": {
+                    "target": "_blank"
+                }
             }
-        },
-        "site": {
-            "name": "Node-RED Dashboard",
-            "hideToolbar": "false",
-            "allowSwipe": "false",
-            "lockMenu": "false",
-            "allowTempTheme": "true",
-            "dateFormat": "DD/MM/YYYY",
-            "sizes": {
-                "sx": 100,
-                "sy": 50,
-                "gx": 6,
-                "gy": 6,
-                "cx": 6,
-                "cy": 6,
-                "px": 0,
-                "py": 0
-            }
-        }
+        ],
+        "outputs": 0,
+        "cts": false,
+        "x": 850,
+        "y": 560,
+        "wires": []
     },
     {
-        "id": "fd8240562a77573a",
-        "type": "ui_group",
-        "name": "Rede Mesh",
-        "tab": "31235f87aab3a89d",
+        "id": "mqtt_metrics",
+        "type": "mqtt in",
+        "z": "tab1",
+        "name": "Métricas MQTT",
+        "topic": "/topic/mesh/metricas",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "6ec4dcef.913b24",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 420,
+        "y": 680,
+        "wires": [
+            [
+                "96866108bbb66ddd"
+            ]
+        ]
+    },
+    {
+        "id": "table_metrics",
+        "type": "ui_table",
+        "z": "tab1",
+        "group": "grupo_metrics",
+        "name": "Tabela Métricas",
         "order": 1,
-        "disp": true,
-        "width": "13",
-        "collapse": true,
-        "className": ""
+        "width": 0,
+        "height": 0,
+        "columns": [
+            {
+                "field": "Hops",
+                "title": "Hops",
+                "width": "",
+                "align": "left",
+                "formatter": "plaintext",
+                "formatterParams": {
+                    "target": "_blank"
+                }
+            },
+            {
+                "field": "Sucesso",
+                "title": "Sucesso",
+                "width": "",
+                "align": "left",
+                "formatter": "plaintext",
+                "formatterParams": {
+                    "target": "_blank"
+                }
+            },
+            {
+                "field": "Perda",
+                "title": "Perda",
+                "width": "",
+                "align": "left",
+                "formatter": "plaintext",
+                "formatterParams": {
+                    "target": "_blank"
+                }
+            },
+            {
+                "field": "RTT",
+                "title": "RTT",
+                "width": "",
+                "align": "left",
+                "formatter": "plaintext",
+                "formatterParams": {
+                    "target": "_blank"
+                }
+            },
+            {
+                "field": "Nós na Rede",
+                "title": "Nós na Rede",
+                "width": "",
+                "align": "left",
+                "formatter": "plaintext",
+                "formatterParams": {
+                    "target": "_blank"
+                }
+            },
+            {
+                "field": "Trocas Pai",
+                "title": "Trocas Pai",
+                "width": "",
+                "align": "left",
+                "formatter": "plaintext",
+                "formatterParams": {
+                    "target": "_blank"
+                }
+            },
+            {
+                "field": "Ult. Troca",
+                "title": "Ult. Troca",
+                "width": "",
+                "align": "left",
+                "formatter": "plaintext",
+                "formatterParams": {
+                    "target": "_blank"
+                }
+            },
+            {
+                "field": "Retransmissões",
+                "title": "Retransmissões",
+                "width": "",
+                "align": "left",
+                "formatter": "plaintext",
+                "formatterParams": {
+                    "target": "_blank"
+                }
+            }
+        ],
+        "outputs": 0,
+        "cts": false,
+        "x": 880,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "cd2ca644d1528406",
+        "type": "function",
+        "z": "tab1",
+        "name": "rssi",
+        "func": "// Recupera a tabela atual da memória do fluxo\nlet tabela = flow.get(\"rssi_table\") || [];\n\nlet novo = {\n    mac: msg.payload.mac,\n    rssi: msg.payload.rssi\n};\n\nlet index = tabela.findIndex(item => item.mac === novo.mac);\n\nif (index !== -1) {\n    // Atualiza se já existe\n    tabela[index].rssi = novo.rssi;\n} else {\n    // Adiciona se for novo MAC\n    tabela.push(novo);\n}\n\n// Salva de volta na memória\nflow.set(\"rssi_table\", tabela);\n\n// Envia a tabela completa para o ui_table\nmsg.payload = tabela;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 610,
+        "y": 560,
+        "wires": [
+            [
+                "table_rssi"
+            ]
+        ]
+    },
+    {
+        "id": "cd8425e2db43371a",
+        "type": "mqtt in",
+        "z": "tab1",
+        "name": "Sensor MQTT",
+        "topic": "/topic/mesh/sensor",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "6ec4dcef.913b24",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 390,
+        "y": 440,
+        "wires": [
+            [
+                "9bd16a5d882acace"
+            ]
+        ]
+    },
+    {
+        "id": "9bd16a5d882acace",
+        "type": "function",
+        "z": "tab1",
+        "name": "sensores",
+        "func": "// Recupera a tabela atual da memória do fluxo\nlet sensorTable = flow.get(\"sensor_table\") || [];\n\nlet novo = {\n  mac: msg.payload.mac,\n  temperatura: msg.payload.temp,\n  umidade: msg.payload.hum,\n  latencia: msg.payload.latency_ms \n};\n\n// Verifica se o MAC já existe\nlet index = sensorTable.findIndex(item => item.mac === novo.mac);\n\nif (index !== -1) {\n  // Atualiza os valores\n  sensorTable[index] = { ...sensorTable[index], ...novo };\n} else {\n  // Adiciona nova entrada\n  sensorTable.push(novo);\n}\n\n// Armazena de volta\nflow.set(\"sensor_table\", sensorTable);\n\n// Envia para o ui_table\nmsg.payload = sensorTable;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 620,
+        "y": 440,
+        "wires": [
+            [
+                "56789c177d54f1b7"
+            ]
+        ]
+    },
+    {
+        "id": "56789c177d54f1b7",
+        "type": "ui_table",
+        "z": "tab1",
+        "group": "grupo_sensores",
+        "name": "Tabela sensores",
+        "order": 4,
+        "width": 15,
+        "height": 3,
+        "columns": [
+            {
+                "field": "mac",
+                "title": "MAC",
+                "width": "",
+                "align": "left",
+                "formatter": "plaintext",
+                "formatterParams": {
+                    "target": "_blank"
+                }
+            },
+            {
+                "field": "temperatura",
+                "title": "Temperatura",
+                "width": "",
+                "align": "left",
+                "formatter": "plaintext",
+                "formatterParams": {
+                    "target": "_blank"
+                }
+            },
+            {
+                "field": "umidade",
+                "title": "Umidade",
+                "width": "",
+                "align": "left",
+                "formatter": "plaintext",
+                "formatterParams": {
+                    "target": "_blank"
+                }
+            },
+            {
+                "field": "latencia",
+                "title": "Latência (ms)",
+                "width": "",
+                "align": "left",
+                "formatter": "plaintext",
+                "formatterParams": {
+                    "target": "_blank"
+                }
+            }
+        ],
+        "outputs": 0,
+        "cts": false,
+        "x": 860,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "96866108bbb66ddd",
+        "type": "function",
+        "z": "tab1",
+        "name": "metricas",
+        "func": "msg.payload = [{\n  \"Hops\": msg.payload.hops_to_root,\n  \"Sucesso\": msg.payload.success_rate,\n  \"Perda\": msg.payload.packet_loss_rate,\n  \"RTT\": msg.payload.rtt_ms,\n  \"Nós na Rede\": msg.payload.children_count,\n  \"Trocas Pai\": msg.payload.parent_changes,\n  \"Ult. Troca\": msg.payload.last_parent_change_ms,\n  \"Retransmissões\": msg.payload.retransmission_count\n}];\nreturn msg;\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 660,
+        "y": 680,
+        "wires": [
+            [
+                "table_metrics"
+            ]
+        ]
+    },
+    {
+        "id": "b135aaf411c107cd",
+        "type": "mqtt in",
+        "z": "tab1",
+        "name": "Sensor MQTT",
+        "topic": "/topic/mesh/sensor",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "6ec4dcef.913b24",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 390,
+        "y": 60,
+        "wires": [
+            [
+                "21f94b3f363a211c"
+            ]
+        ]
+    },
+    {
+        "id": "21f94b3f363a211c",
+        "type": "function",
+        "z": "tab1",
+        "name": "temperatura",
+        "func": "// Obtém o histórico salvo no fluxo ou inicia como array vazio\nlet historico = flow.get(\"grafico_temp\") || [];\n\n// Verifica se msg.payload.temp é válido\nif (msg.payload && typeof msg.payload.temp === \"number\") {\n    let dado = {\n        t: new Date().toLocaleTimeString(), // ou usar Date.now() se quiser timestamp\n        y: msg.payload.temp\n    };\n\n    historico.push(dado);\n\n    // Limita a 50 pontos\n    if (historico.length > 50) {\n        historico.shift();\n    }\n\n    // Salva novamente no fluxo\n    flow.set(\"grafico_temp\", historico);\n\n    // Envia o histórico completo para o template\n    msg.payload = historico;\n} else {\n    // Se o dado estiver incorreto, envia um aviso no debug\n    node.warn(\"Dado inválido em msg.payload.temp\");\n    msg.payload = [];  // Pode evitar erro no template\n}\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 610,
+        "y": 60,
+        "wires": [
+            [
+                "d25e1efb88d1af19",
+                "e01a64aa0f85aea9"
+            ]
+        ]
+    },
+    {
+        "id": "d25e1efb88d1af19",
+        "type": "ui_template",
+        "z": "tab1",
+        "group": "grupo_sensores",
+        "name": "",
+        "order": 1,
+        "width": 5,
+        "height": 6,
+        "format": "<canvas id=\"graficoTemp\" width=\"400\" height=\"200\"></canvas>\n<script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n<script>\n(function(scope) {\n    let chart;\n\n    function criarGrafico(data) {\n        const ctx = document.getElementById(\"graficoTemp\").getContext(\"2d\");\n        const chartData = data.map(d => ({ x: d.t, y: d.y }));\n\n        chart = new Chart(ctx, {\n            type: 'line',\n            data: {\n                labels: data.map(d => d.t),\n                datasets: [{\n                    label: 'Temperatura (°C)',\n                    data: chartData,\n                    fill: false,\n                    borderColor: 'red',\n                    tension: 0.1\n                }]\n            },\n            options: {\n                responsive: true,\n                scales: {\n                    x: {\n                        title: { display: true, text: 'Hora' },\n                        type: 'category'\n                    },\n                    y: {\n                        beginAtZero: false,\n                        title: { display: true, text: 'Temperatura (°C)' }\n                    }\n                }\n            }\n        });\n    }\n\n    scope.$watch('msg.payload', function(data) {\n        if (!Array.isArray(data)) return;\n\n        if (!chart) {\n            criarGrafico(data);\n        } else {\n            const chartData = data.map(d => ({ x: d.t, y: d.y }));\n            chart.data.labels = data.map(d => d.t);\n            chart.data.datasets[0].data = chartData;\n            chart.update();\n        }\n    });\n})(scope);\n</script>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 820,
+        "y": 60,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "97d50156fbfb4bd6",
+        "type": "mqtt in",
+        "z": "tab1",
+        "name": "Sensor MQTT",
+        "topic": "/topic/mesh/sensor",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "6ec4dcef.913b24",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 390,
+        "y": 200,
+        "wires": [
+            [
+                "d80ac32dba14a510"
+            ]
+        ]
+    },
+    {
+        "id": "d80ac32dba14a510",
+        "type": "function",
+        "z": "tab1",
+        "name": "umidade",
+        "func": "// Obtém o histórico salvo no fluxo ou inicia como array vazio\nlet historico = flow.get(\"grafico_hum\") || [];\n\n// Verifica se msg.payload.temp é válido\nif (msg.payload && typeof msg.payload.hum === \"number\") {\n    let dado = {\n        t: new Date().toLocaleTimeString(), // ou usar Date.now() se quiser timestamp\n        y: msg.payload.hum\n    };\n\n    historico.push(dado);\n\n    // Limita a 50 pontos\n    if (historico.length > 50) {\n        historico.shift();\n    }\n\n    // Salva novamente no fluxo\n    flow.set(\"grafico_hum\", historico);\n\n    // Envia o histórico completo para o template\n    msg.payload = historico;\n} else {\n    // Se o dado estiver incorreto, envia um aviso no debug\n    node.warn(\"Dado inválido em msg.payload.hum\");\n    msg.payload = [];  // Pode evitar erro no template\n}\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 200,
+        "wires": [
+            [
+                "c7a4a52ffb62729d",
+                "e649f11928249c65"
+            ]
+        ]
+    },
+    {
+        "id": "c7a4a52ffb62729d",
+        "type": "ui_template",
+        "z": "tab1",
+        "group": "grupo_sensores",
+        "name": "",
+        "order": 2,
+        "width": 5,
+        "height": 6,
+        "format": "<canvas id=\"graficoHum\" width=\"400\" height=\"200\"></canvas>\n<script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n<script>\n    (function(scope) {\n    let chart;\n\n    function criarGrafico(data) {\n        const ctx = document.getElementById(\"graficoHum\").getContext(\"2d\");\n        const chartData = data.map(d => ({ x: d.t, y: d.y }));\n\n        chart = new Chart(ctx, {\n            type: 'line',\n            data: {\n                labels: data.map(d => d.t),\n                datasets: [{\n                    label: 'Umidade (%)',\n                    data: chartData,\n                    fill: false,\n                    borderColor: 'blue',\n                    tension: 0.1\n                }]\n            },\n            options: {\n                responsive: true,\n                scales: {\n                    x: {\n                        title: { display: true, text: 'Hora' },\n                        type: 'category'\n                    },\n                    y: {\n                        beginAtZero: false,\n                        title: { display: true, text: 'Umidade (%)' }\n                    }\n                }\n            }\n        });\n    }\n\n    scope.$watch('msg.payload', function(data) {\n        if (!Array.isArray(data)) return;\n\n        if (!chart) {\n            criarGrafico(data);\n        } else {\n            const chartData = data.map(d => ({ x: d.t, y: d.y }));\n            chart.data.labels = data.map(d => d.t);\n            chart.data.datasets[0].data = chartData;\n            chart.update();\n        }\n    });\n})(scope);\n</script>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 820,
+        "y": 200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ca0161732f7ac35d",
+        "type": "mqtt in",
+        "z": "tab1",
+        "name": "Sensor MQTT",
+        "topic": "/topic/mesh/sensor",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "6ec4dcef.913b24",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 390,
+        "y": 320,
+        "wires": [
+            [
+                "73273bc023f09679"
+            ]
+        ]
+    },
+    {
+        "id": "73273bc023f09679",
+        "type": "function",
+        "z": "tab1",
+        "name": "latencia",
+        "func": "let historico = flow.get(\"grafico_lat\") || [];\n\nif (msg.payload && typeof msg.payload.latency_ms === \"number\") {\n    let dado = {\n        t: new Date().toLocaleTimeString(),\n        y: msg.payload.latency_ms / 1000  // converte ms para segundos\n    };\n\n    historico.push(dado);\n\n    if (historico.length > 50) {\n        historico.shift();\n    }\n\n    flow.set(\"grafico_lat\", historico);\n    msg.payload = historico;\n} else {\n    node.warn(\"latency_ms ausente ou inválido\");\n    msg.payload = [];\n}\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 320,
+        "wires": [
+            [
+                "ec02d25f5e1a6405",
+                "b56bf3cffc643174"
+            ]
+        ]
+    },
+    {
+        "id": "ec02d25f5e1a6405",
+        "type": "ui_template",
+        "z": "tab1",
+        "group": "grupo_sensores",
+        "name": "",
+        "order": 3,
+        "width": 5,
+        "height": 6,
+        "format": "<div>\n    <canvas id=\"grafico_lat\" width=\"400\" height=\"200\"></canvas>\n</div>\n\n<script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n<script>\n    (function(scope) {\n    let chart;\n\n    function criarGrafico(data) {\n        const ctx = document.getElementById(\"grafico_lat\").getContext(\"2d\");\n\n        chart = new Chart(ctx, {\n            type: 'line',\n            data: {\n                labels: data.map(p => p.t),\n                datasets: [{\n                    label: 'Latência (s)',\n                    data: data.map(p => ({ x: p.t, y: p.y })),\n                    fill: false,\n                    borderColor: 'green',\n                    tension: 0.1\n                }]\n            },\n            options: {\n                responsive: true,\n                scales: {\n                    x: {\n                        type: 'category',\n                        title: { display: true, text: 'Horário' }\n                    },\n                    y: {\n                        beginAtZero: true,\n                        title: { display: true, text: 'Latência (s)' }\n                    }\n                }\n            }\n        });\n    }\n\n    scope.$watch('msg.payload', function(data) {\n        if (!Array.isArray(data)) return;\n\n        if (!chart) {\n            criarGrafico(data);\n        } else {\n            chart.data.labels = data.map(p => p.t);\n            chart.data.datasets[0].data = data.map(p => ({ x: p.t, y: p.y }));\n            chart.update();\n        }\n    });\n})(scope);\n</script>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 820,
+        "y": 320,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e01a64aa0f85aea9",
+        "type": "debug",
+        "z": "tab1",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 800,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "e649f11928249c65",
+        "type": "debug",
+        "z": "tab1",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 740,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "b56bf3cffc643174",
+        "type": "debug",
+        "z": "tab1",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 760,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "6d03d4cb9e361f86",
+        "type": "mqtt out",
+        "z": "tab1",
+        "name": "",
+        "topic": "/topic/mesh/restart",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "6ec4dcef.913b24",
+        "x": 1390,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "858f35dda525e990",
+        "type": "ui_button",
+        "z": "tab1",
+        "name": "",
+        "group": "c43853a14aa4af82",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Reinicia Rede Mesh",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "restart_mesh",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 1120,
+        "y": 100,
+        "wires": [
+            [
+                "6d03d4cb9e361f86"
+            ]
+        ]
+    },
+    {
+        "id": "5331b087743761df",
+        "type": "mqtt in",
+        "z": "tab1",
+        "name": "",
+        "topic": "/topic/mesh/rssi",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "6ec4dcef.913b24",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 1080,
+        "y": 220,
+        "wires": [
+            [
+                "cdba259c1214bcb5"
+            ]
+        ]
+    },
+    {
+        "id": "cdba259c1214bcb5",
+        "type": "function",
+        "z": "tab1",
+        "name": "signal",
+        "func": "const payload = msg.payload;\n\n// Validação básica\nif (!payload || typeof payload !== 'object' || !payload.mac || isNaN(payload.rssi)) {\n    node.warn(\"Dados de sinal inválidos ou incompletos. Pulando inserção no banco de dados.\");\n    return null;\n}\n\n// Extração dos dados\nconst macAddress = payload.mac;\nconst rssi = parseInt(payload.rssi, 10);  // Garante que é número inteiro\n\n// Query com placeholders seguros\nmsg.topic = \"INSERT INTO signal(mac, rssi) VALUES (?, ?)\";\nmsg.payload = [macAddress, rssi];\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1250,
+        "y": 220,
+        "wires": [
+            [
+                "bd855edacaabe2e9",
+                "3aabf05b9eb9c9e8"
+            ]
+        ]
+    },
+    {
+        "id": "a1d1e7cdcd59a6cd",
+        "type": "sqlite",
+        "z": "tab1",
+        "mydb": "b931a41ca7c16188",
+        "sqlquery": "msg.topic",
+        "sql": "",
+        "name": "signal",
+        "x": 1830,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "145efec868e512d1",
+        "type": "mqtt in",
+        "z": "tab1",
+        "name": "",
+        "topic": "/topic/mesh/metricas",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "6ec4dcef.913b24",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 1090,
+        "y": 360,
+        "wires": [
+            [
+                "71438fec4d2df473"
+            ]
+        ]
+    },
+    {
+        "id": "71438fec4d2df473",
+        "type": "function",
+        "z": "tab1",
+        "name": "metrics",
+        "func": "const p = msg.payload;\n\n// Validação básica\nif (!p || typeof p !== 'object' ||\n    isNaN(p.hops_to_root) ||\n    isNaN(p.success_rate) ||\n    isNaN(p.packet_loss_rate) ||\n    isNaN(p.rtt_ms) ||\n    isNaN(p.children_count) ||\n    isNaN(p.parent_changes) ||\n    isNaN(p.last_parent_change_ms) ||\n    isNaN(p.retransmission_count)) {\n\n    node.warn(\"Dados de métricas inválidos ou incompletos. Pulando inserção.\");\n    return null;\n}\n\n// Query segura com placeholders\nmsg.topic = `INSERT INTO metrics (\n    hops, sucesso, perda, rtt, nos, trocas_pai, ult_troca, retransmissoes\n) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;\n\nmsg.payload = [\n    parseInt(p.hops_to_root, 10),\n    parseFloat(p.success_rate),\n    parseFloat(p.packet_loss_rate),\n    parseInt(p.rtt_ms, 10),\n    parseInt(p.children_count, 10),\n    parseInt(p.parent_changes, 10),\n    parseInt(p.last_parent_change_ms, 10),\n    parseInt(p.retransmission_count, 10)\n];\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1300,
+        "y": 360,
+        "wires": [
+            [
+                "d07c276b58e85c5e",
+                "1b115ef813d73dc3"
+            ]
+        ]
+    },
+    {
+        "id": "14dd0ea2434d40d1",
+        "type": "sqlite",
+        "z": "tab1",
+        "mydb": "b931a41ca7c16188",
+        "sqlquery": "msg.topic",
+        "sql": "",
+        "name": "metrics",
+        "x": 1840,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "bd855edacaabe2e9",
+        "type": "delay",
+        "z": "tab1",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "1",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1680,
+        "y": 220,
+        "wires": [
+            [
+                "a1d1e7cdcd59a6cd"
+            ]
+        ]
+    },
+    {
+        "id": "d07c276b58e85c5e",
+        "type": "delay",
+        "z": "tab1",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "1",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1660,
+        "y": 360,
+        "wires": [
+            [
+                "14dd0ea2434d40d1"
+            ]
+        ]
+    },
+    {
+        "id": "d640521fc806dcb9",
+        "type": "mqtt in",
+        "z": "tab1",
+        "name": "",
+        "topic": "/topic/mesh/sensor",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "6ec4dcef.913b24",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 1090,
+        "y": 500,
+        "wires": [
+            [
+                "4cb3038b43f8a4af"
+            ]
+        ]
+    },
+    {
+        "id": "4cb3038b43f8a4af",
+        "type": "function",
+        "z": "tab1",
+        "name": "data_sensor",
+        "func": "const payload = msg.payload;\n\n// Validação básica\nif (!payload || typeof payload !== 'object' || !payload.mac || isNaN(payload.temp) || isNaN(payload.hum) || isNaN(payload.latency_ms)) {\n    node.warn(\"Dados de sensor inválidos ou incompletos. Pulando inserção no banco de dados.\");\n    return null;\n}\n\n// Extrai e formata os valores\nconst macAddress = payload.mac;\nconst temperature = parseFloat(payload.temp).toFixed(2);\nconst humidity = parseFloat(payload.hum).toFixed(2);\nconst latencyMs = parseInt(payload.latency_ms, 10);\n\n// Query SQL interpolada corretamente com crase\nmsg.topic = `INSERT INTO mesh_sensor_data (mac_address, temperature, humidity, latency_ms) VALUES ('${macAddress}', ${temperature}, ${humidity}, ${latencyMs});`;\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1370,
+        "y": 520,
+        "wires": [
+            [
+                "f08e9e5c2738be54",
+                "f03ee1aae834aab3"
+            ]
+        ]
+    },
+    {
+        "id": "f08e9e5c2738be54",
+        "type": "delay",
+        "z": "tab1",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "1",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1600,
+        "y": 520,
+        "wires": [
+            [
+                "9131ed3b3b91ebdb"
+            ]
+        ]
+    },
+    {
+        "id": "9131ed3b3b91ebdb",
+        "type": "sqlite",
+        "z": "tab1",
+        "mydb": "b931a41ca7c16188",
+        "sqlquery": "msg.topic",
+        "sql": "",
+        "name": "mesh_sensor_data",
+        "x": 1810,
+        "y": 520,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3aabf05b9eb9c9e8",
+        "type": "debug",
+        "z": "tab1",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1420,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "1b115ef813d73dc3",
+        "type": "debug",
+        "z": "tab1",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1500,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "f03ee1aae834aab3",
+        "type": "debug",
+        "z": "tab1",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1540,
+        "y": 600,
+        "wires": []
     },
     {
         "id": "6ec4dcef.913b24",
@@ -153,694 +920,59 @@
         "sessionExpiry": ""
     },
     {
-        "id": "362289d3fec07326",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "fd8240562a77573a",
-        "order": 6,
-        "width": 1,
-        "height": 1
-    },
-    {
-        "id": "8f5ce948b723077f",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "fd8240562a77573a",
-        "order": 9,
-        "width": 2,
-        "height": 1
-    },
-    {
-        "id": "ea8e42f284eadcdb",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "fd8240562a77573a",
-        "order": 10,
-        "width": 1,
-        "height": 1
-    },
-    {
-        "id": "fec5d99a92e18c6d",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "fd8240562a77573a",
-        "order": 11,
-        "width": 2,
-        "height": 1
-    },
-    {
-        "id": "6ead3099f1d433d9",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "fd8240562a77573a",
-        "order": 12,
-        "width": 1,
-        "height": 1
-    },
-    {
-        "id": "18a30113b49a5799",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "fd8240562a77573a",
-        "order": 13,
-        "width": 2,
-        "height": 1
-    },
-    {
-        "id": "90c3d9330a106fae",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "fd8240562a77573a",
-        "order": 14,
-        "width": 1,
-        "height": 1
-    },
-    {
-        "id": "a7da82cb0b97452c",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "fd8240562a77573a",
-        "order": 16,
-        "width": 2,
-        "height": 1
-    },
-    {
-        "id": "ee08190886b9d96b",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "fd8240562a77573a",
-        "order": 17,
-        "width": 1,
-        "height": 1
-    },
-    {
-        "id": "5e81f0d35dc7e7e8",
-        "type": "ui_spacer",
-        "z": "fe162edfc74f05cc",
-        "name": "spacer",
-        "group": "fd8240562a77573a",
-        "order": 19,
-        "width": 2,
-        "height": 1
-    },
-    {
-        "id": "21fb2f687c873502",
-        "type": "mqtt in",
-        "z": "fe162edfc74f05cc",
-        "name": "",
-        "topic": "/topic/ip_mesh",
-        "qos": "0",
-        "datatype": "auto-detect",
-        "broker": "6ec4dcef.913b24",
-        "nl": false,
-        "rap": false,
-        "inputs": 0,
-        "x": 210,
-        "y": 360,
-        "wires": [
-            [
-                "97aee0cc7523e74f",
-                "1eafb341a22a1bf9"
-            ]
-        ]
-    },
-    {
-        "id": "97aee0cc7523e74f",
-        "type": "debug",
-        "z": "fe162edfc74f05cc",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 480,
-        "y": 320,
-        "wires": []
-    },
-    {
-        "id": "1eafb341a22a1bf9",
-        "type": "ui_template",
-        "z": "fe162edfc74f05cc",
-        "group": "fd8240562a77573a",
-        "name": "Nós na rede",
-        "order": 5,
-        "width": 13,
-        "height": 5,
-        "format": "\n\n<table class=\"table\" id=\"NosRede\">\n    <thead>\n        <tr>\n            <th>Layer</th>\n            <th>IP Address</th>\n        </tr>\n    </thead>\n    <tbody></tbody>\n</table>\n\n<script>\n    (function(scope) {\n        const tableBody = document.querySelector(\"#NosRede tbody\");\n        const ipMap = new Map(); // Armazena os IPs e suas layers\n\n        // Atualiza a tabela com os dados recebidos\n        scope.$watch('msg.payload', function(data) {\n            if (!data || typeof data !== 'string') {\n                console.error(\"Dados inválidos:\", data);\n                return;\n            }\n\n            const match = data.match(/layer:(\\d+) IP:([\\d\\.]+)/);\n            if (!match) {\n                console.error(\"Formato inesperado de dados:\", data);\n                return;\n            }\n\n            const layer = match[1];\n            const ip = match[2];\n\n            // Só adiciona ou atualiza se o IP for novo ou a layer mudar\n            if (!ipMap.has(ip) || ipMap.get(ip) !== layer) {\n                ipMap.set(ip, layer);\n                atualizarTabela();\n            }\n        });\n\n        function atualizarTabela() {\n            tableBody.innerHTML = \"\";\n            ipMap.forEach((layer, ip) => {\n                const row = document.createElement(\"tr\");\n                    row.innerHTML = `\n                    <td>${layer}</td>\n                    <td>${ip}</td>\n                    `;\n                tableBody.appendChild(row);\n            });\n        }\n    })(scope);\n</script>\n\n<style>\n    .table {\n        width: 100%;\n        border-collapse: collapse;\n        /* Remove espaços entre células */\n        margin: 10px 0;\n        font-family: Arial, sans-serif;\n    }\n\n    .table th,\n    .table td {\n        border: 1px solid #ddd;\n        padding: 12px;\n        text-align: center;\n    }\n\n    .table th {\n        background-color: #ba5358;\n        /* Cor do cabeçalho */\n        color: white;\n    }\n\n    /* Estilo para linhas alternadas */\n    .table tbody tr:nth-child(even) {\n        background-color: #f2f2f2;\n        /* Cinza claro para linhas pares */\n    }\n\n    .table tbody tr:nth-child(odd) {\n        background-color: white;\n        /* Branco para linhas ímpares */\n    }\n\n    /* Estilo para hover */\n    .table tbody tr:hover {\n        background-color: #e6e6e6;\n    }\n</style>",
-        "storeOutMessages": true,
-        "fwdInMessages": true,
-        "resendOnRefresh": true,
-        "templateScope": "local",
-        "className": "",
-        "x": 500,
-        "y": 420,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "b95c6de7b9a07bd5",
-        "type": "mqtt out",
-        "z": "fe162edfc74f05cc",
-        "name": "",
-        "topic": "/topic/mesh/restart",
-        "qos": "",
-        "retain": "",
-        "respTopic": "",
-        "contentType": "",
-        "userProps": "",
-        "correl": "",
-        "expiry": "",
-        "broker": "6ec4dcef.913b24",
-        "x": 950,
-        "y": 180,
-        "wires": []
-    },
-    {
-        "id": "82f56e61572fb8e0",
-        "type": "ui_button",
-        "z": "fe162edfc74f05cc",
-        "name": "",
-        "group": "fd8240562a77573a",
-        "order": 1,
-        "width": 0,
-        "height": 0,
-        "passthru": false,
-        "label": "Reinicia Rede Mesh",
-        "tooltip": "",
-        "color": "",
-        "bgcolor": "",
-        "className": "",
-        "icon": "",
-        "payload": "restart_mesh",
-        "payloadType": "str",
-        "topic": "topic",
-        "topicType": "msg",
-        "x": 760,
-        "y": 120,
-        "wires": [
-            [
-                "b95c6de7b9a07bd5"
-            ]
-        ]
-    },
-    {
-        "id": "14fd78d246c6c3b5",
-        "type": "mqtt in",
-        "z": "fe162edfc74f05cc",
-        "name": "",
-        "topic": "/topic/mesh/sensor_data",
-        "qos": "0",
-        "datatype": "auto-detect",
-        "broker": "6ec4dcef.913b24",
-        "nl": false,
-        "rap": false,
-        "inputs": 0,
-        "x": 810,
-        "y": 340,
-        "wires": [
-            [
-                "71f1310f16913cb3",
-                "b6e156717e6dc495"
-            ]
-        ]
-    },
-    {
-        "id": "71f1310f16913cb3",
-        "type": "debug",
-        "z": "fe162edfc74f05cc",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1060,
-        "y": 300,
-        "wires": []
-    },
-    {
-        "id": "b6e156717e6dc495",
-        "type": "ui_template",
-        "z": "fe162edfc74f05cc",
-        "group": "fd8240562a77573a",
-        "name": "Dados Sensores",
+        "id": "grupo_rssi",
+        "type": "ui_group",
+        "name": "RSSI",
+        "tab": "aba_mesh",
         "order": 2,
-        "width": 13,
-        "height": 5,
-        "format": "<table class=\"table\" id=\"sensorTable\">\n    <thead>\n        <tr>\n            <th>MAC Address</th>\n            <th>Temperatura (°C)</th>\n            <th>Umidade (%)</th>\n            <th>Latência (ms)</th>\n        </tr>\n    </thead>\n    <tbody></tbody>\n</table>\n\n<script>\n    (function(scope) {\n        const tableBody = document.querySelector(\"#sensorTable tbody\");\n        const sensorData = {}; // Armazena os dados por MAC\n\n        scope.$watch('msg.payload', function(data) {\n            if (!data) return;\n            \n            // Verifica se é o objeto direto com os dados\n            if (typeof data === 'object' && data.mac && data.temp !== undefined && \n                data.hum !== undefined && data.latency_ms !== undefined) {\n                \n                const mac = data.mac;\n                const temp = parseFloat(data.temp).toFixed(2);\n                const hum = parseFloat(data.hum).toFixed(2);\n                const lat = data.latency_ms.toString();\n                \n                // Atualiza ou adiciona os dados\n                sensorData[mac] = {\n                    mac: mac,\n                    temperatura: temp,\n                    umidade: hum,\n                    latencia: lat\n                };\n                \n                atualizarTabela();\n            }\n        });\n\n        function atualizarTabela() {\n            tableBody.innerHTML = \"\";\n            \n            // Ordena por MAC address antes de exibir\n            const sortedMacs = Object.keys(sensorData).sort();\n            \n            sortedMacs.forEach(mac => {\n                const item = sensorData[mac];\n                const row = document.createElement(\"tr\");\n\n                const macCell = document.createElement(\"td\");\n                const tempCell = document.createElement(\"td\");\n                const humCell = document.createElement(\"td\");\n                const latCell = document.createElement(\"td\");\n\n                macCell.textContent = item.mac;\n                tempCell.textContent = item.temperatura;\n                humCell.textContent = item.umidade;\n                latCell.textContent = item.latencia;\n\n                row.appendChild(macCell);\n                row.appendChild(tempCell);\n                row.appendChild(humCell);\n                row.appendChild(latCell);\n                tableBody.appendChild(row);\n            });\n        }\n    })(scope);\n</script>\n\n<style>\n    .table {\n        width: 100%;\n        border-collapse: collapse;\n        margin: 10px 0;\n        font-family: Arial, sans-serif;\n    }\n\n    .table th,\n    .table td {\n        border: 1px solid #ddd;\n        padding: 12px;\n        text-align: center;\n    }\n\n    .table th {\n        background-color: #ba5358;\n        color: white;\n    }\n\n    .table tbody tr:nth-child(even) {\n        background-color: #f2f2f2;\n    }\n\n    .table tbody tr:nth-child(odd) {\n        background-color: white;\n    }\n\n    .table tbody tr:hover {\n        background-color: #e6e6e6;\n    }\n</style>",
-        "storeOutMessages": true,
-        "fwdInMessages": true,
-        "resendOnRefresh": true,
-        "templateScope": "local",
-        "className": "",
-        "x": 1080,
-        "y": 400,
-        "wires": [
-            []
-        ]
+        "disp": true,
+        "width": 15,
+        "collapse": false
     },
     {
-        "id": "cc90ac8d96627ca4",
-        "type": "mqtt in",
-        "z": "fe162edfc74f05cc",
-        "name": "",
-        "topic": "/topic/mesh/success_rate",
-        "qos": "2",
-        "datatype": "auto-detect",
-        "broker": "6ec4dcef.913b24",
-        "nl": false,
-        "rap": true,
-        "rh": 0,
-        "inputs": 0,
-        "x": 250,
-        "y": 560,
-        "wires": [
-            [
-                "e73c6cefdfa57c62",
-                "7ab7fa38b83badc6"
-            ]
-        ]
-    },
-    {
-        "id": "e73c6cefdfa57c62",
-        "type": "ui_gauge",
-        "z": "fe162edfc74f05cc",
-        "name": "",
-        "group": "fd8240562a77573a",
-        "order": 7,
-        "width": 5,
-        "height": 3,
-        "gtype": "compass",
-        "title": "Taxa de Sucesso",
-        "label": "units",
-        "format": "{{value}}",
-        "min": 0,
-        "max": "100",
-        "colors": [
-            "#00b500",
-            "#e6e600",
-            "#ca3838"
-        ],
-        "seg1": "",
-        "seg2": "",
-        "diff": true,
-        "className": "",
-        "x": 530,
-        "y": 580,
-        "wires": []
-    },
-    {
-        "id": "7ab7fa38b83badc6",
-        "type": "debug",
-        "z": "fe162edfc74f05cc",
-        "name": "debug 2",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 520,
-        "y": 520,
-        "wires": []
-    },
-    {
-        "id": "56d4d46dda5f71e3",
-        "type": "mqtt in",
-        "z": "fe162edfc74f05cc",
-        "name": "",
-        "topic": "/topic/mesh/packet_loss",
-        "qos": "2",
-        "datatype": "auto-detect",
-        "broker": "6ec4dcef.913b24",
-        "nl": false,
-        "rap": true,
-        "rh": 0,
-        "inputs": 0,
-        "x": 240,
-        "y": 680,
-        "wires": [
-            [
-                "6e4b07d7691408f2",
-                "6824732e7ace6ff2"
-            ]
-        ]
-    },
-    {
-        "id": "6e4b07d7691408f2",
-        "type": "ui_gauge",
-        "z": "fe162edfc74f05cc",
-        "name": "",
-        "group": "fd8240562a77573a",
-        "order": 8,
-        "width": 5,
-        "height": 3,
-        "gtype": "compass",
-        "title": "Perda de Pacotes",
-        "label": "units",
-        "format": "{{value}}",
-        "min": 0,
-        "max": "100",
-        "colors": [
-            "#00b500",
-            "#e6e600",
-            "#ca3838"
-        ],
-        "seg1": "",
-        "seg2": "",
-        "diff": true,
-        "className": "",
-        "x": 530,
-        "y": 700,
-        "wires": []
-    },
-    {
-        "id": "6824732e7ace6ff2",
-        "type": "debug",
-        "z": "fe162edfc74f05cc",
-        "name": "debug 3",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 520,
-        "y": 640,
-        "wires": []
-    },
-    {
-        "id": "ec1215e45a3752fc",
-        "type": "mqtt in",
-        "z": "fe162edfc74f05cc",
-        "name": "",
-        "topic": "/topic/mesh/hops",
-        "qos": "2",
-        "datatype": "auto-detect",
-        "broker": "6ec4dcef.913b24",
-        "nl": false,
-        "rap": true,
-        "rh": 0,
-        "inputs": 0,
-        "x": 780,
-        "y": 560,
-        "wires": [
-            [
-                "9daa5a355f096730",
-                "a85f8035ca6860cc"
-            ]
-        ]
-    },
-    {
-        "id": "9daa5a355f096730",
-        "type": "debug",
-        "z": "fe162edfc74f05cc",
-        "name": "debug 4",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1080,
-        "y": 520,
-        "wires": []
-    },
-    {
-        "id": "09a386911eb5e6be",
-        "type": "mqtt in",
-        "z": "fe162edfc74f05cc",
-        "name": "",
-        "topic": "/topic/mesh/parent_changes",
-        "qos": "2",
-        "datatype": "auto-detect",
-        "broker": "6ec4dcef.913b24",
-        "nl": false,
-        "rap": true,
-        "rh": 0,
-        "inputs": 0,
-        "x": 820,
-        "y": 740,
-        "wires": [
-            [
-                "d945a2217a661ec1",
-                "52bc7c35e9e9eb9b"
-            ]
-        ]
-    },
-    {
-        "id": "d945a2217a661ec1",
-        "type": "debug",
-        "z": "fe162edfc74f05cc",
-        "name": "debug 5",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1080,
-        "y": 700,
-        "wires": []
-    },
-    {
-        "id": "52bc7c35e9e9eb9b",
-        "type": "ui_text",
-        "z": "fe162edfc74f05cc",
-        "group": "fd8240562a77573a",
-        "order": 15,
-        "width": 10,
-        "height": 1,
-        "name": "",
-        "label": "Trocas Nó Pai",
-        "format": "{{msg.payload}}",
-        "layout": "col-center",
-        "className": "",
-        "style": true,
-        "font": "Courier,monospace",
-        "fontSize": 16,
-        "color": "#093877",
-        "x": 1100,
-        "y": 780,
-        "wires": []
-    },
-    {
-        "id": "b28b32199b8455b0",
-        "type": "mqtt in",
-        "z": "fe162edfc74f05cc",
-        "name": "",
-        "topic": "/topic/mesh/reconnection_time",
-        "qos": "2",
-        "datatype": "auto-detect",
-        "broker": "6ec4dcef.913b24",
-        "nl": false,
-        "rap": true,
-        "rh": 0,
-        "inputs": 0,
-        "x": 820,
-        "y": 920,
-        "wires": [
-            [
-                "21055d2a357f1147",
-                "1110ca6766629f01"
-            ]
-        ]
-    },
-    {
-        "id": "21055d2a357f1147",
-        "type": "debug",
-        "z": "fe162edfc74f05cc",
-        "name": "debug 6",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1080,
-        "y": 880,
-        "wires": []
-    },
-    {
-        "id": "1110ca6766629f01",
-        "type": "ui_text",
-        "z": "fe162edfc74f05cc",
-        "group": "fd8240562a77573a",
-        "order": 18,
-        "width": 10,
-        "height": 1,
-        "name": "",
-        "label": "Tempo reconexão ",
-        "format": "{{msg.payload}}",
-        "layout": "col-center",
-        "className": "",
-        "style": true,
-        "font": "Courier,monospace",
-        "fontSize": 16,
-        "color": "#4c72a4",
-        "x": 1110,
-        "y": 960,
-        "wires": []
-    },
-    {
-        "id": "a47dcbe00263b4eb",
-        "type": "mqtt in",
-        "z": "fe162edfc74f05cc",
-        "name": "",
-        "topic": "/topic/mesh/rssi",
-        "qos": "0",
-        "datatype": "auto-detect",
-        "broker": "6ec4dcef.913b24",
-        "nl": false,
-        "rap": false,
-        "inputs": 0,
-        "x": 260,
-        "y": 1040,
-        "wires": [
-            [
-                "4763d34c1db8b10a",
-                "a37ed992cb642a0f"
-            ]
-        ]
-    },
-    {
-        "id": "4763d34c1db8b10a",
-        "type": "debug",
-        "z": "fe162edfc74f05cc",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 520,
-        "y": 1000,
-        "wires": []
-    },
-    {
-        "id": "a37ed992cb642a0f",
-        "type": "ui_template",
-        "z": "fe162edfc74f05cc",
-        "group": "fd8240562a77573a",
-        "name": "RSSI na rede",
+        "id": "grupo_metrics",
+        "type": "ui_group",
+        "name": "Métricas",
+        "tab": "aba_mesh",
         "order": 3,
-        "width": 13,
-        "height": 5,
-        "format": "<table class=\"table\" id=\"rssiTable\">\n    <thead>\n        <tr>\n            <th>MAC Address</th>\n            <th>RSSI (dBm)</th>\n        </tr>\n    </thead>\n    <tbody></tbody>\n</table>\n\n<script>\n    (function(scope) {\n        // Objeto para armazenar dados por MAC\n        const rssiData = {};\n\n        scope.$watch('msg.payload', function(data) {\n            if (!data || typeof data !== 'string') return;\n\n            // Espera o formato \"AA:BB:CC:DD:EE:FF - RSSI: -60\"\n            const parts = data.split(\" - RSSI: \");\n            if (parts.length !== 2) return;\n\n            const mac = parts[0].trim();\n            const rssi = parseInt(parts[1]);\n\n            if (!mac || isNaN(rssi)) return;\n\n            // Atualiza o dado\n            rssiData[mac] = rssi;\n\n            // Atualiza a tabela\n            const tableBody = document.querySelector(\"#rssiTable tbody\");\n            tableBody.innerHTML = \"\";\n\n            Object.keys(rssiData).forEach(macAddr => {\n                const row = document.createElement(\"tr\");\n                \n                const macCell = document.createElement(\"td\");\n                const rssiCell = document.createElement(\"td\");\n\n                macCell.textContent = macAddr;\n                rssiCell.textContent = rssiData[macAddr];\n\n                row.appendChild(macCell);\n                row.appendChild(rssiCell);\n                tableBody.appendChild(row);\n            });\n        });\n    })(scope);\n</script>\n\n<style>\n    .table {\n        width: 100%;\n        border-collapse: collapse;\n        /* Remove espaços entre células */\n        margin: 10px 0;\n        font-family: Arial, sans-serif;\n    }\n\n    .table th,\n    .table td {\n        border: 1px solid #ddd;\n        padding: 12px;\n        text-align: center;\n    }\n\n    .table th {\n        background-color: #ba5358;\n        /* Cor do cabeçalho */\n        color: white;\n    }\n\n    /* Estilo para linhas alternadas */\n    .table tbody tr:nth-child(even) {\n        background-color: #f2f2f2;\n        /* Cinza claro para linhas pares */\n    }\n\n    .table tbody tr:nth-child(odd) {\n        background-color: white;\n        /* Branco para linhas ímpares */\n    }\n\n    /* Estilo para hover */\n    .table tbody tr:hover {\n        background-color: #e6e6e6;\n    }\n</style>",
-        "storeOutMessages": true,
-        "fwdInMessages": true,
-        "resendOnRefresh": true,
-        "templateScope": "local",
-        "className": "",
-        "x": 550,
-        "y": 1100,
-        "wires": [
-            []
-        ]
+        "disp": true,
+        "width": 15,
+        "collapse": false
     },
     {
-        "id": "a85f8035ca6860cc",
-        "type": "ui_template",
-        "z": "fe162edfc74f05cc",
-        "group": "fd8240562a77573a",
-        "name": "N° Saltos",
+        "id": "grupo_sensores",
+        "type": "ui_group",
+        "name": "Dados Sensores",
+        "tab": "aba_mesh",
+        "order": 1,
+        "disp": true,
+        "width": 15,
+        "collapse": false
+    },
+    {
+        "id": "c43853a14aa4af82",
+        "type": "ui_group",
+        "name": "Ações na Rede",
+        "tab": "aba_mesh",
         "order": 4,
-        "width": 13,
-        "height": 5,
-        "format": "<table class=\"table\" id=\"hopsTable\">\n    <thead>\n        <tr>\n            <th>MAC Address</th>\n            <th>Saltos (Hops)</th>\n        </tr>\n    </thead>\n    <tbody></tbody>\n</table>\n\n<script>\n    (function(scope) {\n        const tableBody = document.querySelector(\"#hopsTable tbody\");\n        const hopsData = {}; // Armazena apenas os dados de hops por MAC\n\n        scope.$watch('msg.payload', function(data) {\n            if (!data) return;\n            \n            // Verifica se é a mensagem de hops no formato esperado\n            if (typeof data === 'string' && data.includes(\" - Hops:\") && \n                data.match(/([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})/)) {\n                \n                // Extrai MAC e número de saltos\n                const mac = data.match(/(([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2}))/)[0];\n                const hops = data.match(/Hops: (\\d+)/)[1];\n                \n                // Atualiza ou adiciona os dados\n                hopsData[mac] = {\n                    mac: mac,\n                    hops: hops\n                };\n                \n                atualizarTabela();\n            }\n        });\n\n        function atualizarTabela() {\n            tableBody.innerHTML = \"\";\n            \n            // Ordena por MAC address antes de exibir\n            const sortedMacs = Object.keys(hopsData).sort();\n            \n            sortedMacs.forEach(mac => {\n                const item = hopsData[mac];\n                const row = document.createElement(\"tr\");\n\n                const macCell = document.createElement(\"td\");\n                const hopsCell = document.createElement(\"td\");\n\n                macCell.textContent = item.mac;\n                hopsCell.textContent = item.hops;\n\n                row.appendChild(macCell);\n                row.appendChild(hopsCell);\n                tableBody.appendChild(row);\n            });\n        }\n    })(scope);\n</script>\n\n<style>\n    .table {\n        width: 100%;\n        border-collapse: collapse;\n        margin: 10px 0;\n        font-family: Arial, sans-serif;\n    }\n\n    .table th,\n    .table td {\n        border: 1px solid #ddd;\n        padding: 12px;\n        text-align: center;\n    }\n\n    .table th {\n        background-color: #ba5358;\n        /* Cor verde para diferenciar */\n        color: white;\n    }\n\n    .table tbody tr:nth-child(even) {\n        background-color: #f2f2f2;\n    }\n\n    .table tbody tr:nth-child(odd) {\n        background-color: white;\n    }\n\n    .table tbody tr:hover {\n        background-color: #e6e6e6;\n    }\n</style>",
-        "storeOutMessages": true,
-        "fwdInMessages": true,
-        "resendOnRefresh": true,
-        "templateScope": "local",
-        "className": "",
-        "x": 1060,
-        "y": 600,
-        "wires": [
-            []
-        ]
+        "disp": true,
+        "width": 15,
+        "collapse": false,
+        "className": ""
     },
     {
-        "id": "5819f9af183875de",
-        "type": "mqtt in",
-        "z": "fe162edfc74f05cc",
-        "name": "",
-        "topic": "/topic/mesh/sensor_data",
-        "qos": "0",
-        "datatype": "auto-detect",
-        "broker": "6ec4dcef.913b24",
-        "nl": false,
-        "rap": false,
-        "inputs": 0,
-        "x": 1370,
-        "y": 300,
-        "wires": [
-            [
-                "4007e97111842c2a",
-                "d912d806d898c021"
-            ]
-        ]
+        "id": "b931a41ca7c16188",
+        "type": "sqlitedb",
+        "db": "C:/Users/grazi/TCC/rede_mesh.db",
+        "mode": "RWC"
     },
     {
-        "id": "4007e97111842c2a",
-        "type": "debug",
-        "z": "fe162edfc74f05cc",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1620,
-        "y": 260,
-        "wires": []
-    },
-    {
-        "id": "d912d806d898c021",
-        "type": "ui_template",
-        "z": "fe162edfc74f05cc",
-        "group": "fd8240562a77573a",
-        "name": "Gráficos",
-        "order": 20,
-        "width": 13,
-        "height": 12,
-        "format": "<!-- Chart.js CDN -->\n<script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n\n<style>\n    .chart-container {\n        display: flex;\n        flex-wrap: wrap;\n        gap: 20px;\n        justify-content: center;\n        align-items: flex-start;\n        margin-top: 20px;\n    }\n\n    .chart-box {\n        flex: 1 1 300px;\n        min-width: 300px;\n        max-width: 500px;\n    }\n\n    canvas {\n        width: 100% !important;\n        height: 300px !important;\n    }\n</style>\n\n<div class=\"chart-container\">\n    <div class=\"chart-box\">\n        <h4>Temperatura por MAC</h4>\n        <canvas id=\"chartTemp\"></canvas>\n    </div>\n    <div class=\"chart-box\">\n        <h4>Umidade por MAC</h4>\n        <canvas id=\"chartHum\"></canvas>\n    </div>\n    <div class=\"chart-box\">\n        <h4>Latência por MAC</h4>\n        <canvas id=\"chartLat\"></canvas>\n    </div>\n</div>\n\n<script>\n    const macColors = {};\n    \n    function getColorForMac(mac) {\n    if (macColors[mac]) return macColors[mac];\n    \n    // Função para gerar cor randômica\n    function getRandomColor() {\n    const r = Math.floor(Math.random() * 200);\n    const g = Math.floor(Math.random() * 200);\n    const b = Math.floor(Math.random() * 200);\n    return `rgba(${r}, ${g}, ${b}, 0.6)`;\n    }\n    \n    macColors[mac] = getRandomColor();\n    return macColors[mac];\n    }\n    \n    (function(scope) {\n    const chartData = {};  // Histórico por MAC\n\n    const chartTempCtx = document.getElementById('chartTemp').getContext('2d');\n    const chartHumCtx = document.getElementById('chartHum').getContext('2d');\n    const chartLatCtx = document.getElementById('chartLat').getContext('2d');\n\n    const chartTemp = new Chart(chartTempCtx, createChartConfig(\"Temperatura (°C)\"));\n    const chartHum = new Chart(chartHumCtx, createChartConfig(\"Umidade (%)\"));\n    const chartLat = new Chart(chartLatCtx, createChartConfig(\"Latência (ms)\"));\n\n    scope.$watch('msg.payload', function(data) {\n        if (!data || typeof data !== 'object' || !data.mac) return;\n\n        const mac = data.mac;\n        const temp = parseFloat(data.temp).toFixed(2);\n        const hum = parseFloat(data.hum).toFixed(2);\n        const lat = parseFloat(data.latency_ms).toFixed(0);\n        const timestamp = new Date().toLocaleTimeString();\n\n        if (!chartData[mac]) {\n            chartData[mac] = {\n                labels: [],\n                temp: [],\n                hum: [],\n                lat: []\n            };\n\n            const color = getColorForMac(mac);\n            addDataset(chartTemp, mac, color);\n            addDataset(chartHum, mac, color);\n            addDataset(chartLat, mac, color);\n        }\n\n        const maxPoints = 20;\n        const macData = chartData[mac];\n\n        if (macData.labels.length >= maxPoints) {\n            macData.labels.shift();\n            macData.temp.shift();\n            macData.hum.shift();\n            macData.lat.shift();\n        }\n\n        macData.labels.push(timestamp);\n        macData.temp.push(temp);\n        macData.hum.push(hum);\n        macData.lat.push(lat);\n\n        updateChart(chartTemp, mac, macData.labels, macData.temp);\n        updateChart(chartHum, mac, macData.labels, macData.hum);\n        updateChart(chartLat, mac, macData.labels, macData.lat);\n    });\n\n    function createChartConfig(label) {\n        return {\n            type: 'line',\n            data: {\n                labels: [],\n                datasets: []\n            },\n            options: {\n                responsive: true,\n                animation: false,\n                plugins: {\n                    legend: { display: true },\n                    title: { display: false }\n                },\n                scales: {\n                    y: { beginAtZero: true },\n                    x: { ticks: { autoSkip: true, maxTicksLimit: 10 } }\n                }\n            }\n        };\n    }\n\n    function addDataset(chart, label, color) {\n        chart.data.datasets.push({\n            label: label,\n            data: [],\n            borderColor: color,\n            backgroundColor: color,\n            fill: false,\n            tension: 0.1\n        });\n        chart.update();\n    }\n\n    function updateChart(chart, label, labels, data) {\n        const dataset = chart.data.datasets.find(d => d.label === label);\n        if (dataset) {\n            dataset.data = data;\n            chart.data.labels = labels;\n            chart.update();\n        }\n    }\n})(scope);\n</script>",
-        "storeOutMessages": true,
-        "fwdInMessages": true,
-        "resendOnRefresh": true,
-        "templateScope": "local",
-        "className": "",
-        "x": 1610,
-        "y": 360,
-        "wires": [
-            []
-        ]
+        "id": "aba_mesh",
+        "type": "ui_tab",
+        "name": "Painel Mesh",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
     }
 ]

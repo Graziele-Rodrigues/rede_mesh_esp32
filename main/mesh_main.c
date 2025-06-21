@@ -400,8 +400,8 @@ void metrics() {
         "\"retransmission_count\":%d"
         "}",
         metrics.hops_to_root,
-        (double)metrics.success_rate,
-        (double)metrics.packet_loss_rate,
+        (float)metrics.success_rate,
+        (float)metrics.packet_loss_rate,
         metrics.rtt_ms,
         metrics.children_count,
         metrics.parent_changes,
