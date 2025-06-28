@@ -1,24 +1,24 @@
 CREATE TABLE metrics (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-    hops INTEGER,
     sucesso REAL,
     perda REAL,
-    rtt INTEGER,
+    layer INTEGER,
     nos INTEGER,
+    rtt INTEGER,
     trocas_pai INTEGER,
     ult_troca INTEGER,
     retransmissoes INTEGER
 );
 
-CREATE TABLE sinal (
+CREATE TABLE signal (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
     mac TEXT,
     rssi INTEGER
 );
 
-CREATE TABLE mesh_sensor (
+CREATE TABLE mesh_sensor_data (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
     mac TEXT,

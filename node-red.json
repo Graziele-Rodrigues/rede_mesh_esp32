@@ -7,6 +7,211 @@
         "info": ""
     },
     {
+        "id": "d7cacd98f609ab2b",
+        "type": "ui_base",
+        "theme": {
+            "name": "theme-custom",
+            "lightTheme": {
+                "default": "#0094CE",
+                "baseColor": "#322f30",
+                "baseFont": "Arial Black,Arial Black,Gadget,sans-serif",
+                "edited": true,
+                "reset": false
+            },
+            "darkTheme": {
+                "default": "#097479",
+                "baseColor": "#9ea3a3",
+                "baseFont": "Lucida Sans Typewriter,Lucida Console,Monaco,monospace",
+                "edited": true,
+                "reset": false
+            },
+            "customTheme": {
+                "name": "TCC",
+                "default": "#4B7930",
+                "baseColor": "#4B7930",
+                "baseFont": "Times New Roman,Times,serif",
+                "reset": false
+            },
+            "themeState": {
+                "base-color": {
+                    "default": "#4B7930",
+                    "value": "#4B7930",
+                    "edited": true
+                },
+                "page-titlebar-backgroundColor": {
+                    "value": "#4B7930",
+                    "edited": false
+                },
+                "page-backgroundColor": {
+                    "value": "#111111",
+                    "edited": false
+                },
+                "page-sidebar-backgroundColor": {
+                    "value": "#333333",
+                    "edited": false
+                },
+                "group-textColor": {
+                    "value": "#6db046",
+                    "edited": false
+                },
+                "group-borderColor": {
+                    "value": "#555555",
+                    "edited": false
+                },
+                "group-backgroundColor": {
+                    "value": "#333333",
+                    "edited": false
+                },
+                "widget-textColor": {
+                    "value": "#eeeeee",
+                    "edited": false
+                },
+                "widget-backgroundColor": {
+                    "value": "#4b7930",
+                    "edited": false
+                },
+                "widget-borderColor": {
+                    "value": "#333333",
+                    "edited": false
+                },
+                "base-font": {
+                    "value": "Times New Roman,Times,serif"
+                }
+            },
+            "angularTheme": {
+                "primary": "indigo",
+                "accents": "blue",
+                "warn": "red",
+                "background": "grey",
+                "palette": "light"
+            }
+        },
+        "site": {
+            "name": "Node-RED Dashboard",
+            "hideToolbar": "false",
+            "allowSwipe": "false",
+            "lockMenu": "false",
+            "allowTempTheme": "true",
+            "dateFormat": "DD/MM/YYYY",
+            "sizes": {
+                "sx": 100,
+                "sy": 50,
+                "gx": 6,
+                "gy": 6,
+                "cx": 6,
+                "cy": 6,
+                "px": 0,
+                "py": 0
+            }
+        }
+    },
+    {
+        "id": "6ec4dcef.913b24",
+        "type": "mqtt-broker",
+        "name": "eclipse",
+        "broker": "mqtt://mqtt.eclipseprojects.io",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "15",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "b931a41ca7c16188",
+        "type": "sqlitedb",
+        "db": "C:/Users/grazi/TCC/rede_mesh.db",
+        "mode": "RWC"
+    },
+    {
+        "id": "mqtt_broker",
+        "type": "mqtt-broker",
+        "name": "Broker MQTT",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "compatmode": false,
+        "protocolVersion": 4,
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "closeTopic": "",
+        "closePayload": "",
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": ""
+    },
+    {
+        "id": "aba_mesh",
+        "type": "ui_tab",
+        "name": "Painel Mesh",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "grupo_sensores",
+        "type": "ui_group",
+        "name": "Dados Sensores",
+        "tab": "aba_mesh",
+        "order": 1,
+        "disp": true,
+        "width": 15,
+        "collapse": false
+    },
+    {
+        "id": "grupo_rssi",
+        "type": "ui_group",
+        "name": "RSSI",
+        "tab": "aba_mesh",
+        "order": 2,
+        "disp": true,
+        "width": 15,
+        "collapse": false
+    },
+    {
+        "id": "grupo_metrics",
+        "type": "ui_group",
+        "name": "Métricas",
+        "tab": "aba_mesh",
+        "order": 3,
+        "disp": true,
+        "width": 15,
+        "collapse": false
+    },
+    {
+        "id": "c43853a14aa4af82",
+        "type": "ui_group",
+        "name": "Ações na Rede",
+        "tab": "aba_mesh",
+        "order": 4,
+        "disp": true,
+        "width": 15,
+        "collapse": false,
+        "className": ""
+    },
+    {
         "id": "mqtt_rssi",
         "type": "mqtt in",
         "z": "tab1",
@@ -14,7 +219,7 @@
         "topic": "/topic/mesh/rssi",
         "qos": "2",
         "datatype": "auto-detect",
-        "broker": "6ec4dcef.913b24",
+        "broker": "mqtt_broker",
         "nl": false,
         "rap": false,
         "inputs": 0,
@@ -71,7 +276,7 @@
         "topic": "/topic/mesh/metricas",
         "qos": "2",
         "datatype": "auto-detect",
-        "broker": "6ec4dcef.913b24",
+        "broker": "mqtt_broker",
         "nl": false,
         "rap": false,
         "inputs": 0,
@@ -93,16 +298,6 @@
         "width": 0,
         "height": 0,
         "columns": [
-            {
-                "field": "Hops",
-                "title": "Hops",
-                "width": "",
-                "align": "left",
-                "formatter": "plaintext",
-                "formatterParams": {
-                    "target": "_blank"
-                }
-            },
             {
                 "field": "Sucesso",
                 "title": "Sucesso",
@@ -126,6 +321,16 @@
             {
                 "field": "RTT",
                 "title": "RTT",
+                "width": "",
+                "align": "left",
+                "formatter": "plaintext",
+                "formatterParams": {
+                    "target": "_blank"
+                }
+            },
+            {
+                "field": "Camadas",
+                "title": "Camadas",
                 "width": "",
                 "align": "left",
                 "formatter": "plaintext",
@@ -208,7 +413,7 @@
         "topic": "/topic/mesh/sensor",
         "qos": "2",
         "datatype": "auto-detect",
-        "broker": "6ec4dcef.913b24",
+        "broker": "mqtt_broker",
         "nl": false,
         "rap": true,
         "rh": 0,
@@ -303,7 +508,7 @@
         "type": "function",
         "z": "tab1",
         "name": "metricas",
-        "func": "msg.payload = [{\n  \"Hops\": msg.payload.hops_to_root,\n  \"Sucesso\": msg.payload.success_rate,\n  \"Perda\": msg.payload.packet_loss_rate,\n  \"RTT\": msg.payload.rtt_ms,\n  \"Nós na Rede\": msg.payload.children_count,\n  \"Trocas Pai\": msg.payload.parent_changes,\n  \"Ult. Troca\": msg.payload.last_parent_change_ms,\n  \"Retransmissões\": msg.payload.retransmission_count\n}];\nreturn msg;\n\n",
+        "func": "msg.payload = [{\n  \"Camadas\": msg.payload.layer,\n  \"Sucesso\": msg.payload.success_rate,\n  \"Perda\": msg.payload.packet_loss_rate,\n  \"RTT\": msg.payload.rtt_ms,\n  \"Nós na Rede\": msg.payload.children_count,\n  \"Trocas Pai\": msg.payload.parent_changes,\n  \"Ult. Troca\": msg.payload.last_parent_change_ms,\n  \"Retransmissões\": msg.payload.retransmission_count\n}];\nreturn msg;\n\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -326,7 +531,7 @@
         "topic": "/topic/mesh/sensor",
         "qos": "2",
         "datatype": "auto-detect",
-        "broker": "6ec4dcef.913b24",
+        "broker": "mqtt_broker",
         "nl": false,
         "rap": true,
         "rh": 0,
@@ -389,7 +594,7 @@
         "topic": "/topic/mesh/sensor",
         "qos": "2",
         "datatype": "auto-detect",
-        "broker": "6ec4dcef.913b24",
+        "broker": "mqtt_broker",
         "nl": false,
         "rap": true,
         "rh": 0,
@@ -452,7 +657,7 @@
         "topic": "/topic/mesh/sensor",
         "qos": "2",
         "datatype": "auto-detect",
-        "broker": "6ec4dcef.913b24",
+        "broker": "mqtt_broker",
         "nl": false,
         "rap": true,
         "rh": 0,
@@ -609,7 +814,7 @@
         "topic": "/topic/mesh/rssi",
         "qos": "2",
         "datatype": "auto-detect",
-        "broker": "6ec4dcef.913b24",
+        "broker": "mqtt_broker",
         "nl": false,
         "rap": true,
         "rh": 0,
@@ -627,7 +832,7 @@
         "type": "function",
         "z": "tab1",
         "name": "signal",
-        "func": "const payload = msg.payload;\n\n// Validação básica\nif (!payload || typeof payload !== 'object' || !payload.mac || isNaN(payload.rssi)) {\n    node.warn(\"Dados de sinal inválidos ou incompletos. Pulando inserção no banco de dados.\");\n    return null;\n}\n\n// Extração dos dados\nconst macAddress = payload.mac;\nconst rssi = parseInt(payload.rssi, 10);  // Garante que é número inteiro\n\n// Query com placeholders seguros\nmsg.topic = \"INSERT INTO signal(mac, rssi) VALUES (?, ?)\";\nmsg.payload = [macAddress, rssi];\n\nreturn msg;\n",
+        "func": "const payload = msg.payload;\n\n// Extrai e formata os valores\nconst macAddress = payload.mac || null;\nconst rssiRaw = parseInt(payload.rssi, 10);\nconst rssi = Number.isNaN(rssiRaw) ? null : rssiRaw;\n\n// Query SQL interpolada corretamente com crase\nmsg.topic = `INSERT INTO signal (mac, rssi) VALUES ('${macAddress}', ${rssi});`;\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -649,7 +854,7 @@
         "z": "tab1",
         "mydb": "b931a41ca7c16188",
         "sqlquery": "msg.topic",
-        "sql": "",
+        "sql": "INSERT INTO signal(mac, rssi) VALUES (?, ?)\n",
         "name": "signal",
         "x": 1830,
         "y": 220,
@@ -665,7 +870,7 @@
         "topic": "/topic/mesh/metricas",
         "qos": "2",
         "datatype": "auto-detect",
-        "broker": "6ec4dcef.913b24",
+        "broker": "mqtt_broker",
         "nl": false,
         "rap": true,
         "rh": 0,
@@ -683,7 +888,7 @@
         "type": "function",
         "z": "tab1",
         "name": "metrics",
-        "func": "const p = msg.payload;\n\n// Validação básica\nif (!p || typeof p !== 'object' ||\n    isNaN(p.hops_to_root) ||\n    isNaN(p.success_rate) ||\n    isNaN(p.packet_loss_rate) ||\n    isNaN(p.rtt_ms) ||\n    isNaN(p.children_count) ||\n    isNaN(p.parent_changes) ||\n    isNaN(p.last_parent_change_ms) ||\n    isNaN(p.retransmission_count)) {\n\n    node.warn(\"Dados de métricas inválidos ou incompletos. Pulando inserção.\");\n    return null;\n}\n\n// Query segura com placeholders\nmsg.topic = `INSERT INTO metrics (\n    hops, sucesso, perda, rtt, nos, trocas_pai, ult_troca, retransmissoes\n) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;\n\nmsg.payload = [\n    parseInt(p.hops_to_root, 10),\n    parseFloat(p.success_rate),\n    parseFloat(p.packet_loss_rate),\n    parseInt(p.rtt_ms, 10),\n    parseInt(p.children_count, 10),\n    parseInt(p.parent_changes, 10),\n    parseInt(p.last_parent_change_ms, 10),\n    parseInt(p.retransmission_count, 10)\n];\n\nreturn msg;\n",
+        "func": "const p = msg.payload;\n\nmsg.topic = `INSERT INTO metrics (\n    sucesso, perda, layer, nos, rtt, trocas_pai, ult_troca, retransmissoes\n) VALUES (\n    ${parseFloat(p.success_rate)},\n    ${parseFloat(p.packet_loss_rate)},\n    ${parseInt(p.layer, 10)},\n    ${parseInt(p.children_count, 10)},\n    ${parseInt(p.rtt_ms, 10)},\n    ${parseInt(p.parent_changes, 10)},\n    ${parseInt(p.last_parent_change_ms, 10)},\n    ${parseInt(p.retransmission_count, 10)}\n);`;\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -705,7 +910,7 @@
         "z": "tab1",
         "mydb": "b931a41ca7c16188",
         "sqlquery": "msg.topic",
-        "sql": "",
+        "sql": "INSERT INTO metrics (\n    sucesso, perda, layer, nos, rtt, trocas_pai, ult_troca, retransmissoes\n) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
         "name": "metrics",
         "x": 1840,
         "y": 360,
@@ -771,7 +976,7 @@
         "topic": "/topic/mesh/sensor",
         "qos": "2",
         "datatype": "auto-detect",
-        "broker": "6ec4dcef.913b24",
+        "broker": "mqtt_broker",
         "nl": false,
         "rap": true,
         "rh": 0,
@@ -789,7 +994,7 @@
         "type": "function",
         "z": "tab1",
         "name": "data_sensor",
-        "func": "const payload = msg.payload;\n\n// Validação básica\nif (!payload || typeof payload !== 'object' || !payload.mac || isNaN(payload.temp) || isNaN(payload.hum) || isNaN(payload.latency_ms)) {\n    node.warn(\"Dados de sensor inválidos ou incompletos. Pulando inserção no banco de dados.\");\n    return null;\n}\n\n// Extrai e formata os valores\nconst macAddress = payload.mac;\nconst temperature = parseFloat(payload.temp).toFixed(2);\nconst humidity = parseFloat(payload.hum).toFixed(2);\nconst latencyMs = parseInt(payload.latency_ms, 10);\n\n// Query SQL interpolada corretamente com crase\nmsg.topic = `INSERT INTO mesh_sensor_data (mac_address, temperature, humidity, latency_ms) VALUES ('${macAddress}', ${temperature}, ${humidity}, ${latencyMs});`;\n\nreturn msg;\n",
+        "func": "const payload = msg.payload;\n\n// Extrai e formata os valores\nconst macAddress = payload.mac;\nconst temperature = parseFloat(payload.temp).toFixed(2);\nconst humidity = parseFloat(payload.hum).toFixed(2);\nconst latencyMs = parseInt(payload.latency_ms, 10);\n\n// Query SQL interpolada corretamente com crase\nmsg.topic = `INSERT INTO mesh_sensor_data (mac, temperatura, umidade, latencia) VALUES ('${macAddress}', ${temperature}, ${humidity}, ${latencyMs});`;\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -891,88 +1096,5 @@
         "x": 1540,
         "y": 600,
         "wires": []
-    },
-    {
-        "id": "6ec4dcef.913b24",
-        "type": "mqtt-broker",
-        "name": "eclipse",
-        "broker": "mqtt://mqtt.eclipseprojects.io",
-        "port": "1883",
-        "clientid": "",
-        "autoConnect": true,
-        "usetls": false,
-        "protocolVersion": "4",
-        "keepalive": "15",
-        "cleansession": true,
-        "autoUnsubscribe": true,
-        "birthTopic": "",
-        "birthQos": "0",
-        "birthPayload": "",
-        "birthMsg": {},
-        "closeTopic": "",
-        "closePayload": "",
-        "closeMsg": {},
-        "willTopic": "",
-        "willQos": "0",
-        "willPayload": "",
-        "willMsg": {},
-        "userProps": "",
-        "sessionExpiry": ""
-    },
-    {
-        "id": "grupo_rssi",
-        "type": "ui_group",
-        "name": "RSSI",
-        "tab": "aba_mesh",
-        "order": 2,
-        "disp": true,
-        "width": 15,
-        "collapse": false
-    },
-    {
-        "id": "grupo_metrics",
-        "type": "ui_group",
-        "name": "Métricas",
-        "tab": "aba_mesh",
-        "order": 3,
-        "disp": true,
-        "width": 15,
-        "collapse": false
-    },
-    {
-        "id": "grupo_sensores",
-        "type": "ui_group",
-        "name": "Dados Sensores",
-        "tab": "aba_mesh",
-        "order": 1,
-        "disp": true,
-        "width": 15,
-        "collapse": false
-    },
-    {
-        "id": "c43853a14aa4af82",
-        "type": "ui_group",
-        "name": "Ações na Rede",
-        "tab": "aba_mesh",
-        "order": 4,
-        "disp": true,
-        "width": 15,
-        "collapse": false,
-        "className": ""
-    },
-    {
-        "id": "b931a41ca7c16188",
-        "type": "sqlitedb",
-        "db": "C:/Users/grazi/TCC/rede_mesh.db",
-        "mode": "RWC"
-    },
-    {
-        "id": "aba_mesh",
-        "type": "ui_tab",
-        "name": "Painel Mesh",
-        "icon": "dashboard",
-        "order": 1,
-        "disabled": false,
-        "hidden": false
     }
 ]

@@ -10,6 +10,7 @@
 #include "driver/gpio.h"
 #include "freertos/semphr.h"
 #include "esp_timer.h" 
+#include "esp_sntp.h"
 
 #include <sys/time.h>
 #include <inttypes.h> // Para lidar com uint64_t em logs
@@ -23,6 +24,8 @@
 #define CMD_ROUTE_TABLE 0x01
 #define CMD_METRICS     0x02
 #define CMD_SENSOR      0x03
+#define CMD_RTT 0x05
+#define CMD_SYNC_TIME 0xAA
 
 typedef struct {
     uint8_t mac[6];
@@ -33,7 +36,7 @@ typedef struct {
 } mesh_packet_t;
 
 typedef struct {
-    uint8_t hops_to_root;
+    uint8_t layer;
     float success_rate;
     float packet_loss_rate;
     uint32_t rtt_ms;
@@ -43,6 +46,8 @@ typedef struct {
     uint64_t last_parent_change_ms;
     uint8_t retransmission_count;
 } mesh_metrics_t;
+
+mesh_metrics_t metrics;
 
 /*******************************************************
  *                Constants
@@ -63,15 +68,16 @@ static SemaphoreHandle_t s_route_table_lock = NULL;
 // Variaveis para as metricas de avaliação
 
 int8_t parent_rssi = 0;
-uint64_t timestamp_send = 0;
-int packets_sent = 0;
-int packets_received = 0;
+volatile uint64_t timestamp_send = 0;
+volatile uint64_t timestamp_recv;
+volatile uint32_t packets_sent = 0;
+volatile uint32_t packets_received = 0;
 uint64_t timestamp_last_parent_change = 0;
 int parent_changes = 0;
 int parent_children_count = 0;
 int child_count = 0;
 int children_count = 0;
-uint64_t timestamp_recv;
+int64_t time_offset_us = 0;  
 
 /*******************************************************
  *                Function Declarations
@@ -83,6 +89,14 @@ void mqtt_app_publish(char* topic, char *publish_string);
 /*******************************************************
  *                Function Definitions
  *******************************************************/
+
+// Inicializa o SNTP para sincronização de tempo
+ void initialize_sntp(void) {
+    sntp_setoperatingmode(SNTP_OPMODE_POLL);
+    sntp_setservername(0, "pool.ntp.org");
+    sntp_init();
+    ESP_LOGI(MESH_TAG, "SNTP inicializado");
+}
 
  // funcao para obter o MAC
  void get_mac_str(char *mac_str, size_t len) {
@@ -120,18 +134,27 @@ void update_parent_change_time() {
 // Calcula a taxa de sucesso de pacotes (já existe, mantida)
 // A taxa de sucesso é calculada como (pacotes recebidos / pacotes enviados) * 100
 float get_success_rate() {
-    if (packets_sent == 0) return 0.0;
-    return ((float)packets_received / packets_sent) * 100.0;
+    if (packets_sent == 0) {
+        ESP_LOGI(MESH_TAG, "Success Rate: 0.00%% (No packets sent)");
+        return 0.0;
+    }
+    float success_rate = ((float)packets_received / packets_sent) * 100.0;
+    ESP_LOGI(MESH_TAG, "Success Rate: %.2f%% (Received: %lu, Sent: %lu)", success_rate, packets_received, packets_sent);
+    return success_rate;
 }
 
 // Calcula a taxa de perda de pacotes (já existe, mantida)
 // A taxa de perda é calculada como (pacotes enviados - pacotes recebidos) / pacotes enviados * 100
 float get_packet_loss_rate() {
-    if (packets_sent == 0) return 0.0;
+    if (packets_sent == 0) {
+        ESP_LOGI(MESH_TAG, "Packet Loss Rate: 0.00%% (No packets sent)");
+        return 0.0;
+    }
     int lost = packets_sent - packets_received;
-    return lost < 0 ? 0.0 : ((float)lost / packets_sent) * 100.0;
+    float packet_loss_rate = lost < 0 ? 0.0 : ((float)lost / packets_sent) * 100.0;
+    ESP_LOGI(MESH_TAG, "Packet Loss Rate: %.2f%% (Lost: %d, Sent: %lu)", packet_loss_rate, lost, packets_sent);
+    return packet_loss_rate;
 }
-
 
 
 // Calcula o tempo de ida e volta (RTT) entre o envio e recebimento de pacotes
@@ -144,29 +167,6 @@ uint32_t calculate_rtt() {
     
     return (uint32_t)(recv_ms - send_ms);
 }
-
-void collect_metrics(mesh_metrics_t *metrics) {
-    // Conectividade
-    metrics->hops_to_root = esp_mesh_get_layer();
-    metrics->success_rate = get_success_rate();
-    metrics->packet_loss_rate = get_packet_loss_rate();
-    
-    // Topologia
-    metrics->children_count = children_count;
-    metrics->parent_changes = parent_changes;
-    
-    // Tempo desde última troca de pai
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    uint64_t now_ms = (uint64_t)tv.tv_sec * 1000 + (tv.tv_usec / 1000);
-    metrics->last_parent_change_ms = now_ms - timestamp_last_parent_change;
-    
-    // Inicializar outras métricas (implementar conforme necessário)
-    metrics->rtt_ms = 0;
-    metrics->subtree_size = 0;
-    metrics->retransmission_count = 0;
-}
-
 
 
 // Função para calcular CRC-16
@@ -182,6 +182,15 @@ uint16_t calculate_crc16(const uint8_t *data, size_t len) {
         }
     }
     return crc;
+}
+
+// Funcao montagem de pacotes
+void build_packet(mesh_packet_t *packet, uint8_t id, uint8_t *data, uint16_t len) {
+    memcpy(packet->mac, mesh_netif_get_station_mac(), 6);
+    packet->id = id;
+    packet->num_bytes = len;
+    memcpy(packet->payload, data, len);
+    packet->crc = calculate_crc16((uint8_t *)packet, 6 + 1 + 2 + len); // Simples CRC-16
 }
 
 // funcao processamento recepcao dados
@@ -271,21 +280,47 @@ void static recv_cb(mesh_addr_t *from, mesh_data_t *data)
             break;
         }
 
+        case CMD_RTT: {
+            if (esp_mesh_is_root()) {
+                // Responde o pacote de volta para quem enviou
+                mesh_packet_t response;
+                build_packet(&response, CMD_RTT, NULL, 0);
+
+                mesh_data_t data = {
+                    .data = (uint8_t *)&response,
+                    .size = sizeof(mesh_packet_t), 
+                    .proto = MESH_PROTO_BIN,
+                    .tos = MESH_TOS_P2P
+                };
+                esp_mesh_send(from, &data, MESH_DATA_P2P, NULL, 0);
+                ESP_LOGI(MESH_TAG, "Pong enviado");
+            } else {
+                // Se sou um nó e recebi o pong, calculo o RTT
+                timestamp_recv = esp_timer_get_time();
+                metrics.rtt_ms = calculate_rtt();
+            }
+            break;
+        }
+
+        case CMD_SYNC_TIME: {
+            if (packet->num_bytes != sizeof(uint64_t)) break;
+
+            uint64_t time_from_root;
+            memcpy(&time_from_root, packet->payload, sizeof(uint64_t));
+
+            uint64_t local_time = esp_timer_get_time();
+            time_offset_us = (int64_t)time_from_root - (int64_t)local_time;
+
+            ESP_LOGI(MESH_TAG, "Delta de sincronização (us): %" PRId64, time_offset_us);
+            break;
+        }
+
         default:
             ESP_LOGW(MESH_TAG, "Comando desconhecido: %d", packet->id);
             break;
     }
 }
 
-
-// Funcao montagem de pacotes
-void build_packet(mesh_packet_t *packet, uint8_t id, uint8_t *data, uint16_t len) {
-    memcpy(packet->mac, mesh_netif_get_station_mac(), 6);
-    packet->id = id;
-    packet->num_bytes = len;
-    memcpy(packet->payload, data, len);
-    packet->crc = calculate_crc16((uint8_t *)packet, 6 + 1 + 2 + len); // Simples CRC-16
-}
 
 // funcao tabela roteamento
 void send_routing_table() {
@@ -338,16 +373,19 @@ void send_routing_table() {
     free(routing_payload);  // libera o buffer
 }
 
-// Envio dados sensores a cada 5 minutos
+// Envio dados sensores a cada 2 minutos
 static void sensor_send_task(void *args) {
     while (true) {
         if (!esp_mesh_is_root()) {
             float temp =  18.0 + (rand() % 1300) / 100.0;
             float hum  = 60.0 + (rand() % 3100) / 100.0;
-            uint64_t ts = esp_timer_get_time();
+
+            uint64_t local_ts = esp_timer_get_time();
+            uint64_t adjusted_ts = local_ts + time_offset_us;  // Ajusta com base no root
+            
             uint8_t buffer[20];
 
-            memcpy(buffer, &ts, sizeof(ts));
+            memcpy(buffer, &adjusted_ts, sizeof(adjusted_ts));
             memcpy(buffer + 8, &temp, sizeof(temp));
             memcpy(buffer + 12, &hum, sizeof(hum));
 
@@ -376,21 +414,33 @@ static void sensor_send_task(void *args) {
             }
         }
 
-        vTaskDelay(5 * 60 * 1000 / portTICK_PERIOD_MS);  // a cada 5 minutos
+        vTaskDelay(2 * 60 * 1000 / portTICK_PERIOD_MS);  // a cada 2 minutos
     }
 }
 
 
-// Metricas Gerais
 // Métricas Gerais
-void metrics() {
-    mesh_metrics_t metrics;
-    collect_metrics(&metrics);
+void metricas() {
+    // Conectividade
+    metrics.layer = esp_mesh_get_layer();
+    metrics.success_rate = get_success_rate();
+    metrics.packet_loss_rate = get_packet_loss_rate();
+
+    // Topologia
+    metrics.children_count = children_count;
+    metrics.parent_changes = parent_changes;
+
+    // Tempo desde última troca de pai
+    metrics.last_parent_change_ms = timestamp_last_parent_change;
+
+    // Inicializar outras métricas (implementar conforme necessário)
+    metrics.subtree_size = 0;
+    metrics.retransmission_count = 0;
 
     char payload[512];
     snprintf(payload, sizeof(payload),
         "{"
-        "\"hops_to_root\":%d,"
+        "\"layer\":%d,"
         "\"success_rate\":%.2f,"
         "\"packet_loss_rate\":%.2f,"
         "\"rtt_ms\":%" PRIu32 ","
@@ -399,9 +449,9 @@ void metrics() {
         "\"last_parent_change_ms\":%" PRIu64 ","
         "\"retransmission_count\":%d"
         "}",
-        metrics.hops_to_root,
-        (float)metrics.success_rate,
-        (float)metrics.packet_loss_rate,
+        metrics.layer,
+        metrics.success_rate,
+        metrics.packet_loss_rate,
         metrics.rtt_ms,
         metrics.children_count,
         metrics.parent_changes,
@@ -412,13 +462,32 @@ void metrics() {
     if (esp_mesh_is_root()) {
         mqtt_app_publish("/topic/mesh/metricas", payload);
         ESP_LOGI(MESH_TAG, "Métricas publicadas: %s", payload);
+        int8_t rssi = -127;
+        wifi_ap_record_t ap_info;
+
+        if (esp_wifi_sta_get_ap_info(&ap_info) == ESP_OK) {
+            rssi = ap_info.rssi;
+        } else {
+            ESP_LOGW(MESH_TAG, "Falha ao obter RSSI do root em relação ao AP");
+        }
+
+        char mac_str[18];
+        get_mac_str(mac_str, sizeof(mac_str));  // Usa sua função existente
+
+        char msg[100];
+        snprintf(msg, sizeof(msg),
+                "{\"mac\":\"%s\",\"rssi\":%d}", mac_str, rssi);
+        mqtt_app_publish("/topic/mesh/rssi", msg);
+        ESP_LOGI(MESH_TAG, "Root publicou seu RSSI: %s", msg);
     }
+
+    packets_sent = 0;
+    packets_received = 0;
 }
 
-// Envio de metricas a cada 4 minutos
+// Envio de metricas
 static void metrics_send_task(void *args) {
     while (true) {
-        metrics(); // Coleta e publica as métricas
         if (!esp_mesh_is_root()) {
             int8_t rssi;
             esp_wifi_sta_get_rssi((int *)&rssi);
@@ -451,9 +520,69 @@ static void metrics_send_task(void *args) {
             }
         }
 
+        metricas(); // Atualiza as métricas
+        vTaskDelay(5 * 60 * 1000 / portTICK_PERIOD_MS);  // a cada 5 minutos
+    }
+}
+
+// ping_send_task - para medir RTT
+static void ping_send_task(void *args) {
+    while (true) {
+        if (!esp_mesh_is_root()) {
+            timestamp_send = esp_timer_get_time(); // em us
+
+            mesh_packet_t packet;
+            build_packet(&packet, CMD_RTT, NULL, 0);
+
+            mesh_data_t data = {
+                .data = (uint8_t *)&packet,
+                .size = sizeof(mesh_packet_t), 
+                .proto = MESH_PROTO_BIN,
+                .tos = MESH_TOS_P2P
+            };
+
+            mesh_addr_t parent_addr;
+            esp_err_t err = esp_mesh_get_parent_bssid(&parent_addr);
+            if (err == ESP_OK) {
+                esp_mesh_send(&parent_addr, &data, MESH_DATA_P2P, NULL, 0);
+                packets_sent++;
+                ESP_LOGI(MESH_TAG, "Ping enviado para o pai");
+            }
+        }
+
         vTaskDelay(4 * 60 * 1000 / portTICK_PERIOD_MS);  // a cada 4 minutos
     }
-}  
+}
+
+void send_time_to_children() {
+    uint64_t current_time = esp_timer_get_time(); // tempo em us
+
+    mesh_packet_t packet;
+    build_packet(&packet, CMD_SYNC_TIME, (uint8_t*)&current_time, sizeof(current_time));
+
+    mesh_data_t data = {
+        .data = (uint8_t*)&packet,
+        .size = sizeof(mesh_packet_t),
+        .proto = MESH_PROTO_BIN,
+        .tos = MESH_TOS_P2P
+    };
+
+    for (int i = 0; i < s_route_table_size; i++) {
+        esp_mesh_send(&s_route_table[i], &data, MESH_DATA_P2P, NULL, 0);
+    }
+
+    ESP_LOGI(MESH_TAG, "Horário sincronizado enviado para filhos");
+}
+
+// task para sincronizar o horário com os filhos
+static void sync_time_task(void *args) {
+    while (true) {
+        if (esp_mesh_is_root()) {
+            send_time_to_children();
+        }
+        vTaskDelay(1 * 60 * 1000 / portTICK_PERIOD_MS);  // a cada 1 minuto
+    }
+}
 
 esp_err_t esp_mesh_comm_mqtt_task_start(void)
 {
@@ -464,6 +593,8 @@ esp_err_t esp_mesh_comm_mqtt_task_start(void)
     if (!is_comm_mqtt_task_started) {
         xTaskCreate(sensor_send_task, "sensor_send_task", 4096, NULL, 5, NULL);
         xTaskCreate(metrics_send_task, "metrics_send_task", 4096, NULL, 5, NULL);
+        xTaskCreate(ping_send_task, "ping_send_task", 4096, NULL, 5, NULL);
+        xTaskCreate(sync_time_task, "sync_time_task", 4096, NULL, 5, NULL);
         mqtt_app_start();
         is_comm_mqtt_task_started = true;
     }
