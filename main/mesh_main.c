@@ -9,11 +9,16 @@
 #include "mesh_netif.h"
 #include "driver/gpio.h"
 #include "freertos/semphr.h"
-#include "esp_timer.h" 
+
+#include "esp_netif_sntp.h"
 #include "esp_sntp.h"
+#include "esp_log.h"
+#include "time.h"
+#include "lwip/ip_addr.h"
 
 #include <sys/time.h>
 #include <inttypes.h> // Para lidar com uint64_t em logs
+#include <time.h>
 
 /*******************************************************
  *                Macros
@@ -70,14 +75,30 @@ static SemaphoreHandle_t s_route_table_lock = NULL;
 int8_t parent_rssi = 0;
 volatile uint64_t timestamp_send = 0;
 volatile uint64_t timestamp_recv;
-volatile uint32_t packets_sent = 0;
-volatile uint32_t packets_received = 0;
+volatile uint16_t packets_sent = 0;
+volatile uint16_t packets_received = 0;
+uint64_t reconnection_time = 0;
 uint64_t timestamp_last_parent_change = 0;
 int parent_changes = 0;
 int parent_children_count = 0;
 int child_count = 0;
 int children_count = 0;
-int64_t time_offset_us = 0;  
+int64_t time_offset = 0;  
+static bool ntp_synced = false;  
+volatile bool time_synced = false;
+
+typedef struct {
+    uint8_t mac[6];
+    uint16_t last_sent;
+} node_info_t;
+
+#define MAX_NODES 10
+node_info_t nodes[MAX_NODES];
+int node_count = 0;
+float packet_loss = 0.0;  // Taxa de perda de pacotes
+float success_rate = 0.0; // Taxa de sucesso de pacotes
+uint32_t total_sent = 0;
+uint32_t total_received = 0;
 
 /*******************************************************
  *                Function Declarations
@@ -90,12 +111,46 @@ void mqtt_app_publish(char* topic, char *publish_string);
  *                Function Definitions
  *******************************************************/
 
-// Inicializa o SNTP para sincronização de tempo
- void initialize_sntp(void) {
-    sntp_setoperatingmode(SNTP_OPMODE_POLL);
-    sntp_setservername(0, "pool.ntp.org");
-    sntp_init();
-    ESP_LOGI(MESH_TAG, "SNTP inicializado");
+void time_sync_notification_cb(struct timeval *tv)
+{
+    ESP_LOGI("NTP", "Time synchronized");
+}
+
+bool obtain_time(void)
+{
+    ESP_LOGI("NTP", "Inicializando SNTP...");
+
+    esp_sntp_config_t config = ESP_NETIF_SNTP_DEFAULT_CONFIG("pool.ntp.org");
+
+    config.start = false; // iniciaremos manualmente
+    config.sync_cb = time_sync_notification_cb;
+
+#ifdef CONFIG_SNTP_TIME_SYNC_METHOD_SMOOTH
+    config.smooth_sync = true;
+#endif
+
+    esp_netif_sntp_init(&config);
+    esp_netif_sntp_start();
+
+    time_t now = 0;
+    struct tm timeinfo = { 0 };
+    int retry = 0;
+    const int retry_count = 20;
+
+    while (esp_netif_sntp_sync_wait(2000 / portTICK_PERIOD_MS) == ESP_ERR_TIMEOUT && ++retry < retry_count) {
+        ESP_LOGI("NTP", "Aguardando sincronização SNTP... (%d/%d)", retry, retry_count);
+    }
+
+    time(&now);
+    localtime_r(&now, &timeinfo);
+
+    if (timeinfo.tm_year < (2020 - 1900)) {
+        ESP_LOGE("NTP", "Falha ao sincronizar NTP");
+        return false;
+    }
+
+    ESP_LOGI("NTP", "Tempo sincronizado: %s", asctime(&timeinfo));
+    return true;
 }
 
  // funcao para obter o MAC
@@ -114,58 +169,76 @@ void mqtt_app_publish(char* topic, char *publish_string);
 
 // Mede o tempo de troca de nó pai
 void update_parent_change_time() {
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    uint64_t timestamp_now = (uint64_t)tv.tv_sec * 1000 + (tv.tv_usec / 1000); // Convertendo para ms
-    
+
+    // Timestamp de recebimento
+    struct timeval tv_recv;
+    gettimeofday(&tv_recv, NULL);
+    uint64_t timestamp_recv = (uint64_t)tv_recv.tv_sec * 1000 + tv_recv.tv_usec / 1000;
+    uint64_t timestamp_now = timestamp_recv + time_offset;
+
     if (timestamp_last_parent_change > 0) {
         uint64_t reconnection_time = timestamp_now - timestamp_last_parent_change;
-        char reconnection_str[20];
-        snprintf(reconnection_str, sizeof(reconnection_str), "%" PRIu64 " ms", reconnection_time); // Alterado para ms
-        mqtt_app_publish("/topic/mesh/reconnection_time", reconnection_str);
-
-        ESP_LOGI(MESH_TAG, "Tempo de reconexão: %" PRIu64 " ms", reconnection_time); // Alterado para ms
+        ESP_LOGI(MESH_TAG, "Tempo desde última troca de pai: %" PRIu64 " ms", reconnection_time);
+    } else {
+        ESP_LOGI(MESH_TAG, "Primeira conexão com pai registrada.");
     }
 
     timestamp_last_parent_change = timestamp_now;
     parent_changes++;
 }
 
-// Calcula a taxa de sucesso de pacotes (já existe, mantida)
-// A taxa de sucesso é calculada como (pacotes recebidos / pacotes enviados) * 100
-float get_success_rate() {
-    if (packets_sent == 0) {
-        ESP_LOGI(MESH_TAG, "Success Rate: 0.00%% (No packets sent)");
-        return 0.0;
+void calculate_rates() {
+    if (total_sent == 0) {
+        success_rate = 0.0;
+        packet_loss = 0.0;
+        return;
     }
-    float success_rate = ((float)packets_received / packets_sent) * 100.0;
-    ESP_LOGI(MESH_TAG, "Success Rate: %.2f%% (Received: %lu, Sent: %lu)", success_rate, packets_received, packets_sent);
-    return success_rate;
+
+    success_rate = ((float)total_received / total_sent) * 100.0;
+    packet_loss = 100.0 - success_rate;
+
+    ESP_LOGI(MESH_TAG, "Taxa de sucesso: %.2f%%, perda: %.2f%%", success_rate, packet_loss);
 }
 
-// Calcula a taxa de perda de pacotes (já existe, mantida)
-// A taxa de perda é calculada como (pacotes enviados - pacotes recebidos) / pacotes enviados * 100
-float get_packet_loss_rate() {
-    if (packets_sent == 0) {
-        ESP_LOGI(MESH_TAG, "Packet Loss Rate: 0.00%% (No packets sent)");
-        return 0.0;
+void update_packet_counters(uint8_t *mac, uint16_t current_sent) {
+    bool node_found = false;
+    
+    for (int i = 0; i < node_count; i++) {
+        if (memcmp(mac, nodes[i].mac, 6) == 0) {
+            // Para nós existentes, incrementa apenas 1 no total_sent (o pacote atual)
+            total_sent += 1;
+            nodes[i].last_sent = current_sent;
+            total_received += 1;
+            node_found = true;
+            break;
+        }
     }
-    int lost = packets_sent - packets_received;
-    float packet_loss_rate = lost < 0 ? 0.0 : ((float)lost / packets_sent) * 100.0;
-    ESP_LOGI(MESH_TAG, "Packet Loss Rate: %.2f%% (Lost: %d, Sent: %lu)", packet_loss_rate, lost, packets_sent);
-    return packet_loss_rate;
+
+    // Novo nó
+    if (!node_found && node_count < MAX_NODES) {
+        memcpy(nodes[node_count].mac, mac, 6);
+        nodes[node_count].last_sent = current_sent;
+        node_count++;
+        // Para novo nó, conta apenas o pacote atual
+        total_sent += 1;
+        total_received += 1;
+    }
+
+    // Chama calculate_rates apenas se necessário (opcional)
+    static uint32_t last_calc = 0;
+    if (total_sent - last_calc >= 10) { // A cada 10 pacotes, por exemplo
+        calculate_rates();
+        last_calc = total_sent;
+    }
 }
 
 
 // Calcula o tempo de ida e volta (RTT) entre o envio e recebimento de pacotes
 uint32_t calculate_rtt() {
     if (timestamp_send == 0 || timestamp_recv == 0) return 0;
-    
-    // Converter para milissegundos
-    uint64_t send_ms = timestamp_send / 1000;
-    uint64_t recv_ms = timestamp_recv / 1000;
-    
-    return (uint32_t)(recv_ms - send_ms);
+
+    // Calcula diferença primeiro, depois converte
+    return (uint32_t)(timestamp_recv - timestamp_send);
 }
 
 
@@ -206,8 +279,6 @@ void static recv_cb(mesh_addr_t *from, mesh_data_t *data)
         return;
     }
 
-    packets_received++;
-
     // Converte MAC para string
     char mac_str[18];
     snprintf(mac_str, sizeof(mac_str), MACSTR, MAC2STR(packet->mac));
@@ -215,67 +286,66 @@ void static recv_cb(mesh_addr_t *from, mesh_data_t *data)
     // Processa com base no ID do pacote
     switch (packet->id) {
         case CMD_SENSOR: {
-            if (packet->num_bytes < 16) {
-                ESP_LOGW(MESH_TAG, "Payload de sensor muito pequeno");
-                return;
-            }
-
-            uint64_t timestamp;
-            float temp, hum;
-            memcpy(&timestamp, packet->payload, sizeof(uint64_t));
-            memcpy(&temp, packet->payload + 8, sizeof(float));
-            memcpy(&hum, packet->payload + 12, sizeof(float));
-
-            uint64_t now = esp_timer_get_time();
-            uint64_t latency_us = now - timestamp;
-            uint64_t latency_ms = latency_us / 1000;
-
             if (esp_mesh_is_root()) {
+                packets_received++;
+
+                struct timeval tv_start;
+                gettimeofday(&tv_start, NULL);
+                uint64_t processing_start = (uint64_t)tv_start.tv_sec * 1000 + tv_start.tv_usec / 1000;
+
+                uint64_t timestamp;
+                float temp, hum;
+                uint16_t sent;
+                memcpy(&timestamp, packet->payload, sizeof(uint64_t));
+                memcpy(&temp, packet->payload + 8, sizeof(float));
+                memcpy(&hum, packet->payload + 12, sizeof(float));
+                memcpy(&sent, packet->payload + 16, sizeof(uint16_t));
+
+                // Timestamp de recebimento
+                struct timeval tv_recv;
+                gettimeofday(&tv_recv, NULL);
+                uint64_t timestamp_recv = (uint64_t)tv_recv.tv_sec * 1000 + tv_recv.tv_usec / 1000;
+
+                // Tempo de processamento local
+                uint64_t processing_time = timestamp_recv - processing_start;
+
+                // Latência = tempo de recebimento - timestamp enviado - tempo de processamento
+                uint64_t latency_ms = timestamp_recv - timestamp - processing_time;
+
                 char msg[150];
                 snprintf(msg, sizeof(msg),
-                         "{\"mac\":\"%s\",\"temp\":%.2f,\"hum\":%.2f,\"latency_ms\":%" PRIu64 "}",
-                         mac_str, temp, hum, latency_ms);
+                        "{\"mac\":\"%s\",\"temp\":%.2f,\"hum\":%.2f,\"latency_ms\":%" PRIu64 "}",
+                        mac_str, temp, hum, latency_ms);
                 mqtt_app_publish("/topic/mesh/sensor", msg);
                 ESP_LOGI(MESH_TAG, "MQTT publicado em /topic/mesh/sensor: %s", msg);
 
+                update_packet_counters(from->addr, sent);
             }
             break;
         }
 
         case CMD_METRICS: {
-            if (packet->num_bytes < sizeof(int8_t)) {
-                ESP_LOGW(MESH_TAG, "Payload de métrica inválido");
-                return;
-            }
-
-            int8_t rssi;
-            memcpy(&rssi, packet->payload, sizeof(int8_t));
-
-
             if (esp_mesh_is_root()) {
+                if (packet->num_bytes < sizeof(int8_t)) {
+                    ESP_LOGW(MESH_TAG, "Payload de métrica inválido");
+                        return;
+                }
+                packets_received++;
+
+                int8_t rssi;
+                uint16_t sent;
+
+                memcpy(&rssi, packet->payload, sizeof(int8_t));
+                memcpy(&sent, packet->payload + 1, sizeof(uint16_t));
+
                 char msg[100];
                 snprintf(msg, sizeof(msg),
                          "{\"mac\":\"%s\",\"rssi\":%d}", mac_str, rssi);
                 mqtt_app_publish("/topic/mesh/rssi", msg);
                 ESP_LOGI(MESH_TAG, "MQTT publicado em /topic/mesh/rssi: %s", msg);
-            }
-            break;
-        }
 
-        case CMD_ROUTE_TABLE: {
-            int size = packet->num_bytes;
-            if (s_route_table_lock == NULL || size % 6 != 0) {
-                ESP_LOGE(MESH_TAG, "Erro na tabela de roteamento recebida");
-                return;
-            }
-
-            xSemaphoreTake(s_route_table_lock, portMAX_DELAY);
-            s_route_table_size = size / 6;
-            memcpy(&s_route_table, packet->payload, size);
-            xSemaphoreGive(s_route_table_lock);
-
-            for (int i = 0; i < s_route_table_size; ++i) {
-                ESP_LOGI(MESH_TAG, "Recebido MAC[%d]: " MACSTR, i, MAC2STR(s_route_table[i].addr));
+                update_packet_counters(packet->mac, sent);
+                calculate_rates();
             }
             break;
         }
@@ -296,7 +366,9 @@ void static recv_cb(mesh_addr_t *from, mesh_data_t *data)
                 ESP_LOGI(MESH_TAG, "Pong enviado");
             } else {
                 // Se sou um nó e recebi o pong, calculo o RTT
-                timestamp_recv = esp_timer_get_time();
+                struct timeval tv_recv;
+                gettimeofday(&tv_recv, NULL);
+                uint64_t timestamp_recv = (uint64_t)tv_recv.tv_sec * 1000 + tv_recv.tv_usec / 1000;
                 metrics.rtt_ms = calculate_rtt();
             }
             break;
@@ -308,10 +380,32 @@ void static recv_cb(mesh_addr_t *from, mesh_data_t *data)
             uint64_t time_from_root;
             memcpy(&time_from_root, packet->payload, sizeof(uint64_t));
 
-            uint64_t local_time = esp_timer_get_time();
-            time_offset_us = (int64_t)time_from_root - (int64_t)local_time;
+            struct timeval now;
+            gettimeofday(&now, NULL);  // Pega o tempo absoluto (RTC/NTP)
+            uint64_t local_time = (uint64_t)now.tv_sec * 1000 + now.tv_usec / 1000; // em ms
 
-            ESP_LOGI(MESH_TAG, "Delta de sincronização (us): %" PRId64, time_offset_us);
+            time_offset = (int64_t)time_from_root - (int64_t)local_time;
+            time_synced = true;
+
+            ESP_LOGI(MESH_TAG, "Delta de sincronização (ms): %" PRId64, time_offset);
+            break;
+        }
+
+        case CMD_ROUTE_TABLE: {
+            int size = packet->num_bytes;
+            if (s_route_table_lock == NULL || size % 6 != 0) {
+                ESP_LOGE(MESH_TAG, "Erro na tabela de roteamento recebida");
+                return;
+            }
+
+            xSemaphoreTake(s_route_table_lock, portMAX_DELAY);
+            s_route_table_size = size / 6;
+            memcpy(&s_route_table, packet->payload, size);
+            xSemaphoreGive(s_route_table_lock);
+
+            for (int i = 0; i < s_route_table_size; ++i) {
+                ESP_LOGI(MESH_TAG, "Recebido MAC[%d]: " MACSTR, i, MAC2STR(s_route_table[i].addr));
+            }
             break;
         }
 
@@ -344,7 +438,6 @@ void send_routing_table() {
     }
     sprintf(ptr, "]}");
 
-    mqtt_app_publish("/topic/route_table", route_table_json);
     free(route_table_json);
 
     // Monta o payload com os MACs dos nós da tabela
@@ -377,17 +470,28 @@ void send_routing_table() {
 static void sensor_send_task(void *args) {
     while (true) {
         if (!esp_mesh_is_root()) {
+             if (!time_synced) {
+                ESP_LOGW(MESH_TAG, "Aguardando sincronização de horário...");
+                vTaskDelay(2000 / portTICK_PERIOD_MS);
+                continue;
+            }
+            packets_sent++;
             float temp =  18.0 + (rand() % 1300) / 100.0;
             float hum  = 60.0 + (rand() % 3100) / 100.0;
+            uint16_t sent = packets_sent;
 
-            uint64_t local_ts = esp_timer_get_time();
-            uint64_t adjusted_ts = local_ts + time_offset_us;  // Ajusta com base no root
+            struct timeval tv_recv;
+            gettimeofday(&tv_recv, NULL);
+            uint64_t local_ts = (uint64_t)tv_recv.tv_sec * 1000 + tv_recv.tv_usec / 1000;
+
+            uint64_t adjusted_ts = local_ts + time_offset; // ms, timestamp ajustado
             
             uint8_t buffer[20];
 
             memcpy(buffer, &adjusted_ts, sizeof(adjusted_ts));
             memcpy(buffer + 8, &temp, sizeof(temp));
             memcpy(buffer + 12, &hum, sizeof(hum));
+            memcpy(buffer + 16, &sent, sizeof(sent)); 
 
             mesh_packet_t packet;
             build_packet(&packet, CMD_SENSOR, buffer, sizeof(buffer));
@@ -404,7 +508,6 @@ static void sensor_send_task(void *args) {
             if (err == ESP_OK) {
                 err = esp_mesh_send(&parent_addr, &data, MESH_DATA_P2P, NULL, 0);
                 if (err == ESP_OK) {
-                    packets_sent++;
                     ESP_LOGI(MESH_TAG, "Dados de sensor enviados ao pai " MACSTR, MAC2STR(parent_addr.addr));
                 } else {
                     ESP_LOGW(MESH_TAG, "Falha ao enviar dados ao pai: %d", err);
@@ -423,15 +526,15 @@ static void sensor_send_task(void *args) {
 void metricas() {
     // Conectividade
     metrics.layer = esp_mesh_get_layer();
-    metrics.success_rate = get_success_rate();
-    metrics.packet_loss_rate = get_packet_loss_rate();
+    metrics.success_rate = success_rate;
+    metrics.packet_loss_rate = packet_loss;
 
     // Topologia
     metrics.children_count = children_count;
     metrics.parent_changes = parent_changes;
 
-    // Tempo desde última troca de pai
-    metrics.last_parent_change_ms = timestamp_last_parent_change;
+    // Tempo última troca de pai
+    metrics.last_parent_change_ms = reconnection_time;
 
     // Inicializar outras métricas (implementar conforme necessário)
     metrics.subtree_size = 0;
@@ -479,21 +582,26 @@ void metricas() {
                 "{\"mac\":\"%s\",\"rssi\":%d}", mac_str, rssi);
         mqtt_app_publish("/topic/mesh/rssi", msg);
         ESP_LOGI(MESH_TAG, "Root publicou seu RSSI: %s", msg);
+
     }
 
-    packets_sent = 0;
-    packets_received = 0;
 }
 
 // Envio de metricas
 static void metrics_send_task(void *args) {
     while (true) {
         if (!esp_mesh_is_root()) {
+            packets_sent++;
+
             int8_t rssi;
+            uint16_t sent = packets_sent;
+            // Obtém o RSSI do nó pai
             esp_wifi_sta_get_rssi((int *)&rssi);
+            
 
             uint8_t buffer[10] = {0};
             memcpy(buffer, &rssi, sizeof(rssi));
+            memcpy(buffer + 1, &sent, sizeof(sent)); 
 
             mesh_packet_t packet;
             build_packet(&packet, CMD_METRICS, buffer, sizeof(rssi));
@@ -510,7 +618,6 @@ static void metrics_send_task(void *args) {
             if (err == ESP_OK) {
                 err = esp_mesh_send(&parent_addr, &data, MESH_DATA_P2P, NULL, 0);
                 if (err == ESP_OK) {
-                    packets_sent++;
                     ESP_LOGI(MESH_TAG, "Métrica enviada ao pai " MACSTR ": RSSI=%d", MAC2STR(parent_addr.addr), rssi);
                 } else {
                     ESP_LOGW(MESH_TAG, "Falha ao enviar métrica ao pai: %d", err);
@@ -519,9 +626,10 @@ static void metrics_send_task(void *args) {
                 ESP_LOGW(MESH_TAG, "Não foi possível obter endereço do nó pai");
             }
         }
-
-        metricas(); // Atualiza as métricas
-        vTaskDelay(5 * 60 * 1000 / portTICK_PERIOD_MS);  // a cada 5 minutos
+        if(esp_mesh_is_root()) {
+            metricas(); // Atualiza as métricas
+        }
+        vTaskDelay(2 * 60 * 1000 / portTICK_PERIOD_MS);  // a cada 2 minutos
     }
 }
 
@@ -529,7 +637,10 @@ static void metrics_send_task(void *args) {
 static void ping_send_task(void *args) {
     while (true) {
         if (!esp_mesh_is_root()) {
-            timestamp_send = esp_timer_get_time(); // em us
+            // Timestamp de recebimento
+            struct timeval tv_recv;
+            gettimeofday(&tv_recv, NULL);
+            uint64_t timestamp_send = (uint64_t)tv_recv.tv_sec * 1000 + tv_recv.tv_usec / 1000;
 
             mesh_packet_t packet;
             build_packet(&packet, CMD_RTT, NULL, 0);
@@ -550,15 +661,17 @@ static void ping_send_task(void *args) {
             }
         }
 
-        vTaskDelay(4 * 60 * 1000 / portTICK_PERIOD_MS);  // a cada 4 minutos
+        vTaskDelay(2 * 60 * 1000 / portTICK_PERIOD_MS);  // a cada 2 minutos
     }
 }
 
 void send_time_to_children() {
-    uint64_t current_time = esp_timer_get_time(); // tempo em us
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    uint64_t unix_now_ms = (uint64_t)tv.tv_sec * 1000 + tv.tv_usec / 1000;
 
     mesh_packet_t packet;
-    build_packet(&packet, CMD_SYNC_TIME, (uint8_t*)&current_time, sizeof(current_time));
+    build_packet(&packet, CMD_SYNC_TIME, (uint8_t*)&unix_now_ms, sizeof(unix_now_ms));
 
     mesh_data_t data = {
         .data = (uint8_t*)&packet,
@@ -567,11 +680,13 @@ void send_time_to_children() {
         .tos = MESH_TOS_P2P
     };
 
+    send_routing_table(); // Atualiza a tabela de roteamento antes de enviar
+
     for (int i = 0; i < s_route_table_size; i++) {
         esp_mesh_send(&s_route_table[i], &data, MESH_DATA_P2P, NULL, 0);
     }
 
-    ESP_LOGI(MESH_TAG, "Horário sincronizado enviado para filhos");
+    ESP_LOGI(MESH_TAG, "Horário sincronizado enviado para filhos: %" PRIu64 " ms", unix_now_ms);
 }
 
 // task para sincronizar o horário com os filhos
@@ -591,10 +706,9 @@ esp_err_t esp_mesh_comm_mqtt_task_start(void)
     s_route_table_lock = xSemaphoreCreateMutex();
 
     if (!is_comm_mqtt_task_started) {
-        xTaskCreate(sensor_send_task, "sensor_send_task", 4096, NULL, 5, NULL);
+        xTaskCreate(sensor_send_task, "sensor_send_task", 4096, NULL, 8, NULL);
         xTaskCreate(metrics_send_task, "metrics_send_task", 4096, NULL, 5, NULL);
-        xTaskCreate(ping_send_task, "ping_send_task", 4096, NULL, 5, NULL);
-        xTaskCreate(sync_time_task, "sync_time_task", 4096, NULL, 5, NULL);
+        xTaskCreate(ping_send_task, "ping_send_task", 4096, NULL, 7, NULL);
         mqtt_app_start();
         is_comm_mqtt_task_started = true;
     }
@@ -796,7 +910,18 @@ void ip_event_handler(void *arg, esp_event_base_t event_base,
     ESP_ERROR_CHECK(esp_netif_get_dns_info(netif, ESP_NETIF_DNS_MAIN, &dns));
     mesh_netif_start_root_ap(esp_mesh_is_root(), dns.ip.u_addr.ip4.addr); 
 #endif
-    esp_mesh_comm_mqtt_task_start();
+
+  if (esp_mesh_is_root() && !ntp_synced) {
+        ESP_LOGI(MESH_TAG, "Root com IP, iniciando sincronização NTP...");
+        if (obtain_time()) {
+            ntp_synced = true;
+            ESP_LOGI(MESH_TAG, "NTP sincronizado com sucesso.");
+            xTaskCreate(sync_time_task, "sync_time_task", 4096, NULL, 10, NULL);
+        } else {
+            ESP_LOGE(MESH_TAG, "Falha ao sincronizar NTP.");
+        }
+    }
+    esp_mesh_comm_mqtt_task_start();  
 }
 
 
@@ -843,4 +968,5 @@ void app_main(void)
     ESP_ERROR_CHECK(esp_mesh_start());
     ESP_LOGI(MESH_TAG, "mesh starts successfully, heap:%" PRId32 ", %s\n",  esp_get_free_heap_size(),
              esp_mesh_is_root_fixed() ? "root fixed" : "root not fixed");
+
 }

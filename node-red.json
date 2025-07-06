@@ -7,211 +7,6 @@
         "info": ""
     },
     {
-        "id": "d7cacd98f609ab2b",
-        "type": "ui_base",
-        "theme": {
-            "name": "theme-custom",
-            "lightTheme": {
-                "default": "#0094CE",
-                "baseColor": "#322f30",
-                "baseFont": "Arial Black,Arial Black,Gadget,sans-serif",
-                "edited": true,
-                "reset": false
-            },
-            "darkTheme": {
-                "default": "#097479",
-                "baseColor": "#9ea3a3",
-                "baseFont": "Lucida Sans Typewriter,Lucida Console,Monaco,monospace",
-                "edited": true,
-                "reset": false
-            },
-            "customTheme": {
-                "name": "TCC",
-                "default": "#4B7930",
-                "baseColor": "#4B7930",
-                "baseFont": "Times New Roman,Times,serif",
-                "reset": false
-            },
-            "themeState": {
-                "base-color": {
-                    "default": "#4B7930",
-                    "value": "#4B7930",
-                    "edited": true
-                },
-                "page-titlebar-backgroundColor": {
-                    "value": "#4B7930",
-                    "edited": false
-                },
-                "page-backgroundColor": {
-                    "value": "#111111",
-                    "edited": false
-                },
-                "page-sidebar-backgroundColor": {
-                    "value": "#333333",
-                    "edited": false
-                },
-                "group-textColor": {
-                    "value": "#6db046",
-                    "edited": false
-                },
-                "group-borderColor": {
-                    "value": "#555555",
-                    "edited": false
-                },
-                "group-backgroundColor": {
-                    "value": "#333333",
-                    "edited": false
-                },
-                "widget-textColor": {
-                    "value": "#eeeeee",
-                    "edited": false
-                },
-                "widget-backgroundColor": {
-                    "value": "#4b7930",
-                    "edited": false
-                },
-                "widget-borderColor": {
-                    "value": "#333333",
-                    "edited": false
-                },
-                "base-font": {
-                    "value": "Times New Roman,Times,serif"
-                }
-            },
-            "angularTheme": {
-                "primary": "indigo",
-                "accents": "blue",
-                "warn": "red",
-                "background": "grey",
-                "palette": "light"
-            }
-        },
-        "site": {
-            "name": "Node-RED Dashboard",
-            "hideToolbar": "false",
-            "allowSwipe": "false",
-            "lockMenu": "false",
-            "allowTempTheme": "true",
-            "dateFormat": "DD/MM/YYYY",
-            "sizes": {
-                "sx": 100,
-                "sy": 50,
-                "gx": 6,
-                "gy": 6,
-                "cx": 6,
-                "cy": 6,
-                "px": 0,
-                "py": 0
-            }
-        }
-    },
-    {
-        "id": "6ec4dcef.913b24",
-        "type": "mqtt-broker",
-        "name": "eclipse",
-        "broker": "mqtt://mqtt.eclipseprojects.io",
-        "port": "1883",
-        "clientid": "",
-        "autoConnect": true,
-        "usetls": false,
-        "protocolVersion": "4",
-        "keepalive": "15",
-        "cleansession": true,
-        "autoUnsubscribe": true,
-        "birthTopic": "",
-        "birthQos": "0",
-        "birthPayload": "",
-        "birthMsg": {},
-        "closeTopic": "",
-        "closePayload": "",
-        "closeMsg": {},
-        "willTopic": "",
-        "willQos": "0",
-        "willPayload": "",
-        "willMsg": {},
-        "userProps": "",
-        "sessionExpiry": ""
-    },
-    {
-        "id": "b931a41ca7c16188",
-        "type": "sqlitedb",
-        "db": "C:/Users/grazi/TCC/rede_mesh.db",
-        "mode": "RWC"
-    },
-    {
-        "id": "mqtt_broker",
-        "type": "mqtt-broker",
-        "name": "Broker MQTT",
-        "broker": "localhost",
-        "port": "1883",
-        "clientid": "",
-        "autoConnect": true,
-        "usetls": false,
-        "compatmode": false,
-        "protocolVersion": 4,
-        "keepalive": "60",
-        "cleansession": true,
-        "autoUnsubscribe": true,
-        "birthTopic": "",
-        "birthQos": "0",
-        "birthPayload": "",
-        "closeTopic": "",
-        "closePayload": "",
-        "willTopic": "",
-        "willQos": "0",
-        "willPayload": ""
-    },
-    {
-        "id": "aba_mesh",
-        "type": "ui_tab",
-        "name": "Painel Mesh",
-        "icon": "dashboard",
-        "order": 1,
-        "disabled": false,
-        "hidden": false
-    },
-    {
-        "id": "grupo_sensores",
-        "type": "ui_group",
-        "name": "Dados Sensores",
-        "tab": "aba_mesh",
-        "order": 1,
-        "disp": true,
-        "width": 15,
-        "collapse": false
-    },
-    {
-        "id": "grupo_rssi",
-        "type": "ui_group",
-        "name": "RSSI",
-        "tab": "aba_mesh",
-        "order": 2,
-        "disp": true,
-        "width": 15,
-        "collapse": false
-    },
-    {
-        "id": "grupo_metrics",
-        "type": "ui_group",
-        "name": "Métricas",
-        "tab": "aba_mesh",
-        "order": 3,
-        "disp": true,
-        "width": 15,
-        "collapse": false
-    },
-    {
-        "id": "c43853a14aa4af82",
-        "type": "ui_group",
-        "name": "Ações na Rede",
-        "tab": "aba_mesh",
-        "order": 4,
-        "disp": true,
-        "width": 15,
-        "collapse": false,
-        "className": ""
-    },
-    {
         "id": "mqtt_rssi",
         "type": "mqtt in",
         "z": "tab1",
@@ -219,7 +14,7 @@
         "topic": "/topic/mesh/rssi",
         "qos": "2",
         "datatype": "auto-detect",
-        "broker": "mqtt_broker",
+        "broker": "6ec4dcef.913b24",
         "nl": false,
         "rap": false,
         "inputs": 0,
@@ -239,7 +34,7 @@
         "name": "Tabela RSSI",
         "order": 1,
         "width": 15,
-        "height": 3,
+        "height": 4,
         "columns": [
             {
                 "field": "mac",
@@ -276,7 +71,7 @@
         "topic": "/topic/mesh/metricas",
         "qos": "2",
         "datatype": "auto-detect",
-        "broker": "mqtt_broker",
+        "broker": "6ec4dcef.913b24",
         "nl": false,
         "rap": false,
         "inputs": 0,
@@ -413,7 +208,7 @@
         "topic": "/topic/mesh/sensor",
         "qos": "2",
         "datatype": "auto-detect",
-        "broker": "mqtt_broker",
+        "broker": "6ec4dcef.913b24",
         "nl": false,
         "rap": true,
         "rh": 0,
@@ -431,7 +226,7 @@
         "type": "function",
         "z": "tab1",
         "name": "sensores",
-        "func": "// Recupera a tabela atual da memória do fluxo\nlet sensorTable = flow.get(\"sensor_table\") || [];\n\nlet novo = {\n  mac: msg.payload.mac,\n  temperatura: msg.payload.temp,\n  umidade: msg.payload.hum,\n  latencia: msg.payload.latency_ms \n};\n\n// Verifica se o MAC já existe\nlet index = sensorTable.findIndex(item => item.mac === novo.mac);\n\nif (index !== -1) {\n  // Atualiza os valores\n  sensorTable[index] = { ...sensorTable[index], ...novo };\n} else {\n  // Adiciona nova entrada\n  sensorTable.push(novo);\n}\n\n// Armazena de volta\nflow.set(\"sensor_table\", sensorTable);\n\n// Envia para o ui_table\nmsg.payload = sensorTable;\nreturn msg;\n",
+        "func": "// Recupera a tabela atual da memória do fluxo\nlet sensorTable = flow.get(\"sensor_table\") || [];\n\n// Obtém o timestamp enviado pelo sensor (em ms)\nconst latency = parseInt(msg.payload.latency_ms, 10);\n\n// Cria o objeto com dados atualizados\nlet novo = {\n  mac: msg.payload.mac,\n  temperatura: parseFloat(msg.payload.temp).toFixed(2),\n  umidade: parseFloat(msg.payload.hum).toFixed(2),\n  latencia: latency\n};\n\n// Verifica se o MAC já existe na tabela\nlet index = sensorTable.findIndex(item => item.mac === novo.mac);\n\nif (index !== -1) {\n  // Atualiza os valores existentes\n  sensorTable[index] = { ...sensorTable[index], ...novo };\n} else {\n  // Adiciona nova entrada\n  sensorTable.push(novo);\n}\n\n// Armazena a tabela atualizada no flow\nflow.set(\"sensor_table\", sensorTable);\n\n// Envia a tabela para o próximo nó (ex: ui_table)\nmsg.payload = sensorTable;\nreturn msg;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -531,7 +326,7 @@
         "topic": "/topic/mesh/sensor",
         "qos": "2",
         "datatype": "auto-detect",
-        "broker": "mqtt_broker",
+        "broker": "6ec4dcef.913b24",
         "nl": false,
         "rap": true,
         "rh": 0,
@@ -594,7 +389,7 @@
         "topic": "/topic/mesh/sensor",
         "qos": "2",
         "datatype": "auto-detect",
-        "broker": "mqtt_broker",
+        "broker": "6ec4dcef.913b24",
         "nl": false,
         "rap": true,
         "rh": 0,
@@ -657,7 +452,7 @@
         "topic": "/topic/mesh/sensor",
         "qos": "2",
         "datatype": "auto-detect",
-        "broker": "mqtt_broker",
+        "broker": "6ec4dcef.913b24",
         "nl": false,
         "rap": true,
         "rh": 0,
@@ -675,7 +470,7 @@
         "type": "function",
         "z": "tab1",
         "name": "latencia",
-        "func": "let historico = flow.get(\"grafico_lat\") || [];\n\nif (msg.payload && typeof msg.payload.latency_ms === \"number\") {\n    let dado = {\n        t: new Date().toLocaleTimeString(),\n        y: msg.payload.latency_ms / 1000  // converte ms para segundos\n    };\n\n    historico.push(dado);\n\n    if (historico.length > 50) {\n        historico.shift();\n    }\n\n    flow.set(\"grafico_lat\", historico);\n    msg.payload = historico;\n} else {\n    node.warn(\"latency_ms ausente ou inválido\");\n    msg.payload = [];\n}\n\nreturn msg;\n",
+        "func": "let historico = flow.get(\"grafico_lat\") || [];\n\nif (msg.payload && typeof msg.payload.latency_ms === \"number\") {\n\n    // Cria dado para gráfico\n    let dado = {\n        t: new Date().toLocaleTimeString(),\n        y: msg.payload.latency_ms\n    };\n\n    historico.push(dado);\n\n    if (historico.length > 50) {\n        historico.shift();\n    }\n\n    flow.set(\"grafico_lat\", historico);\n    msg.payload = historico;\n} else {\n    node.warn(\"timestamp_ms ausente ou inválido\");\n    msg.payload = [];\n}\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -700,7 +495,7 @@
         "order": 3,
         "width": 5,
         "height": 6,
-        "format": "<div>\n    <canvas id=\"grafico_lat\" width=\"400\" height=\"200\"></canvas>\n</div>\n\n<script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n<script>\n    (function(scope) {\n    let chart;\n\n    function criarGrafico(data) {\n        const ctx = document.getElementById(\"grafico_lat\").getContext(\"2d\");\n\n        chart = new Chart(ctx, {\n            type: 'line',\n            data: {\n                labels: data.map(p => p.t),\n                datasets: [{\n                    label: 'Latência (s)',\n                    data: data.map(p => ({ x: p.t, y: p.y })),\n                    fill: false,\n                    borderColor: 'green',\n                    tension: 0.1\n                }]\n            },\n            options: {\n                responsive: true,\n                scales: {\n                    x: {\n                        type: 'category',\n                        title: { display: true, text: 'Horário' }\n                    },\n                    y: {\n                        beginAtZero: true,\n                        title: { display: true, text: 'Latência (s)' }\n                    }\n                }\n            }\n        });\n    }\n\n    scope.$watch('msg.payload', function(data) {\n        if (!Array.isArray(data)) return;\n\n        if (!chart) {\n            criarGrafico(data);\n        } else {\n            chart.data.labels = data.map(p => p.t);\n            chart.data.datasets[0].data = data.map(p => ({ x: p.t, y: p.y }));\n            chart.update();\n        }\n    });\n})(scope);\n</script>",
+        "format": "<div>\n    <canvas id=\"grafico_lat\" width=\"400\" height=\"200\"></canvas>\n</div>\n\n<script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n<script>\n    (function(scope) {\n    let chart;\n\n    function criarGrafico(data) {\n        const ctx = document.getElementById(\"grafico_lat\").getContext(\"2d\");\n\n        chart = new Chart(ctx, {\n            type: 'line',\n            data: {\n                labels: data.map(p => p.t),\n                datasets: [{\n                    label: 'Latência (ms)',\n                    data: data.map(p => ({ x: p.t, y: p.y })),\n                    fill: false,\n                    borderColor: 'green',\n                    tension: 0.1\n                }]\n            },\n            options: {\n                responsive: true,\n                scales: {\n                    x: {\n                        type: 'category',\n                        title: { display: true, text: 'Horário' }\n                    },\n                    y: {\n                        beginAtZero: true,\n                        title: { display: true, text: 'Latência (ms)' }\n                    }\n                }\n            }\n        });\n    }\n\n    scope.$watch('msg.payload', function(data) {\n        if (!Array.isArray(data)) return;\n\n        if (!chart) {\n            criarGrafico(data);\n        } else {\n            chart.data.labels = data.map(p => p.t);\n            chart.data.datasets[0].data = data.map(p => ({ x: p.t, y: p.y }));\n            chart.update();\n        }\n    });\n})(scope);\n</script>",
         "storeOutMessages": true,
         "fwdInMessages": true,
         "resendOnRefresh": true,
@@ -773,7 +568,7 @@
         "userProps": "",
         "correl": "",
         "expiry": "",
-        "broker": "6ec4dcef.913b24",
+        "broker": "mqtt_broker",
         "x": 1390,
         "y": 100,
         "wires": []
@@ -814,7 +609,7 @@
         "topic": "/topic/mesh/rssi",
         "qos": "2",
         "datatype": "auto-detect",
-        "broker": "mqtt_broker",
+        "broker": "6ec4dcef.913b24",
         "nl": false,
         "rap": true,
         "rh": 0,
@@ -870,7 +665,7 @@
         "topic": "/topic/mesh/metricas",
         "qos": "2",
         "datatype": "auto-detect",
-        "broker": "mqtt_broker",
+        "broker": "6ec4dcef.913b24",
         "nl": false,
         "rap": true,
         "rh": 0,
@@ -924,8 +719,8 @@
         "z": "tab1",
         "name": "",
         "pauseType": "delay",
-        "timeout": "1",
-        "timeoutUnits": "seconds",
+        "timeout": "5",
+        "timeoutUnits": "milliseconds",
         "rate": "1",
         "nbRateUnits": "1",
         "rateUnits": "second",
@@ -935,7 +730,7 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 1680,
+        "x": 1570,
         "y": 220,
         "wires": [
             [
@@ -949,8 +744,8 @@
         "z": "tab1",
         "name": "",
         "pauseType": "delay",
-        "timeout": "1",
-        "timeoutUnits": "seconds",
+        "timeout": "5",
+        "timeoutUnits": "milliseconds",
         "rate": "1",
         "nbRateUnits": "1",
         "rateUnits": "second",
@@ -960,7 +755,7 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 1660,
+        "x": 1610,
         "y": 360,
         "wires": [
             [
@@ -976,7 +771,7 @@
         "topic": "/topic/mesh/sensor",
         "qos": "2",
         "datatype": "auto-detect",
-        "broker": "mqtt_broker",
+        "broker": "6ec4dcef.913b24",
         "nl": false,
         "rap": true,
         "rh": 0,
@@ -994,7 +789,7 @@
         "type": "function",
         "z": "tab1",
         "name": "data_sensor",
-        "func": "const payload = msg.payload;\n\n// Extrai e formata os valores\nconst macAddress = payload.mac;\nconst temperature = parseFloat(payload.temp).toFixed(2);\nconst humidity = parseFloat(payload.hum).toFixed(2);\nconst latencyMs = parseInt(payload.latency_ms, 10);\n\n// Query SQL interpolada corretamente com crase\nmsg.topic = `INSERT INTO mesh_sensor_data (mac, temperatura, umidade, latencia) VALUES ('${macAddress}', ${temperature}, ${humidity}, ${latencyMs});`;\n\nreturn msg;\n",
+        "func": "const payload = msg.payload;\n\n// Extrai e formata os valores\nconst macAddress = payload.mac;\nconst temperature = parseFloat(payload.temp).toFixed(2);\nconst humidity = parseFloat(payload.hum).toFixed(2);\nconst timestamp_ms = (parseInt(payload.latency_ms, 10));  // timestamp enviado pelo nó sensor (campo que você deve incluir)\n\nmsg.topic = `INSERT INTO mesh_sensor_data (mac, temperatura, umidade, latencia) VALUES ('${macAddress}', ${temperature}, ${humidity}, ${timestamp_ms});`;\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1016,8 +811,8 @@
         "z": "tab1",
         "name": "",
         "pauseType": "delay",
-        "timeout": "1",
-        "timeoutUnits": "seconds",
+        "timeout": "5",
+        "timeoutUnits": "milliseconds",
         "rate": "1",
         "nbRateUnits": "1",
         "rateUnits": "second",
@@ -1027,7 +822,7 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 1600,
+        "x": 1610,
         "y": 520,
         "wires": [
             [
@@ -1096,5 +891,111 @@
         "x": 1540,
         "y": 600,
         "wires": []
+    },
+    {
+        "id": "6ec4dcef.913b24",
+        "type": "mqtt-broker",
+        "name": "mosquitto publico",
+        "broker": "mqtt://test.mosquitto.org",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "15",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "grupo_rssi",
+        "type": "ui_group",
+        "name": "RSSI",
+        "tab": "aba_mesh",
+        "order": 2,
+        "disp": true,
+        "width": 15,
+        "collapse": false
+    },
+    {
+        "id": "grupo_metrics",
+        "type": "ui_group",
+        "name": "Métricas",
+        "tab": "aba_mesh",
+        "order": 3,
+        "disp": true,
+        "width": 15,
+        "collapse": false
+    },
+    {
+        "id": "grupo_sensores",
+        "type": "ui_group",
+        "name": "Dados Sensores",
+        "tab": "aba_mesh",
+        "order": 1,
+        "disp": true,
+        "width": 15,
+        "collapse": false
+    },
+    {
+        "id": "mqtt_broker",
+        "type": "mqtt-broker",
+        "name": "Broker MQTT",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "compatmode": false,
+        "protocolVersion": 4,
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "closeTopic": "",
+        "closePayload": "",
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": ""
+    },
+    {
+        "id": "c43853a14aa4af82",
+        "type": "ui_group",
+        "name": "Ações na Rede",
+        "tab": "aba_mesh",
+        "order": 4,
+        "disp": true,
+        "width": 15,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "b931a41ca7c16188",
+        "type": "sqlitedb",
+        "db": "C:/Users/grazi/TCC/rede_mesh.db",
+        "mode": "RWC"
+    },
+    {
+        "id": "aba_mesh",
+        "type": "ui_tab",
+        "name": "Painel Mesh",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
     }
 ]
