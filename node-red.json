@@ -7,6 +7,211 @@
         "info": ""
     },
     {
+        "id": "d7cacd98f609ab2b",
+        "type": "ui_base",
+        "theme": {
+            "name": "theme-custom",
+            "lightTheme": {
+                "default": "#0094CE",
+                "baseColor": "#322f30",
+                "baseFont": "Arial Black,Arial Black,Gadget,sans-serif",
+                "edited": true,
+                "reset": false
+            },
+            "darkTheme": {
+                "default": "#097479",
+                "baseColor": "#9ea3a3",
+                "baseFont": "Lucida Sans Typewriter,Lucida Console,Monaco,monospace",
+                "edited": true,
+                "reset": false
+            },
+            "customTheme": {
+                "name": "TCC",
+                "default": "#4B7930",
+                "baseColor": "#4B7930",
+                "baseFont": "Times New Roman,Times,serif",
+                "reset": false
+            },
+            "themeState": {
+                "base-color": {
+                    "default": "#4B7930",
+                    "value": "#4B7930",
+                    "edited": true
+                },
+                "page-titlebar-backgroundColor": {
+                    "value": "#4B7930",
+                    "edited": false
+                },
+                "page-backgroundColor": {
+                    "value": "#111111",
+                    "edited": false
+                },
+                "page-sidebar-backgroundColor": {
+                    "value": "#333333",
+                    "edited": false
+                },
+                "group-textColor": {
+                    "value": "#6db046",
+                    "edited": false
+                },
+                "group-borderColor": {
+                    "value": "#555555",
+                    "edited": false
+                },
+                "group-backgroundColor": {
+                    "value": "#333333",
+                    "edited": false
+                },
+                "widget-textColor": {
+                    "value": "#eeeeee",
+                    "edited": false
+                },
+                "widget-backgroundColor": {
+                    "value": "#4b7930",
+                    "edited": false
+                },
+                "widget-borderColor": {
+                    "value": "#333333",
+                    "edited": false
+                },
+                "base-font": {
+                    "value": "Times New Roman,Times,serif"
+                }
+            },
+            "angularTheme": {
+                "primary": "indigo",
+                "accents": "blue",
+                "warn": "red",
+                "background": "grey",
+                "palette": "light"
+            }
+        },
+        "site": {
+            "name": "Node-RED Dashboard",
+            "hideToolbar": "false",
+            "allowSwipe": "false",
+            "lockMenu": "false",
+            "allowTempTheme": "true",
+            "dateFormat": "DD/MM/YYYY",
+            "sizes": {
+                "sx": 100,
+                "sy": 50,
+                "gx": 6,
+                "gy": 6,
+                "cx": 6,
+                "cy": 6,
+                "px": 0,
+                "py": 0
+            }
+        }
+    },
+    {
+        "id": "6ec4dcef.913b24",
+        "type": "mqtt-broker",
+        "name": "mosquitto publico",
+        "broker": "mqtt://test.mosquitto.org",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "15",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "b931a41ca7c16188",
+        "type": "sqlitedb",
+        "db": "C:/Users/grazi/TCC/rede_mesh.db",
+        "mode": "RWC"
+    },
+    {
+        "id": "mqtt_broker",
+        "type": "mqtt-broker",
+        "name": "Broker MQTT",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "compatmode": false,
+        "protocolVersion": 4,
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "closeTopic": "",
+        "closePayload": "",
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": ""
+    },
+    {
+        "id": "aba_mesh",
+        "type": "ui_tab",
+        "name": "Painel Mesh",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "grupo_sensores",
+        "type": "ui_group",
+        "name": "Dados Sensores",
+        "tab": "aba_mesh",
+        "order": 1,
+        "disp": true,
+        "width": 15,
+        "collapse": false
+    },
+    {
+        "id": "grupo_rssi",
+        "type": "ui_group",
+        "name": "RSSI",
+        "tab": "aba_mesh",
+        "order": 2,
+        "disp": true,
+        "width": 15,
+        "collapse": false
+    },
+    {
+        "id": "grupo_metrics",
+        "type": "ui_group",
+        "name": "Métricas",
+        "tab": "aba_mesh",
+        "order": 3,
+        "disp": true,
+        "width": 15,
+        "collapse": false
+    },
+    {
+        "id": "c43853a14aa4af82",
+        "type": "ui_group",
+        "name": "Ações na Rede",
+        "tab": "aba_mesh",
+        "order": 4,
+        "disp": true,
+        "width": 15,
+        "collapse": false,
+        "className": ""
+    },
+    {
         "id": "mqtt_rssi",
         "type": "mqtt in",
         "z": "tab1",
@@ -217,7 +422,8 @@
         "y": 440,
         "wires": [
             [
-                "9bd16a5d882acace"
+                "9bd16a5d882acace",
+                "8c547d7b3fc3dd64"
             ]
         ]
     },
@@ -344,7 +550,7 @@
         "type": "function",
         "z": "tab1",
         "name": "temperatura",
-        "func": "// Obtém o histórico salvo no fluxo ou inicia como array vazio\nlet historico = flow.get(\"grafico_temp\") || [];\n\n// Verifica se msg.payload.temp é válido\nif (msg.payload && typeof msg.payload.temp === \"number\") {\n    let dado = {\n        t: new Date().toLocaleTimeString(), // ou usar Date.now() se quiser timestamp\n        y: msg.payload.temp\n    };\n\n    historico.push(dado);\n\n    // Limita a 50 pontos\n    if (historico.length > 50) {\n        historico.shift();\n    }\n\n    // Salva novamente no fluxo\n    flow.set(\"grafico_temp\", historico);\n\n    // Envia o histórico completo para o template\n    msg.payload = historico;\n} else {\n    // Se o dado estiver incorreto, envia um aviso no debug\n    node.warn(\"Dado inválido em msg.payload.temp\");\n    msg.payload = [];  // Pode evitar erro no template\n}\n\nreturn msg;\n",
+        "func": "// Obtém o histórico salvo no fluxo ou inicia como objeto vazio\nlet historicosPorMac = flow.get(\"historicos_temp_por_mac\") || {};\n\n// Verifica se msg.payload.mac e msg.payload.temp são válidos\nif (msg.payload && msg.payload.mac && typeof msg.payload.temp === \"number\") {\n    let mac = msg.payload.mac;\n\n    // Inicializa o histórico para este MAC se ainda não existir\n    if (!historicosPorMac[mac]) {\n        historicosPorMac[mac] = [];\n    }\n\n    let dado = {\n        t: new Date().toLocaleTimeString(),\n        y: msg.payload.temp\n    };\n\n    historicosPorMac[mac].push(dado);\n\n    // Limita a 50 pontos para este MAC\n    if (historicosPorMac[mac].length > 50) {\n        historicosPorMac[mac].shift();\n    }\n\n    // Salva novamente no fluxo\n    flow.set(\"historicos_temp_por_mac\", historicosPorMac);\n\n    // Envia o objeto completo para o template\n    // O template vai iterar sobre isso para criar múltiplos gráficos\n    msg.payload = historicosPorMac;\n} else {\n    node.warn(\"Dado inválido: msg.payload.mac ou msg.payload.temp ausente/inválido\");\n    msg.payload = {}; // Envia um objeto vazio para evitar erros no template\n}\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -355,8 +561,7 @@
         "y": 60,
         "wires": [
             [
-                "d25e1efb88d1af19",
-                "e01a64aa0f85aea9"
+                "d25e1efb88d1af19"
             ]
         ]
     },
@@ -369,7 +574,7 @@
         "order": 1,
         "width": 5,
         "height": 6,
-        "format": "<canvas id=\"graficoTemp\" width=\"400\" height=\"200\"></canvas>\n<script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n<script>\n(function(scope) {\n    let chart;\n\n    function criarGrafico(data) {\n        const ctx = document.getElementById(\"graficoTemp\").getContext(\"2d\");\n        const chartData = data.map(d => ({ x: d.t, y: d.y }));\n\n        chart = new Chart(ctx, {\n            type: 'line',\n            data: {\n                labels: data.map(d => d.t),\n                datasets: [{\n                    label: 'Temperatura (°C)',\n                    data: chartData,\n                    fill: false,\n                    borderColor: 'red',\n                    tension: 0.1\n                }]\n            },\n            options: {\n                responsive: true,\n                scales: {\n                    x: {\n                        title: { display: true, text: 'Hora' },\n                        type: 'category'\n                    },\n                    y: {\n                        beginAtZero: false,\n                        title: { display: true, text: 'Temperatura (°C)' }\n                    }\n                }\n            }\n        });\n    }\n\n    scope.$watch('msg.payload', function(data) {\n        if (!Array.isArray(data)) return;\n\n        if (!chart) {\n            criarGrafico(data);\n        } else {\n            const chartData = data.map(d => ({ x: d.t, y: d.y }));\n            chart.data.labels = data.map(d => d.t);\n            chart.data.datasets[0].data = chartData;\n            chart.update();\n        }\n    });\n})(scope);\n</script>\n",
+        "format": "<style>\n    /* Estilos para o contêiner de todos os gráficos de temperatura */\n    .charts-container {\n        display: flex;\n        flex-direction: column;\n        /* Gráficos de MACs diferentes empilhados verticalmente */\n        gap: 20px;\n        /* Espaço entre os gráficos de MAC */\n        padding: 15px;\n        background-color: #222;\n        /* Fundo escuro */\n        border-radius: 8px;\n        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);\n        font-family: 'Inter', sans-serif;\n        /* Fonte Inter */\n        color: #eee;\n    }\n\n    /* Estilos para cada gráfico individual de temperatura por MAC */\n    .single-chart-wrapper {\n        background-color: #333;\n        padding: 10px;\n        border-radius: 8px;\n        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);\n        text-align: center;\n        width: 100%;\n        /* Ocupa a largura total do seu contêiner pai (o UI Template) */\n        max-width: 450px;\n        /* Limita a largura para melhor visualização */\n        margin: 0 auto;\n        /* Centraliza o wrapper */\n    }\n\n    .single-chart-wrapper h3 {\n        color: #ddd;\n        margin-bottom: 10px;\n        font-size: 1.1em;\n    }\n\n    canvas {\n        background-color: #444;\n        /* Fundo do canvas */\n        border-radius: 5px;\n        padding: 5px;\n        width: 100% !important;\n        /* Garante que o canvas seja responsivo */\n        height: auto !important;\n        /* Garante que o canvas seja responsivo */\n        max-height: 250px;\n        /* Altura máxima para os gráficos */\n        box-sizing: border-box;\n        /* Inclui padding e border no cálculo da largura */\n    }\n\n    /* Estilos para responsividade em telas menores */\n    @media (max-width: 750px) {\n        .charts-container {\n            padding: 10px;\n            gap: 15px;\n        }\n\n        .single-chart-wrapper {\n            max-width: 100%;\n            /* Permite que ocupe toda a largura em telas pequenas */\n        }\n    }\n</style>\n\n<div id=\"graficosContainerTemp\" class=\"charts-container\">\n    <!-- Os gráficos de temperatura serão injetados aqui via JavaScript -->\n</div>\n\n<script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n<script>\n    (function(scope) {\n        let charts = {}; // Objeto para armazenar as instâncias dos gráficos, indexadas pelo MAC\n\n        function criarOuAtualizarGrafico(mac, data) {\n            let container = document.getElementById(\"graficosContainerTemp\");\n            let canvasId = \"graficoTemp-\" + mac.replace(/:/g, \"-\"); // ID único para cada gráfico de temperatura por MAC\n\n            let canvas = document.getElementById(canvasId);\n            if (!canvas) {\n                // Se o canvas não existe, cria um novo wrapper e canvas\n                let div = document.createElement(\"div\");\n                div.className = \"single-chart-wrapper\";\n                div.innerHTML = `<h3>MAC: ${mac} - Temperatura (°C)</h3><canvas id=\"${canvasId}\"></canvas>`;\n                container.appendChild(div);\n                canvas = document.getElementById(canvasId);\n            }\n\n            const ctx = canvas.getContext(\"2d\");\n            const chartData = data.map(d => ({ x: d.t, y: d.y }));\n\n            if (charts[mac]) {\n                // Se o gráfico já existe, atualiza os dados\n                charts[mac].data.labels = data.map(d => d.t);\n                charts[mac].data.datasets[0].data = chartData;\n                charts[mac].update();\n            } else {\n                // Se o gráfico não existe, cria um novo\n                charts[mac] = new Chart(ctx, {\n                    type: 'line',\n                    data: {\n                        labels: data.map(d => d.t),\n                        datasets: [{\n                            label: `Temperatura (°C) - MAC: ${mac}`,\n                            data: chartData,\n                            fill: false,\n                            borderColor: 'red', // Cor para temperatura\n                            tension: 0.1\n                        }]\n                    },\n                    options: {\n                        responsive: true,\n                        maintainAspectRatio: false, // Permite que o canvas ajuste sua altura\n                        scales: {\n                            x: {\n                                title: { display: true, text: 'Hora', color: '#ccc' },\n                                type: 'category',\n                                ticks: { color: '#ccc' },\n                                grid: { color: 'rgba(255,255,255,0.1)' }\n                            },\n                            y: {\n                                beginAtZero: false,\n                                title: { display: true, text: 'Temperatura (°C)', color: '#ccc' },\n                                ticks: { color: '#ccc' },\n                                grid: { color: 'rgba(255,255,255,0.1)' }\n                            }\n                        },\n                        plugins: {\n                            legend: {\n                                labels: {\n                                    color: '#eee' // Cor da legenda\n                                }\n                            }\n                        }\n                    }\n                });\n            }\n        }\n\n        scope.$watch('msg.payload', function(payloadPorMac) {\n            if (typeof payloadPorMac !== 'object' || payloadPorMac === null) return;\n\n            // Remove gráficos de MACs que não estão mais no payload\n            for (let mac in charts) {\n                if (!payloadPorMac.hasOwnProperty(mac)) {\n                    charts[mac].destroy();\n                    delete charts[mac];\n                    let canvasToRemove = document.getElementById(\"graficoTemp-\" + mac.replace(/:/g, \"-\"));\n                    if (canvasToRemove && canvasToRemove.parentNode) {\n                        canvasToRemove.parentNode.remove(); // Remove o wrapper que contém o canvas e o h3\n                    }\n                }\n            }\n\n            // Cria ou atualiza gráficos para os MACs presentes no payload\n            for (let mac in payloadPorMac) {\n                if (payloadPorMac.hasOwnProperty(mac) && Array.isArray(payloadPorMac[mac])) {\n                    criarOuAtualizarGrafico(mac, payloadPorMac[mac]);\n                }\n            }\n        });\n    })(scope);\n</script>",
         "storeOutMessages": true,
         "fwdInMessages": true,
         "resendOnRefresh": true,
@@ -407,7 +612,7 @@
         "type": "function",
         "z": "tab1",
         "name": "umidade",
-        "func": "// Obtém o histórico salvo no fluxo ou inicia como array vazio\nlet historico = flow.get(\"grafico_hum\") || [];\n\n// Verifica se msg.payload.temp é válido\nif (msg.payload && typeof msg.payload.hum === \"number\") {\n    let dado = {\n        t: new Date().toLocaleTimeString(), // ou usar Date.now() se quiser timestamp\n        y: msg.payload.hum\n    };\n\n    historico.push(dado);\n\n    // Limita a 50 pontos\n    if (historico.length > 50) {\n        historico.shift();\n    }\n\n    // Salva novamente no fluxo\n    flow.set(\"grafico_hum\", historico);\n\n    // Envia o histórico completo para o template\n    msg.payload = historico;\n} else {\n    // Se o dado estiver incorreto, envia um aviso no debug\n    node.warn(\"Dado inválido em msg.payload.hum\");\n    msg.payload = [];  // Pode evitar erro no template\n}\n\nreturn msg;\n",
+        "func": "// Obtém o histórico salvo no fluxo ou inicia como objeto vazio\nlet historicosPorMac = flow.get(\"historicos_hum_por_mac\") || {};\n\n// Verifica se msg.payload.mac e msg.payload.temp são válidos\nif (msg.payload && msg.payload.mac && typeof msg.payload.hum === \"number\") {\n    let mac = msg.payload.mac;\n\n    // Inicializa o histórico para este MAC se ainda não existir\n    if (!historicosPorMac[mac]) {\n        historicosPorMac[mac] = [];\n    }\n\n    let dado = {\n        t: new Date().toLocaleTimeString(),\n        y: msg.payload.hum\n    };\n\n    historicosPorMac[mac].push(dado);\n\n    // Limita a 50 pontos para este MAC\n    if (historicosPorMac[mac].length > 50) {\n        historicosPorMac[mac].shift();\n    }\n\n    // Salva novamente no fluxo\n    flow.set(\"historicos_hum_por_mac\", historicosPorMac);\n\n    // Envia o objeto completo para o template\n    // O template vai iterar sobre isso para criar múltiplos gráficos\n    msg.payload = historicosPorMac;\n} else {\n    node.warn(\"Dado inválido: msg.payload.mac ou msg.payload.hum ausente/inválido\");\n    msg.payload = {}; // Envia um objeto vazio para evitar erros no template\n}\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -418,8 +623,7 @@
         "y": 200,
         "wires": [
             [
-                "c7a4a52ffb62729d",
-                "e649f11928249c65"
+                "c7a4a52ffb62729d"
             ]
         ]
     },
@@ -432,7 +636,7 @@
         "order": 2,
         "width": 5,
         "height": 6,
-        "format": "<canvas id=\"graficoHum\" width=\"400\" height=\"200\"></canvas>\n<script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n<script>\n    (function(scope) {\n    let chart;\n\n    function criarGrafico(data) {\n        const ctx = document.getElementById(\"graficoHum\").getContext(\"2d\");\n        const chartData = data.map(d => ({ x: d.t, y: d.y }));\n\n        chart = new Chart(ctx, {\n            type: 'line',\n            data: {\n                labels: data.map(d => d.t),\n                datasets: [{\n                    label: 'Umidade (%)',\n                    data: chartData,\n                    fill: false,\n                    borderColor: 'blue',\n                    tension: 0.1\n                }]\n            },\n            options: {\n                responsive: true,\n                scales: {\n                    x: {\n                        title: { display: true, text: 'Hora' },\n                        type: 'category'\n                    },\n                    y: {\n                        beginAtZero: false,\n                        title: { display: true, text: 'Umidade (%)' }\n                    }\n                }\n            }\n        });\n    }\n\n    scope.$watch('msg.payload', function(data) {\n        if (!Array.isArray(data)) return;\n\n        if (!chart) {\n            criarGrafico(data);\n        } else {\n            const chartData = data.map(d => ({ x: d.t, y: d.y }));\n            chart.data.labels = data.map(d => d.t);\n            chart.data.datasets[0].data = chartData;\n            chart.update();\n        }\n    });\n})(scope);\n</script>",
+        "format": "<style>\n    /* Estilos para o contêiner de todos os gráficos de umidade */\n    .charts-container {\n        display: flex;\n        flex-direction: column;\n        /* Gráficos de MACs diferentes empilhados verticalmente */\n        gap: 20px;\n        /* Espaço entre os gráficos de MAC */\n        padding: 15px;\n        background-color: #222;\n        /* Fundo escuro */\n        border-radius: 8px;\n        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);\n        font-family: 'Inter', sans-serif;\n        /* Fonte Inter */\n        color: #eee;\n    }\n\n    /* Estilos para cada gráfico individual de umidade por MAC */\n    .single-chart-wrapper {\n        background-color: #333;\n        padding: 10px;\n        border-radius: 8px;\n        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);\n        text-align: center;\n        width: 100%;\n        /* Ocupa a largura total do seu contêiner pai (o UI Template) */\n        max-width: 450px;\n        /* Limita a largura para melhor visualização */\n        margin: 0 auto;\n        /* Centraliza o wrapper */\n    }\n\n    .single-chart-wrapper h3 {\n        color: #ddd;\n        margin-bottom: 10px;\n        font-size: 1.1em;\n    }\n\n    canvas {\n        background-color: #444;\n        /* Fundo do canvas */\n        border-radius: 5px;\n        padding: 5px;\n        width: 100% !important;\n        /* Garante que o canvas seja responsivo */\n        height: auto !important;\n        /* Garante que o canvas seja responsivo */\n        max-height: 250px;\n        /* Altura máxima para os gráficos */\n        box-sizing: border-box;\n        /* Inclui padding e border no cálculo da largura */\n    }\n\n    /* Estilos para responsividade em telas menores */\n    @media (max-width: 750px) {\n        .charts-container {\n            padding: 10px;\n            gap: 15px;\n        }\n\n        .single-chart-wrapper {\n            max-width: 100%;\n            /* Permite que ocupe toda a largura em telas pequenas */\n        }\n    }\n</style>\n\n<div id=\"graficosContainerHum\" class=\"charts-container\">\n    <!-- Os gráficos de umidade serão injetados aqui via JavaScript -->\n</div>\n\n<script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n<script>\n    (function(scope) {\n        let charts = {}; // Objeto para armazenar as instâncias dos gráficos, indexadas pelo MAC\n\n        function criarOuAtualizarGrafico(mac, data) {\n            let container = document.getElementById(\"graficosContainerHum\");\n            let canvasId = \"graficoHum-\" + mac.replace(/:/g, \"-\"); // ID único para cada gráfico de umidade por MAC\n\n            let canvas = document.getElementById(canvasId);\n            if (!canvas) {\n                // Se o canvas não existe, cria um novo wrapper e canvas\n                let div = document.createElement(\"div\");\n                div.className = \"single-chart-wrapper\";\n                div.innerHTML = `<h3>MAC: ${mac} - Umidade (%)</h3><canvas id=\"${canvasId}\"></canvas>`;\n                container.appendChild(div);\n                canvas = document.getElementById(canvasId);\n            }\n\n            const ctx = canvas.getContext(\"2d\");\n            const chartData = data.map(d => ({ x: d.t, y: d.y }));\n\n            if (charts[mac]) {\n                // Se o gráfico já existe, atualiza os dados\n                charts[mac].data.labels = data.map(d => d.t);\n                charts[mac].data.datasets[0].data = chartData;\n                charts[mac].update();\n            } else {\n                // Se o gráfico não existe, cria um novo\n                charts[mac] = new Chart(ctx, {\n                    type: 'line',\n                    data: {\n                        labels: data.map(d => d.t),\n                        datasets: [{\n                            label: `Umidade (%) - MAC: ${mac}`,\n                            data: chartData,\n                            fill: false,\n                            borderColor: 'blue', // Cor para umidade\n                            tension: 0.1\n                        }]\n                    },\n                    options: {\n                        responsive: true,\n                        maintainAspectRatio: false,\n                        scales: {\n                            x: {\n                                title: { display: true, text: 'Hora', color: '#ccc' },\n                                type: 'category',\n                                ticks: { color: '#ccc' },\n                                grid: { color: 'rgba(255,255,255,0.1)' }\n                            },\n                            y: {\n                                beginAtZero: false,\n                                title: { display: true, text: 'Umidade (%)', color: '#ccc' },\n                                ticks: { color: '#ccc' },\n                                grid: { color: 'rgba(255,255,255,0.1)' }\n                            }\n                        },\n                        plugins: {\n                            legend: {\n                                labels: {\n                                    color: '#eee'\n                                }\n                            }\n                        }\n                    }\n                });\n            }\n        }\n\n        scope.$watch('msg.payload', function(payloadPorMac) {\n            if (typeof payloadPorMac !== 'object' || payloadPorMac === null) return;\n\n            // Remove gráficos de MACs que não estão mais no payload\n            for (let mac in charts) {\n                if (!payloadPorMac.hasOwnProperty(mac)) {\n                    charts[mac].destroy();\n                    delete charts[mac];\n                    let canvasToRemove = document.getElementById(\"graficoHum-\" + mac.replace(/:/g, \"-\"));\n                    if (canvasToRemove && canvasToRemove.parentNode) {\n                        canvasToRemove.parentNode.remove();\n                    }\n                }\n            }\n\n            // Cria ou atualiza gráficos para os MACs presentes no payload\n            for (let mac in payloadPorMac) {\n                if (payloadPorMac.hasOwnProperty(mac) && Array.isArray(payloadPorMac[mac])) {\n                    criarOuAtualizarGrafico(mac, payloadPorMac[mac]);\n                }\n            }\n        });\n    })(scope);\n</script>",
         "storeOutMessages": true,
         "fwdInMessages": true,
         "resendOnRefresh": true,
@@ -470,7 +674,7 @@
         "type": "function",
         "z": "tab1",
         "name": "latencia",
-        "func": "let historico = flow.get(\"grafico_lat\") || [];\n\nif (msg.payload && typeof msg.payload.latency_ms === \"number\") {\n\n    // Cria dado para gráfico\n    let dado = {\n        t: new Date().toLocaleTimeString(),\n        y: msg.payload.latency_ms\n    };\n\n    historico.push(dado);\n\n    if (historico.length > 50) {\n        historico.shift();\n    }\n\n    flow.set(\"grafico_lat\", historico);\n    msg.payload = historico;\n} else {\n    node.warn(\"timestamp_ms ausente ou inválido\");\n    msg.payload = [];\n}\n\nreturn msg;",
+        "func": "// Obtém o histórico salvo no fluxo ou inicia como objeto vazio\nlet historicosPorMac = flow.get(\"historicos_lat_por_mac\") || {};\n\n// Verifica se msg.payload.mac e msg.payload.temp são válidos\nif (msg.payload && msg.payload.mac && typeof msg.payload.latency_ms === \"number\") {\n    let mac = msg.payload.mac;\n\n    // Inicializa o histórico para este MAC se ainda não existir\n    if (!historicosPorMac[mac]) {\n        historicosPorMac[mac] = [];\n    }\n\n    let dado = {\n        t: new Date().toLocaleTimeString(),\n        y: msg.payload.latency_ms\n    };\n\n    historicosPorMac[mac].push(dado);\n\n    // Limita a 50 pontos para este MAC\n    if (historicosPorMac[mac].length > 50) {\n        historicosPorMac[mac].shift();\n    }\n\n    // Salva novamente no fluxo\n    flow.set(\"historicos_lat_por_mac\", historicosPorMac);\n\n    // Envia o objeto completo para o template\n    // O template vai iterar sobre isso para criar múltiplos gráficos\n    msg.payload = historicosPorMac;\n} else {\n    node.warn(\"Dado inválido: msg.payload.mac ou msg.payload.latency_ms ausente/inválido\");\n    msg.payload = {}; // Envia um objeto vazio para evitar erros no template\n}\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -481,8 +685,7 @@
         "y": 320,
         "wires": [
             [
-                "ec02d25f5e1a6405",
-                "b56bf3cffc643174"
+                "ec02d25f5e1a6405"
             ]
         ]
     },
@@ -495,7 +698,7 @@
         "order": 3,
         "width": 5,
         "height": 6,
-        "format": "<div>\n    <canvas id=\"grafico_lat\" width=\"400\" height=\"200\"></canvas>\n</div>\n\n<script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n<script>\n    (function(scope) {\n    let chart;\n\n    function criarGrafico(data) {\n        const ctx = document.getElementById(\"grafico_lat\").getContext(\"2d\");\n\n        chart = new Chart(ctx, {\n            type: 'line',\n            data: {\n                labels: data.map(p => p.t),\n                datasets: [{\n                    label: 'Latência (ms)',\n                    data: data.map(p => ({ x: p.t, y: p.y })),\n                    fill: false,\n                    borderColor: 'green',\n                    tension: 0.1\n                }]\n            },\n            options: {\n                responsive: true,\n                scales: {\n                    x: {\n                        type: 'category',\n                        title: { display: true, text: 'Horário' }\n                    },\n                    y: {\n                        beginAtZero: true,\n                        title: { display: true, text: 'Latência (ms)' }\n                    }\n                }\n            }\n        });\n    }\n\n    scope.$watch('msg.payload', function(data) {\n        if (!Array.isArray(data)) return;\n\n        if (!chart) {\n            criarGrafico(data);\n        } else {\n            chart.data.labels = data.map(p => p.t);\n            chart.data.datasets[0].data = data.map(p => ({ x: p.t, y: p.y }));\n            chart.update();\n        }\n    });\n})(scope);\n</script>",
+        "format": "<style>\n    /* Estilos para o contêiner de todos os gráficos de latência */\n    .charts-container {\n        display: flex;\n        flex-direction: column;\n        /* Gráficos de MACs diferentes empilhados verticalmente */\n        gap: 20px;\n        /* Espaço entre os gráficos de MAC */\n        padding: 15px;\n        background-color: #222;\n        /* Fundo escuro */\n        border-radius: 8px;\n        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);\n        font-family: 'Inter', sans-serif;\n        /* Fonte Inter */\n        color: #eee;\n    }\n\n    /* Estilos para cada gráfico individual de latência por MAC */\n    .single-chart-wrapper {\n        background-color: #333;\n        padding: 10px;\n        border-radius: 8px;\n        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);\n        text-align: center;\n        width: 100%;\n        /* Ocupa a largura total do seu contêiner pai (o UI Template) */\n        max-width: 450px;\n        /* Limita a largura para melhor visualização */\n        margin: 0 auto;\n        /* Centraliza o wrapper */\n    }\n\n    .single-chart-wrapper h3 {\n        color: #ddd;\n        margin-bottom: 10px;\n        font-size: 1.1em;\n    }\n\n    canvas {\n        background-color: #444;\n        /* Fundo do canvas */\n        border-radius: 5px;\n        padding: 5px;\n        width: 100% !important;\n        /* Garante que o canvas seja responsivo */\n        height: auto !important;\n        /* Garante que o canvas seja responsivo */\n        max-height: 250px;\n        /* Altura máxima para os gráficos */\n        box-sizing: border-box;\n        /* Inclui padding e border no cálculo da largura */\n    }\n\n    /* Estilos para responsividade em telas menores */\n    @media (max-width: 750px) {\n        .charts-container {\n            padding: 10px;\n            gap: 15px;\n        }\n\n        .single-chart-wrapper {\n            max-width: 100%;\n            /* Permite que ocupe toda a largura em telas pequenas */\n        }\n    }\n</style>\n\n<div id=\"graficosContainerLat\" class=\"charts-container\">\n    <!-- Os gráficos de latência serão injetados aqui via JavaScript -->\n</div>\n\n<script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n<script>\n    (function(scope) {\n        let charts = {}; // Objeto para armazenar as instâncias dos gráficos, indexadas pelo MAC\n\n        function criarOuAtualizarGrafico(mac, data) {\n            let container = document.getElementById(\"graficosContainerLat\");\n            let canvasId = \"graficoLat-\" + mac.replace(/:/g, \"-\"); // ID único para cada gráfico de latência por MAC\n\n            let canvas = document.getElementById(canvasId);\n            if (!canvas) {\n                // Se o canvas não existe, cria um novo wrapper e canvas\n                let div = document.createElement(\"div\");\n                div.className = \"single-chart-wrapper\";\n                div.innerHTML = `<h3>MAC: ${mac} - Latência (ms)</h3><canvas id=\"${canvasId}\"></canvas>`;\n                container.appendChild(div);\n                canvas = document.getElementById(canvasId);\n            }\n\n            const ctx = canvas.getContext(\"2d\");\n            const chartData = data.map(d => ({ x: d.t, y: d.y }));\n\n            if (charts[mac]) {\n                // Se o gráfico já existe, atualiza os dados\n                charts[mac].data.labels = data.map(d => d.t);\n                charts[mac].data.datasets[0].data = chartData;\n                charts[mac].update();\n            } else {\n                // Se o gráfico não existe, cria um novo\n                charts[mac] = new Chart(ctx, {\n                    type: 'line',\n                    data: {\n                        labels: data.map(d => d.t),\n                        datasets: [{\n                            label: `Latência (ms) - MAC: ${mac}`,\n                            data: chartData,\n                            fill: false,\n                            borderColor: 'green', // Cor para latência\n                            tension: 0.1\n                        }]\n                    },\n                    options: {\n                        responsive: true,\n                        maintainAspectRatio: false,\n                        scales: {\n                            x: {\n                                title: { display: true, text: 'Hora', color: '#ccc' },\n                                type: 'category',\n                                ticks: { color: '#ccc' },\n                                grid: { color: 'rgba(255,255,255,0.1)' }\n                            },\n                            y: {\n                                beginAtZero: false,\n                                title: { display: true, text: 'Latência (ms)', color: '#ccc' },\n                                ticks: { color: '#ccc' },\n                                grid: { color: 'rgba(255,255,255,0.1)' }\n                            }\n                        },\n                        plugins: {\n                            legend: {\n                                labels: {\n                                    color: '#eee'\n                                }\n                            }\n                        }\n                    }\n                });\n            }\n        }\n\n        scope.$watch('msg.payload', function(payloadPorMac) {\n            if (typeof payloadPorMac !== 'object' || payloadPorMac === null) return;\n\n            // Remove gráficos de MACs que não estão mais no payload\n            for (let mac in charts) {\n                if (!payloadPorMac.hasOwnProperty(mac)) {\n                    charts[mac].destroy();\n                    delete charts[mac];\n                    let canvasToRemove = document.getElementById(\"graficoLat-\" + mac.replace(/:/g, \"-\"));\n                    if (canvasToRemove && canvasToRemove.parentNode) {\n                        canvasToRemove.parentNode.remove();\n                    }\n                }\n            }\n\n            // Cria ou atualiza gráficos para os MACs presentes no payload\n            for (let mac in payloadPorMac) {\n                if (payloadPorMac.hasOwnProperty(mac) && Array.isArray(payloadPorMac[mac])) {\n                    criarOuAtualizarGrafico(mac, payloadPorMac[mac]);\n                }\n            }\n        });\n    })(scope);\n</script>",
         "storeOutMessages": true,
         "fwdInMessages": true,
         "resendOnRefresh": true,
@@ -506,54 +709,6 @@
         "wires": [
             []
         ]
-    },
-    {
-        "id": "e01a64aa0f85aea9",
-        "type": "debug",
-        "z": "tab1",
-        "name": "debug 1",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 800,
-        "y": 100,
-        "wires": []
-    },
-    {
-        "id": "e649f11928249c65",
-        "type": "debug",
-        "z": "tab1",
-        "name": "debug 5",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 740,
-        "y": 240,
-        "wires": []
-    },
-    {
-        "id": "b56bf3cffc643174",
-        "type": "debug",
-        "z": "tab1",
-        "name": "debug 6",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 760,
-        "y": 360,
-        "wires": []
     },
     {
         "id": "6d03d4cb9e361f86",
@@ -893,109 +1048,19 @@
         "wires": []
     },
     {
-        "id": "6ec4dcef.913b24",
-        "type": "mqtt-broker",
-        "name": "mosquitto publico",
-        "broker": "mqtt://test.mosquitto.org",
-        "port": "1883",
-        "clientid": "",
-        "autoConnect": true,
-        "usetls": false,
-        "protocolVersion": "4",
-        "keepalive": "15",
-        "cleansession": true,
-        "autoUnsubscribe": true,
-        "birthTopic": "",
-        "birthQos": "0",
-        "birthPayload": "",
-        "birthMsg": {},
-        "closeTopic": "",
-        "closePayload": "",
-        "closeMsg": {},
-        "willTopic": "",
-        "willQos": "0",
-        "willPayload": "",
-        "willMsg": {},
-        "userProps": "",
-        "sessionExpiry": ""
-    },
-    {
-        "id": "grupo_rssi",
-        "type": "ui_group",
-        "name": "RSSI",
-        "tab": "aba_mesh",
-        "order": 2,
-        "disp": true,
-        "width": 15,
-        "collapse": false
-    },
-    {
-        "id": "grupo_metrics",
-        "type": "ui_group",
-        "name": "Métricas",
-        "tab": "aba_mesh",
-        "order": 3,
-        "disp": true,
-        "width": 15,
-        "collapse": false
-    },
-    {
-        "id": "grupo_sensores",
-        "type": "ui_group",
-        "name": "Dados Sensores",
-        "tab": "aba_mesh",
-        "order": 1,
-        "disp": true,
-        "width": 15,
-        "collapse": false
-    },
-    {
-        "id": "mqtt_broker",
-        "type": "mqtt-broker",
-        "name": "Broker MQTT",
-        "broker": "localhost",
-        "port": "1883",
-        "clientid": "",
-        "autoConnect": true,
-        "usetls": false,
-        "compatmode": false,
-        "protocolVersion": 4,
-        "keepalive": "60",
-        "cleansession": true,
-        "autoUnsubscribe": true,
-        "birthTopic": "",
-        "birthQos": "0",
-        "birthPayload": "",
-        "closeTopic": "",
-        "closePayload": "",
-        "willTopic": "",
-        "willQos": "0",
-        "willPayload": ""
-    },
-    {
-        "id": "c43853a14aa4af82",
-        "type": "ui_group",
-        "name": "Ações na Rede",
-        "tab": "aba_mesh",
-        "order": 4,
-        "disp": true,
-        "width": 15,
-        "collapse": false,
-        "className": ""
-    },
-    {
-        "id": "b931a41ca7c16188",
-        "type": "sqlitedb",
-        "db": "C:/Users/grazi/TCC/rede_mesh.db",
-        "mode": "RWC"
-    },
-    {
-        "id": "aba_mesh",
-        "type": "ui_tab",
-        "name": "Painel Mesh",
-        "icon": "dashboard",
-        "order": 1,
-        "disabled": false,
-        "hidden": false
+        "id": "8c547d7b3fc3dd64",
+        "type": "debug",
+        "z": "tab1",
+        "name": "debug 7",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 560,
+        "y": 500,
+        "wires": []
     }
 ]
