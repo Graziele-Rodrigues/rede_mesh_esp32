@@ -15,7 +15,8 @@ CREATE TABLE signal (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
     mac TEXT,
-    rssi INTEGER
+    rssi INTEGER,
+    mac_pai TEXT
 );
 
 CREATE TABLE mesh_sensor_data (
@@ -24,5 +25,6 @@ CREATE TABLE mesh_sensor_data (
     mac TEXT,
     temperatura FLOAT,
     umidade FLOAT,
-    latencia INTEGER
+    latencia INTEGER, 
+    hops INTEGER
 );

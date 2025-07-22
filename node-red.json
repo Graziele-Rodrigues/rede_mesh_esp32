@@ -7,211 +7,6 @@
         "info": ""
     },
     {
-        "id": "d7cacd98f609ab2b",
-        "type": "ui_base",
-        "theme": {
-            "name": "theme-custom",
-            "lightTheme": {
-                "default": "#0094CE",
-                "baseColor": "#322f30",
-                "baseFont": "Arial Black,Arial Black,Gadget,sans-serif",
-                "edited": true,
-                "reset": false
-            },
-            "darkTheme": {
-                "default": "#097479",
-                "baseColor": "#9ea3a3",
-                "baseFont": "Lucida Sans Typewriter,Lucida Console,Monaco,monospace",
-                "edited": true,
-                "reset": false
-            },
-            "customTheme": {
-                "name": "TCC",
-                "default": "#4B7930",
-                "baseColor": "#4B7930",
-                "baseFont": "Times New Roman,Times,serif",
-                "reset": false
-            },
-            "themeState": {
-                "base-color": {
-                    "default": "#4B7930",
-                    "value": "#4B7930",
-                    "edited": true
-                },
-                "page-titlebar-backgroundColor": {
-                    "value": "#4B7930",
-                    "edited": false
-                },
-                "page-backgroundColor": {
-                    "value": "#111111",
-                    "edited": false
-                },
-                "page-sidebar-backgroundColor": {
-                    "value": "#333333",
-                    "edited": false
-                },
-                "group-textColor": {
-                    "value": "#6db046",
-                    "edited": false
-                },
-                "group-borderColor": {
-                    "value": "#555555",
-                    "edited": false
-                },
-                "group-backgroundColor": {
-                    "value": "#333333",
-                    "edited": false
-                },
-                "widget-textColor": {
-                    "value": "#eeeeee",
-                    "edited": false
-                },
-                "widget-backgroundColor": {
-                    "value": "#4b7930",
-                    "edited": false
-                },
-                "widget-borderColor": {
-                    "value": "#333333",
-                    "edited": false
-                },
-                "base-font": {
-                    "value": "Times New Roman,Times,serif"
-                }
-            },
-            "angularTheme": {
-                "primary": "indigo",
-                "accents": "blue",
-                "warn": "red",
-                "background": "grey",
-                "palette": "light"
-            }
-        },
-        "site": {
-            "name": "Node-RED Dashboard",
-            "hideToolbar": "false",
-            "allowSwipe": "false",
-            "lockMenu": "false",
-            "allowTempTheme": "true",
-            "dateFormat": "DD/MM/YYYY",
-            "sizes": {
-                "sx": 100,
-                "sy": 50,
-                "gx": 6,
-                "gy": 6,
-                "cx": 6,
-                "cy": 6,
-                "px": 0,
-                "py": 0
-            }
-        }
-    },
-    {
-        "id": "6ec4dcef.913b24",
-        "type": "mqtt-broker",
-        "name": "mosquitto publico",
-        "broker": "mqtt://test.mosquitto.org",
-        "port": "1883",
-        "clientid": "",
-        "autoConnect": true,
-        "usetls": false,
-        "protocolVersion": "4",
-        "keepalive": "15",
-        "cleansession": true,
-        "autoUnsubscribe": true,
-        "birthTopic": "",
-        "birthQos": "0",
-        "birthPayload": "",
-        "birthMsg": {},
-        "closeTopic": "",
-        "closePayload": "",
-        "closeMsg": {},
-        "willTopic": "",
-        "willQos": "0",
-        "willPayload": "",
-        "willMsg": {},
-        "userProps": "",
-        "sessionExpiry": ""
-    },
-    {
-        "id": "b931a41ca7c16188",
-        "type": "sqlitedb",
-        "db": "C:/Users/grazi/TCC/rede_mesh.db",
-        "mode": "RWC"
-    },
-    {
-        "id": "mqtt_broker",
-        "type": "mqtt-broker",
-        "name": "Broker MQTT",
-        "broker": "localhost",
-        "port": "1883",
-        "clientid": "",
-        "autoConnect": true,
-        "usetls": false,
-        "compatmode": false,
-        "protocolVersion": 4,
-        "keepalive": "60",
-        "cleansession": true,
-        "autoUnsubscribe": true,
-        "birthTopic": "",
-        "birthQos": "0",
-        "birthPayload": "",
-        "closeTopic": "",
-        "closePayload": "",
-        "willTopic": "",
-        "willQos": "0",
-        "willPayload": ""
-    },
-    {
-        "id": "aba_mesh",
-        "type": "ui_tab",
-        "name": "Painel Mesh",
-        "icon": "dashboard",
-        "order": 1,
-        "disabled": false,
-        "hidden": false
-    },
-    {
-        "id": "grupo_sensores",
-        "type": "ui_group",
-        "name": "Dados Sensores",
-        "tab": "aba_mesh",
-        "order": 1,
-        "disp": true,
-        "width": 15,
-        "collapse": false
-    },
-    {
-        "id": "grupo_rssi",
-        "type": "ui_group",
-        "name": "RSSI",
-        "tab": "aba_mesh",
-        "order": 2,
-        "disp": true,
-        "width": 15,
-        "collapse": false
-    },
-    {
-        "id": "grupo_metrics",
-        "type": "ui_group",
-        "name": "Métricas",
-        "tab": "aba_mesh",
-        "order": 3,
-        "disp": true,
-        "width": 15,
-        "collapse": false
-    },
-    {
-        "id": "c43853a14aa4af82",
-        "type": "ui_group",
-        "name": "Ações na Rede",
-        "tab": "aba_mesh",
-        "order": 4,
-        "disp": true,
-        "width": 15,
-        "collapse": false,
-        "className": ""
-    },
-    {
         "id": "mqtt_rssi",
         "type": "mqtt in",
         "z": "tab1",
@@ -224,10 +19,11 @@
         "rap": false,
         "inputs": 0,
         "x": 390,
-        "y": 560,
+        "y": 580,
         "wires": [
             [
-                "cd2ca644d1528406"
+                "cd2ca644d1528406",
+                "f7013360306d58e0"
             ]
         ]
     },
@@ -260,12 +56,22 @@
                 "formatterParams": {
                     "target": "_blank"
                 }
+            },
+            {
+                "field": "mac_parent",
+                "title": "PARENT",
+                "width": "",
+                "align": "left",
+                "formatter": "plaintext",
+                "formatterParams": {
+                    "target": "_blank"
+                }
             }
         ],
         "outputs": 0,
         "cts": false,
         "x": 850,
-        "y": 560,
+        "y": 580,
         "wires": []
     },
     {
@@ -280,8 +86,8 @@
         "nl": false,
         "rap": false,
         "inputs": 0,
-        "x": 420,
-        "y": 680,
+        "x": 400,
+        "y": 740,
         "wires": [
             [
                 "96866108bbb66ddd"
@@ -381,8 +187,8 @@
         ],
         "outputs": 0,
         "cts": false,
-        "x": 880,
-        "y": 680,
+        "x": 860,
+        "y": 740,
         "wires": []
     },
     {
@@ -390,7 +196,7 @@
         "type": "function",
         "z": "tab1",
         "name": "rssi",
-        "func": "// Recupera a tabela atual da memória do fluxo\nlet tabela = flow.get(\"rssi_table\") || [];\n\nlet novo = {\n    mac: msg.payload.mac,\n    rssi: msg.payload.rssi\n};\n\nlet index = tabela.findIndex(item => item.mac === novo.mac);\n\nif (index !== -1) {\n    // Atualiza se já existe\n    tabela[index].rssi = novo.rssi;\n} else {\n    // Adiciona se for novo MAC\n    tabela.push(novo);\n}\n\n// Salva de volta na memória\nflow.set(\"rssi_table\", tabela);\n\n// Envia a tabela completa para o ui_table\nmsg.payload = tabela;\nreturn msg;\n",
+        "func": "// Recupera a tabela atual da memória do fluxo\nlet tabela = flow.get(\"rssi_table\") || [];\n\nlet novo = {\n    mac: msg.payload.mac,\n    rssi: msg.payload.rssi,\n    mac_parent: msg.payload.parent\n};\n\nlet index = tabela.findIndex(item => item.mac === novo.mac);\n\nif (index !== -1) {\n    // Atualiza se já existe\n    tabela[index].rssi = novo.rssi;\n} else {\n    // Adiciona se for novo MAC\n    tabela.push(novo);\n}\n\n// Salva de volta na memória\nflow.set(\"rssi_table\", tabela);\n\n// Envia a tabela completa para o ui_table\nmsg.payload = tabela;\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -398,7 +204,7 @@
         "finalize": "",
         "libs": [],
         "x": 610,
-        "y": 560,
+        "y": 580,
         "wires": [
             [
                 "table_rssi"
@@ -432,7 +238,7 @@
         "type": "function",
         "z": "tab1",
         "name": "sensores",
-        "func": "// Recupera a tabela atual da memória do fluxo\nlet sensorTable = flow.get(\"sensor_table\") || [];\n\n// Obtém o timestamp enviado pelo sensor (em ms)\nconst latency = parseInt(msg.payload.latency_ms, 10);\n\n// Cria o objeto com dados atualizados\nlet novo = {\n  mac: msg.payload.mac,\n  temperatura: parseFloat(msg.payload.temp).toFixed(2),\n  umidade: parseFloat(msg.payload.hum).toFixed(2),\n  latencia: latency\n};\n\n// Verifica se o MAC já existe na tabela\nlet index = sensorTable.findIndex(item => item.mac === novo.mac);\n\nif (index !== -1) {\n  // Atualiza os valores existentes\n  sensorTable[index] = { ...sensorTable[index], ...novo };\n} else {\n  // Adiciona nova entrada\n  sensorTable.push(novo);\n}\n\n// Armazena a tabela atualizada no flow\nflow.set(\"sensor_table\", sensorTable);\n\n// Envia a tabela para o próximo nó (ex: ui_table)\nmsg.payload = sensorTable;\nreturn msg;",
+        "func": "// Recupera a tabela atual da memória do fluxo\nlet sensorTable = flow.get(\"sensor_table\") || [];\n\n// Obtém o timestamp enviado pelo sensor (em ms)\nconst latency = parseInt(msg.payload.latency_ms, 10);\n\n// Cria o objeto com dados atualizados\nlet novo = {\n  mac: msg.payload.mac,\n  temperatura: parseFloat(msg.payload.temp).toFixed(2),\n  umidade: parseFloat(msg.payload.hum).toFixed(2),\n  latencia: latency,\n  saltos: msg.payload.hops\n};\n\n// Verifica se o MAC já existe na tabela\nlet index = sensorTable.findIndex(item => item.mac === novo.mac);\n\nif (index !== -1) {\n  // Atualiza os valores existentes\n  sensorTable[index] = { ...sensorTable[index], ...novo };\n} else {\n  // Adiciona nova entrada\n  sensorTable.push(novo);\n}\n\n// Armazena a tabela atualizada no flow\nflow.set(\"sensor_table\", sensorTable);\n\n// Envia a tabela para o próximo nó (ex: ui_table)\nmsg.payload = sensorTable;\nreturn msg;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -496,6 +302,16 @@
                 "formatterParams": {
                     "target": "_blank"
                 }
+            },
+            {
+                "field": "saltos",
+                "title": "Saltos",
+                "width": "",
+                "align": "left",
+                "formatter": "plaintext",
+                "formatterParams": {
+                    "target": "_blank"
+                }
             }
         ],
         "outputs": 0,
@@ -516,8 +332,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 660,
-        "y": 680,
+        "x": 640,
+        "y": 740,
         "wires": [
             [
                 "table_metrics"
@@ -782,7 +598,7 @@
         "type": "function",
         "z": "tab1",
         "name": "signal",
-        "func": "const payload = msg.payload;\n\n// Extrai e formata os valores\nconst macAddress = payload.mac || null;\nconst rssiRaw = parseInt(payload.rssi, 10);\nconst rssi = Number.isNaN(rssiRaw) ? null : rssiRaw;\n\n// Query SQL interpolada corretamente com crase\nmsg.topic = `INSERT INTO signal (mac, rssi) VALUES ('${macAddress}', ${rssi});`;\n\nreturn msg;\n",
+        "func": "const payload = msg.payload;\n\n// Extrai e formata os valores\nconst macAddress = payload.mac || null;\nconst rssiRaw = parseInt(payload.rssi, 10);\nconst rssi = Number.isNaN(rssiRaw) ? null : rssiRaw;\nconst parent_mac = payload.parent || null;\n// Query SQL interpolada corretamente com crase\nmsg.topic = `INSERT INTO signal (mac, rssi, mac_pai) VALUES ('${macAddress}', ${rssi}, '${parent_mac}');`;\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -944,7 +760,7 @@
         "type": "function",
         "z": "tab1",
         "name": "data_sensor",
-        "func": "const payload = msg.payload;\n\n// Extrai e formata os valores\nconst macAddress = payload.mac;\nconst temperature = parseFloat(payload.temp).toFixed(2);\nconst humidity = parseFloat(payload.hum).toFixed(2);\nconst timestamp_ms = (parseInt(payload.latency_ms, 10));  // timestamp enviado pelo nó sensor (campo que você deve incluir)\n\nmsg.topic = `INSERT INTO mesh_sensor_data (mac, temperatura, umidade, latencia) VALUES ('${macAddress}', ${temperature}, ${humidity}, ${timestamp_ms});`;\n\nreturn msg;\n",
+        "func": "const payload = msg.payload;\n\n// Extrai e formata os valores\nconst macAddress = payload.mac;\nconst temperature = parseFloat(payload.temp).toFixed(2);\nconst humidity = parseFloat(payload.hum).toFixed(2);\nconst timestamp_ms = (parseInt(payload.latency_ms, 10));  // timestamp enviado pelo nó sensor (campo que você deve incluir)\nconst saltos = payload.hops; \n\nmsg.topic = `INSERT INTO mesh_sensor_data (mac, temperatura, umidade, latencia, hops) VALUES ('${macAddress}', ${temperature}, ${humidity}, ${timestamp_ms}, ${saltos});`;\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1062,5 +878,127 @@
         "x": 560,
         "y": 500,
         "wires": []
+    },
+    {
+        "id": "f7013360306d58e0",
+        "type": "debug",
+        "z": "tab1",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 580,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "6ec4dcef.913b24",
+        "type": "mqtt-broker",
+        "name": "mosquitto publico",
+        "broker": "mqtt://test.mosquitto.org",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "15",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "grupo_rssi",
+        "type": "ui_group",
+        "name": "RSSI",
+        "tab": "aba_mesh",
+        "order": 2,
+        "disp": true,
+        "width": 15,
+        "collapse": false
+    },
+    {
+        "id": "grupo_metrics",
+        "type": "ui_group",
+        "name": "Métricas",
+        "tab": "aba_mesh",
+        "order": 3,
+        "disp": true,
+        "width": 15,
+        "collapse": false
+    },
+    {
+        "id": "grupo_sensores",
+        "type": "ui_group",
+        "name": "Dados Sensores",
+        "tab": "aba_mesh",
+        "order": 1,
+        "disp": true,
+        "width": 15,
+        "collapse": false
+    },
+    {
+        "id": "mqtt_broker",
+        "type": "mqtt-broker",
+        "name": "Broker MQTT",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "compatmode": false,
+        "protocolVersion": 4,
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "closeTopic": "",
+        "closePayload": "",
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": ""
+    },
+    {
+        "id": "c43853a14aa4af82",
+        "type": "ui_group",
+        "name": "Ações na Rede",
+        "tab": "aba_mesh",
+        "order": 4,
+        "disp": true,
+        "width": 15,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "b931a41ca7c16188",
+        "type": "sqlitedb",
+        "db": "C:/Users/grazi/TCC/rede_mesh.db",
+        "mode": "RWC"
+    },
+    {
+        "id": "aba_mesh",
+        "type": "ui_tab",
+        "name": "Painel Mesh",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
     }
 ]
