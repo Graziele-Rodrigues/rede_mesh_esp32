@@ -24,7 +24,7 @@
  *                Macros
  *******************************************************/
 
-#define PAYLOAD_SIZE 200
+#define PAYLOAD_SIZE 32 
 #define PACKET_HEADER_SIZE 8 + 1 + 2  // MAC (6) + ID (1) + NUM_BYTES (2)
 #define CMD_ROUTE_TABLE 0x01
 #define CMD_METRICS     0x02
@@ -32,7 +32,7 @@
 #define CMD_RTT 0x05
 #define CMD_SYNC_TIME 0xAA
 
-typedef struct __attribute__((packed)) {
+typedef struct {
     uint8_t mac[6];
     uint8_t id;
     uint16_t num_bytes;
@@ -86,6 +86,7 @@ int children_count = 0;
 int64_t time_offset = 0;  
 static bool ntp_synced = false;  
 volatile bool time_synced = false;
+static uint8_t g_max_mesh_layer = 1; // Inicia com 1, a camada do próprio root
 
 typedef struct {
     uint8_t mac[6];
@@ -283,7 +284,7 @@ void static recv_cb(mesh_addr_t *from, mesh_data_t *data)
     // Converte MAC para string
     char mac_str[18];
     snprintf(mac_str, sizeof(mac_str), MACSTR, MAC2STR(packet->mac));
-
+    
     // Processa com base no ID do pacote
     switch (packet->id) {
         case CMD_SENSOR: {
@@ -320,10 +321,11 @@ void static recv_cb(mesh_addr_t *from, mesh_data_t *data)
 
                 mqtt_app_publish("/topic/mesh/sensor", msg);
                 ESP_LOGI(MESH_TAG, "MQTT sensor: %s", msg);
-
+                g_max_mesh_layer = (layer > g_max_mesh_layer) ? layer : g_max_mesh_layer;
                 update_packet_counters(packet->mac, sent);
             }
             break;
+
         }
 
         case CMD_METRICS: {
@@ -372,7 +374,7 @@ void static recv_cb(mesh_addr_t *from, mesh_data_t *data)
                     .proto = MESH_PROTO_BIN,
                     .tos = MESH_TOS_P2P
                 };
-                esp_mesh_send(from, &data, MESH_DATA_P2P, NULL, 0);
+                esp_mesh_send(from, &data, MESH_DATA_FROMDS, NULL, 0);
                 ESP_LOGI(MESH_TAG, "Pong enviado");
             } else {
                 // Se sou um nó e recebi o pong, calculo o RTT
@@ -498,6 +500,7 @@ static void sensor_send_task(void *args) {
             uint64_t adjusted_ts = local_ts + time_offset; // ms, timestamp ajustado
             
             uint8_t buffer[20];
+            //uint8_t buffer[PAYLOAD_SIZE];
 
             memcpy(buffer, &adjusted_ts, sizeof(adjusted_ts));
             memcpy(buffer + 8, &temp, sizeof(temp));
@@ -505,30 +508,36 @@ static void sensor_send_task(void *args) {
             memcpy(buffer + 16, &sent, sizeof(sent)); 
             memcpy(buffer + 18, &layer, sizeof(layer));
 
+            /*for (int i = 19; i < PAYLOAD_SIZE; i++) {
+                buffer[i] = 0xAA; 
+            }*/
+
             mesh_packet_t packet;
             build_packet(&packet, CMD_SENSOR, buffer, sizeof(buffer));
+
+            // DEBUG: Exibe conteúdo do pacote antes do envio
+            ESP_LOGI(MESH_TAG, "Pacote preparado:");
+            ESP_LOGI(MESH_TAG, "MAC: " MACSTR, MAC2STR(packet.mac));
+            ESP_LOGI(MESH_TAG, "ID: %d, Size: %d, CRC: 0x%04X", 
+                   packet.id, packet.num_bytes, packet.crc);
+            ESP_LOGI(MESH_TAG, "Payload: TS=%" PRIu64 ", T=%.2f, H=%.2f, Sent=%d, Layer=%d",
+                   adjusted_ts, temp, hum, sent, layer);
 
             mesh_data_t data = {
                 .data  = (uint8_t *)&packet,
                 .size  = sizeof(mesh_packet_t),
                 .proto = MESH_PROTO_BIN,
-                .tos   = MESH_TOS_P2P
+                .tos   = MESH_TOS_P2P  
             };
 
-            mesh_addr_t parent_addr;
-            esp_err_t err = esp_mesh_get_parent_bssid(&parent_addr);    
+            esp_err_t err =  esp_mesh_send(NULL, &data, 0, NULL, 0); // enviar mensagem para node principal
             if (err == ESP_OK) {
-                err = esp_mesh_send(&parent_addr, &data, MESH_DATA_P2P, NULL, 0);
-                if (err == ESP_OK) {
-                    ESP_LOGI(MESH_TAG, "Dados de sensor enviados ao pai " MACSTR, MAC2STR(parent_addr.addr));
-                } else {
-                    ESP_LOGW(MESH_TAG, "Falha ao enviar dados ao pai: %d", err);
-                }
+                ESP_LOGI(MESH_TAG, "Tamanho do pacote enviado: %d bytes", sizeof(mesh_packet_t));
+
             } else {
-                ESP_LOGW(MESH_TAG, "Não foi possível obter endereço do nó pai");
+                ESP_LOGW(MESH_TAG, "Falha ao enviar dados ao pai: %d", err);
             }
         }
-
         vTaskDelay(1 * 60 * 1000 / portTICK_PERIOD_MS);  // a cada 1 minutos
     }
 }
@@ -568,9 +577,10 @@ static void metrics_send_task(void *args) {
                 .tos = MESH_TOS_P2P
             };
 
-            err = esp_mesh_send(&parent_addr, &data, MESH_DATA_P2P, NULL, 0);
+            err = esp_mesh_send(NULL, &data, 0, NULL, 0); // enviar mensagem para node principal
+
             if (err == ESP_OK) {
-                ESP_LOGI(MESH_TAG, "Métrica enviada (RSSI=%d, pai=" MACSTR ")", rssi, MAC2STR(parent_addr.addr));
+                ESP_LOGI(MESH_TAG, "Métrica enviada (RSSI=%d, parent=" MACSTR ")", rssi, MAC2STR(parent_addr.addr));
             } else {
                 ESP_LOGW(MESH_TAG, "Falha ao enviar métrica ao pai");
             }
@@ -586,7 +596,7 @@ static void metrics_send_task(void *args) {
 // Métricas Gerais
 void metricas() {
     // Conectividade
-    metrics.layer = esp_mesh_get_layer();
+    metrics.layer = g_max_mesh_layer;
     metrics.success_rate = success_rate;
     metrics.packet_loss_rate = packet_loss;
 
@@ -624,28 +634,25 @@ void metricas() {
         metrics.retransmission_count
     );
 
-    if (esp_mesh_is_root()) {
-        mqtt_app_publish("/topic/mesh/metricas", payload);
-        ESP_LOGI(MESH_TAG, "Métricas publicadas: %s", payload);
-        int8_t rssi = -127;
-        wifi_ap_record_t ap_info;
+    mqtt_app_publish("/topic/mesh/metricas", payload);
+    ESP_LOGI(MESH_TAG, "Métricas publicadas: %s", payload);
+    int8_t rssi = -127;
+    wifi_ap_record_t ap_info;
 
-        if (esp_wifi_sta_get_ap_info(&ap_info) == ESP_OK) {
-            rssi = ap_info.rssi;
-        } else {
-            ESP_LOGW(MESH_TAG, "Falha ao obter RSSI do root em relação ao AP");
-        }
-
-        char mac_str[18];
-        get_mac_str(mac_str, sizeof(mac_str));  // Usa sua função existente
-
-        char msg[100];
-        snprintf(msg, sizeof(msg),
-                "{\"mac\":\"%s\",\"rssi\":%d}", mac_str, rssi);
-        mqtt_app_publish("/topic/mesh/rssi", msg);
-        ESP_LOGI(MESH_TAG, "Root publicou seu RSSI: %s", msg);
-
+    if (esp_wifi_sta_get_ap_info(&ap_info) == ESP_OK) {
+        rssi = ap_info.rssi;
+    } else {
+        ESP_LOGW(MESH_TAG, "Falha ao obter RSSI do root em relação ao AP");
     }
+
+    char mac_str[18];
+    get_mac_str(mac_str, sizeof(mac_str));  // Usa sua função existente
+
+    char msg[100];
+    snprintf(msg, sizeof(msg),
+            "{\"mac\":\"%s\",\"rssi\":%d}", mac_str, rssi);
+    mqtt_app_publish("/topic/mesh/rssi", msg);
+    ESP_LOGI(MESH_TAG, "Root publicou seu RSSI: %s", msg);
 }
 
 // ping_send_task - para medir RTT
@@ -981,6 +988,7 @@ void app_main(void)
     ESP_ERROR_CHECK(esp_mesh_set_config(&cfg));
     /* mesh start */
     ESP_ERROR_CHECK(esp_mesh_start());
+    ESP_ERROR_CHECK(esp_mesh_set_self_organized(true, true)); // rede autoconfiguravel (padrao)
     ESP_LOGI(MESH_TAG, "mesh starts successfully, heap:%" PRId32 ", %s\n",  esp_get_free_heap_size(),
              esp_mesh_is_root_fixed() ? "root fixed" : "root not fixed");
 
