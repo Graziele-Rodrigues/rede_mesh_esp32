@@ -10,6 +10,11 @@
 #include "driver/gpio.h"
 #include "freertos/semphr.h"
 
+#include "esp_system.h"
+#include "esp_task_wdt.h"
+#include "freertos/task.h"
+#include "freertos/FreeRTOS.h"
+
 #include "esp_netif_sntp.h"
 #include "esp_sntp.h"
 #include "esp_log.h"
@@ -20,11 +25,15 @@
 #include <inttypes.h> // Para lidar com uint64_t em logs
 #include <time.h>
 
+#include "driver/temperature_sensor.h"
+
+
+
 /*******************************************************
  *                Macros
  *******************************************************/
 
-#define PAYLOAD_SIZE 32 
+#define PAYLOAD_SIZE 1024 
 #define PACKET_HEADER_SIZE 8 + 1 + 2  // MAC (6) + ID (1) + NUM_BYTES (2)
 #define CMD_ROUTE_TABLE 0x01
 #define CMD_METRICS     0x02
@@ -44,12 +53,9 @@ typedef struct {
     uint8_t layer;
     float success_rate;
     float packet_loss_rate;
-    uint32_t rtt_ms;
     uint8_t children_count;
-    uint16_t subtree_size;
     uint16_t parent_changes;
     uint64_t last_parent_change_ms;
-    uint8_t retransmission_count;
 } mesh_metrics_t;
 
 mesh_metrics_t metrics;
@@ -69,7 +75,7 @@ static esp_ip4_addr_t s_current_ip;
 static mesh_addr_t s_route_table[CONFIG_MESH_ROUTE_TABLE_SIZE];
 static int s_route_table_size = 0;
 static SemaphoreHandle_t s_route_table_lock = NULL;
-
+temperature_sensor_handle_t temp_handle = NULL;
 // Variaveis para as metricas de avaliação
 
 int8_t parent_rssi = 0;
@@ -100,6 +106,17 @@ float packet_loss = 0.0;  // Taxa de perda de pacotes
 float success_rate = 0.0; // Taxa de sucesso de pacotes
 uint32_t total_sent = 0;
 uint32_t total_received = 0;
+float total_cpu_usage_global = 0.0f;
+float cpu_idle_global = 0.0f;
+
+
+#if (CONFIG_FREERTOS_GENERATE_RUN_TIME_STATS == 1)
+#include "esp_timer.h"
+uint32_t get_run_time_counter_value(void)
+{
+    return (uint32_t)(esp_timer_get_time() / 1000ULL); // microsegundos -> milissegundos
+}
+#endif
 
 /*******************************************************
  *                Function Declarations
@@ -108,11 +125,9 @@ uint32_t total_received = 0;
 void mqtt_app_start(void);
 void mqtt_app_publish(char* topic, char *publish_string);
 void metricas(void);
-
 /*******************************************************
  *                Function Definitions
  *******************************************************/
-
 void time_sync_notification_cb(struct timeval *tv)
 {
     ESP_LOGI("NTP", "Time synchronized");
@@ -154,6 +169,7 @@ bool obtain_time(void)
     ESP_LOGI("NTP", "Tempo sincronizado: %s", asctime(&timeinfo));
     return true;
 }
+
 
  // funcao para obter o MAC
  void get_mac_str(char *mac_str, size_t len) {
@@ -235,13 +251,6 @@ void update_packet_counters(uint8_t *mac, uint16_t current_sent) {
 }
 
 
-/* Calcula o tempo de ida e volta (RTT) entre o envio e recebimento de pacotes
-uint32_t calculate_rtt() {
-    if (timestamp_send == 0 || timestamp_recv == 0) return 0;
-
-    // Calcula diferença primeiro, depois converte
-    return (uint32_t)(timestamp_recv - timestamp_send);
-} */ 
 
 
 // Função para calcular CRC-16
@@ -299,12 +308,20 @@ void static recv_cb(mesh_addr_t *from, mesh_data_t *data)
                 float temp, hum;
                 uint16_t sent;
                 uint8_t layer;
+                float temp_interna;
+                size_t free_heap;
+                float total_cpu_usage_global;
+                float cpu_idle_global;
 
                 memcpy(&timestamp, packet->payload, sizeof(uint64_t));
                 memcpy(&temp, packet->payload + 8, sizeof(float));
                 memcpy(&hum, packet->payload + 12, sizeof(float));
                 memcpy(&sent, packet->payload + 16, sizeof(uint16_t));
                 memcpy(&layer, packet->payload + 18, sizeof(uint8_t));
+                memcpy(&temp_interna, packet->payload + 19, sizeof(temp_interna));
+                memcpy(&free_heap, packet->payload + 23, sizeof(free_heap));
+                memcpy(&total_cpu_usage_global, packet->payload + 27, sizeof(total_cpu_usage_global));
+                memcpy(&cpu_idle_global, packet->payload + 31, sizeof(cpu_idle_global));
 
                 uint64_t timestamp_recv = (uint64_t)tv_start.tv_sec * 1000 + tv_start.tv_usec / 1000;
                 uint64_t latency_ms = timestamp_recv - timestamp;
@@ -316,8 +333,8 @@ void static recv_cb(mesh_addr_t *from, mesh_data_t *data)
 
                 char msg[200];
                 snprintf(msg, sizeof(msg),
-                        "{\"mac\":\"%s\",\"temp\":%.2f,\"hum\":%.2f,\"latency_ms\":%" PRIu64 ",\"hops\":%d}",
-                        mac_str, temp, hum, latency_ms, hops);
+                        "{\"mac\":\"%s\",\"temp\":%.2f,\"hum\":%.2f,\"latency_ms\":%" PRIu64 ",\"hops\":%d,\"temp_interna\":%.2f,\"free_heap\":%zu,\"cpu\":%.2f,\"cpu_idle\":%.2f}",
+                        mac_str, temp, hum, latency_ms, hops, temp_interna, free_heap, total_cpu_usage_global, cpu_idle_global);
 
                 mqtt_app_publish("/topic/mesh/sensor", msg);
                 ESP_LOGI(MESH_TAG, "MQTT sensor: %s", msg);
@@ -361,30 +378,6 @@ void static recv_cb(mesh_addr_t *from, mesh_data_t *data)
             }
             break;
         }
-
-        /*case CMD_RTT: {
-            if (esp_mesh_is_root()) {
-                // Responde o pacote de volta para quem enviou
-                mesh_packet_t response;
-                build_packet(&response, CMD_RTT, NULL, 0);
-
-                mesh_data_t data = {
-                    .data = (uint8_t *)&response,
-                    .size = sizeof(mesh_packet_t), 
-                    .proto = MESH_PROTO_BIN,
-                    .tos = MESH_TOS_P2P
-                };
-                esp_mesh_send(from, &data, MESH_DATA_FROMDS, NULL, 0);
-                ESP_LOGI(MESH_TAG, "Pong enviado");
-            } else {
-                // Se sou um nó e recebi o pong, calculo o RTT
-                struct timeval tv_recv;
-                gettimeofday(&tv_recv, NULL);
-                uint64_t timestamp_recv = (uint64_t)tv_recv.tv_sec * 1000 + tv_recv.tv_usec / 1000;
-                metrics.rtt_ms = calculate_rtt();
-            }
-            break;
-        }*/
 
         case CMD_SYNC_TIME: {
             if (packet->num_bytes != sizeof(uint64_t)) break;
@@ -478,6 +471,7 @@ void send_routing_table() {
     free(routing_payload);  // libera o buffer
 }
 
+
 // Envio dados sensores a cada 1 minuto
 static void sensor_send_task(void *args) {
     while (true) {
@@ -493,24 +487,32 @@ static void sensor_send_task(void *args) {
             uint16_t sent = packets_sent;
             uint8_t layer = esp_mesh_get_layer();  // saltos
 
+            float temp_interna = 0.0;
+            ESP_ERROR_CHECK(temperature_sensor_get_celsius(temp_handle, &temp_interna));
+            size_t free_heap = esp_get_free_heap_size();
+
             struct timeval tv_recv;
             gettimeofday(&tv_recv, NULL);
             uint64_t local_ts = (uint64_t)tv_recv.tv_sec * 1000 + tv_recv.tv_usec / 1000;
 
             uint64_t adjusted_ts = local_ts + time_offset; // ms, timestamp ajustado
             
-            uint8_t buffer[20];
-            //uint8_t buffer[PAYLOAD_SIZE];
+            //uint8_t buffer[20];
+            uint8_t buffer[PAYLOAD_SIZE];
 
             memcpy(buffer, &adjusted_ts, sizeof(adjusted_ts));
             memcpy(buffer + 8, &temp, sizeof(temp));
             memcpy(buffer + 12, &hum, sizeof(hum));
             memcpy(buffer + 16, &sent, sizeof(sent)); 
             memcpy(buffer + 18, &layer, sizeof(layer));
+            memcpy(buffer + 19, &temp_interna, sizeof(temp_interna));
+            memcpy(buffer + 23, &free_heap, sizeof(free_heap));
+            memcpy(buffer + 27, &total_cpu_usage_global, sizeof(total_cpu_usage_global));
+            memcpy(buffer + 31, &cpu_idle_global, sizeof(cpu_idle_global));
 
-            /*for (int i = 19; i < PAYLOAD_SIZE; i++) {
+            for (int i = 31; i < PAYLOAD_SIZE; i++) {
                 buffer[i] = 0xAA; 
-            }*/
+            }
 
             mesh_packet_t packet;
             build_packet(&packet, CMD_SENSOR, buffer, sizeof(buffer));
@@ -520,8 +522,8 @@ static void sensor_send_task(void *args) {
             ESP_LOGI(MESH_TAG, "MAC: " MACSTR, MAC2STR(packet.mac));
             ESP_LOGI(MESH_TAG, "ID: %d, Size: %d, CRC: 0x%04X", 
                    packet.id, packet.num_bytes, packet.crc);
-            ESP_LOGI(MESH_TAG, "Payload: TS=%" PRIu64 ", T=%.2f, H=%.2f, Sent=%d, Layer=%d",
-                   adjusted_ts, temp, hum, sent, layer);
+            ESP_LOGI(MESH_TAG, "Payload: TS=%" PRIu64 ", T=%.2f, H=%.2f, Sent=%d, Layer=%d, CPU Idle=%.2f",
+                   adjusted_ts, temp, hum, sent, layer, cpu_idle_global);
 
             mesh_data_t data = {
                 .data  = (uint8_t *)&packet,
@@ -538,7 +540,7 @@ static void sensor_send_task(void *args) {
                 ESP_LOGW(MESH_TAG, "Falha ao enviar dados ao pai: %d", err);
             }
         }
-        vTaskDelay(1 * 60 * 1000 / portTICK_PERIOD_MS);  // a cada 1 minutos
+        vTaskDelay(5 * 60 * 1000 / portTICK_PERIOD_MS);  // a cada 1 minutos
     }
 }
 
@@ -588,13 +590,14 @@ static void metrics_send_task(void *args) {
             metricas();  // atualiza no root
         }
 
-        // Aguarda 1 minuto
-        vTaskDelay(1 * 60 * 1000 / portTICK_PERIOD_MS);
+        // Aguarda 5 minutos
+        vTaskDelay(5 * 60 * 1000 / portTICK_PERIOD_MS);
     }
 }
 
 // Métricas Gerais
 void metricas() {
+
     // Conectividade
     metrics.layer = g_max_mesh_layer;
     metrics.success_rate = success_rate;
@@ -607,10 +610,10 @@ void metricas() {
     // Tempo última troca de pai
     metrics.last_parent_change_ms = reconnection_time;
 
-    // Inicializar outras métricas (implementar conforme necessário)
-    metrics.subtree_size = 0;
-    metrics.retransmission_count = 0;
-    metrics.rtt_ms = 0;
+    float temp_interna_root = 0.0;
+    ESP_ERROR_CHECK(temperature_sensor_get_celsius(temp_handle, &temp_interna_root));
+    size_t free_heap_root = esp_get_free_heap_size();   
+
 
     char payload[512];
     snprintf(payload, sizeof(payload),
@@ -618,21 +621,19 @@ void metricas() {
         "\"layer\":%d,"
         "\"success_rate\":%.2f,"
         "\"packet_loss_rate\":%.2f,"
-        "\"rtt_ms\":%" PRIu32 ","
         "\"children_count\":%d,"
         "\"parent_changes\":%d,"
-        "\"last_parent_change_ms\":%" PRIu64 ","
-        "\"retransmission_count\":%d"
+        "\"last_parent_change_ms\":%" PRIu64
         "}",
         metrics.layer,
         metrics.success_rate,
         metrics.packet_loss_rate,
-        metrics.rtt_ms,
         metrics.children_count,
         metrics.parent_changes,
-        metrics.last_parent_change_ms,
-        metrics.retransmission_count
+        metrics.last_parent_change_ms
     );
+
+
 
     mqtt_app_publish("/topic/mesh/metricas", payload);
     ESP_LOGI(MESH_TAG, "Métricas publicadas: %s", payload);
@@ -648,11 +649,23 @@ void metricas() {
     char mac_str[18];
     get_mac_str(mac_str, sizeof(mac_str));  // Usa sua função existente
 
-    char msg[100];
-    snprintf(msg, sizeof(msg),
-            "{\"mac\":\"%s\",\"rssi\":%d}", mac_str, rssi);
-    mqtt_app_publish("/topic/mesh/rssi", msg);
-    ESP_LOGI(MESH_TAG, "Root publicou seu RSSI: %s", msg);
+    // --- Publica métricas gerais ---
+    char msg_metricas[100];
+    snprintf(msg_metricas, sizeof(msg_metricas),
+            "{\"mac\":\"%s\",\"temp_interna\":%.2f,\"free_heap\":%zu,\"cpu\":%.2f,\"cpu_idle\":%.2f}",
+            mac_str, temp_interna_root, free_heap_root, total_cpu_usage_global, cpu_idle_global);
+    mqtt_app_publish("/topic/mesh/sistema_root", msg_metricas);
+    ESP_LOGI(MESH_TAG, "Root publicou uso cpu: %s", msg_metricas);
+
+    // --- Publica RSSI em tópico separado ---
+    char msg_rssi[50];
+    snprintf(msg_rssi, sizeof(msg_rssi),
+            "{\"mac\":\"%s\",\"rssi\":%d}",
+            mac_str, rssi);
+
+    mqtt_app_publish("/topic/mesh/rssi", msg_rssi);
+    ESP_LOGI(MESH_TAG, "Root publicou RSSI: %s", msg_rssi);
+
 }
 
 // ping_send_task - para medir RTT
@@ -730,7 +743,6 @@ esp_err_t esp_mesh_comm_mqtt_task_start(void)
     if (!is_comm_mqtt_task_started) {
         xTaskCreate(sensor_send_task, "sensor_send_task", 4096, NULL, 8, NULL);
         xTaskCreate(metrics_send_task, "metrics_send_task", 4096, NULL, 5, NULL);
-        //xTaskCreate(ping_send_task, "ping_send_task", 4096, NULL, 7, NULL);
         mqtt_app_start();
         is_comm_mqtt_task_started = true;
     }
@@ -947,6 +959,66 @@ void ip_event_handler(void *arg, esp_event_base_t event_base,
 }
 
 
+// Função para imprimir métricas do sistema
+void print_system_metrics(void)
+{
+    uint32_t free_heap = esp_get_free_heap_size();
+    uint32_t min_free_heap = esp_get_minimum_free_heap_size();
+    UBaseType_t task_count = uxTaskGetNumberOfTasks();
+
+    ESP_LOGI(MESH_TAG, "===== MÉTRICAS DO SISTEMA =====");
+    ESP_LOGI(MESH_TAG, "Heap livre atual: %" PRIu32 " bytes", free_heap);
+    ESP_LOGI(MESH_TAG, "Heap mínimo livre: %" PRIu32 " bytes", min_free_heap);
+    ESP_LOGI(MESH_TAG, "Tarefas em execução: %" PRIu32, (uint32_t)task_count);
+
+    TaskStatus_t *task_status_array = malloc(task_count * sizeof(TaskStatus_t));
+    if (task_status_array == NULL) {
+        ESP_LOGE(MESH_TAG, "Falha ao alocar memória para task_status_array");
+        return;
+    }
+
+    uint32_t total_run_time = 0;
+    task_count = uxTaskGetSystemState(task_status_array, task_count, &total_run_time);
+    if (total_run_time == 0) total_run_time = 1;
+
+    float total_cpu_usage = 0.0f;
+    float idle_cpu_usage = 0.0f;
+
+    for (UBaseType_t i = 0; i < task_count; i++) {
+        float cpu_usage = ((float)task_status_array[i].ulRunTimeCounter * 100.0f) / total_run_time;
+        uint32_t stack_free = task_status_array[i].usStackHighWaterMark;
+
+        total_cpu_usage += cpu_usage;
+
+        // Verifica se é tarefa IDLE (pode ser "IDLE", "IDLE0" ou "IDLE1")
+        if (strstr(task_status_array[i].pcTaskName, "IDLE") != NULL) {
+            idle_cpu_usage += cpu_usage;
+        }
+
+        ESP_LOGI(MESH_TAG, "Tarefa: %s | CPU: %.2f%% | Stack livre: %" PRIu32 " bytes",
+                 task_status_array[i].pcTaskName,
+                 cpu_usage,
+                 stack_free);
+    }
+
+    free(task_status_array);
+
+    // Atualiza variáveis globais
+    cpu_idle_global = idle_cpu_usage;
+    total_cpu_usage_global = 100.0f - cpu_idle_global; // CPU efetivamente usada
+}
+
+
+
+void system_metrics_task(void *pvParameters)
+{
+    while (true) {
+        print_system_metrics();
+        vTaskDelay(pdMS_TO_TICKS(5 * 60000));  // a cada 5 minutos
+    }
+}
+
+
 void app_main(void)
 {
     ESP_ERROR_CHECK(nvs_flash_init());
@@ -991,5 +1063,13 @@ void app_main(void)
     ESP_ERROR_CHECK(esp_mesh_set_self_organized(true, true)); // rede autoconfiguravel (padrao)
     ESP_LOGI(MESH_TAG, "mesh starts successfully, heap:%" PRId32 ", %s\n",  esp_get_free_heap_size(),
              esp_mesh_is_root_fixed() ? "root fixed" : "root not fixed");
+    
+    // Configuração do sensor: faixa típica 10°C a 50°C
+    temperature_sensor_config_t temp_sensor = TEMPERATURE_SENSOR_CONFIG_DEFAULT(10, 50);
+    // Instala o driver
+    ESP_ERROR_CHECK(temperature_sensor_install(&temp_sensor, &temp_handle));
+    // Ativa o sensor
+    ESP_ERROR_CHECK(temperature_sensor_enable(temp_handle));
 
+    xTaskCreate(system_metrics_task, "system_metrics_task", 4096, NULL, 3, NULL);
 }

@@ -1,10 +1,222 @@
 [
     {
+        "id": "59f1d1cf2e279e0a",
+        "type": "tab",
+        "label": "Fluxo 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "tab1",
         "type": "tab",
         "label": "Painel Mesh",
         "disabled": false,
         "info": ""
+    },
+    {
+        "id": "6ec4dcef.913b24",
+        "type": "mqtt-broker",
+        "name": "mosquitto publico",
+        "broker": "mqtt://test.mosquitto.org",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "15",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "mqtt_broker",
+        "type": "mqtt-broker",
+        "name": "Broker MQTT",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "compatmode": false,
+        "protocolVersion": 4,
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "closeTopic": "",
+        "closePayload": "",
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": ""
+    },
+    {
+        "id": "b931a41ca7c16188",
+        "type": "sqlitedb",
+        "db": "C:\\Users\\cgraz\\BD_TCC\\tcc.db",
+        "mode": "RWC"
+    },
+    {
+        "id": "aba_mesh",
+        "type": "ui_tab",
+        "name": "Painel Mesh",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "grupo_rssi",
+        "type": "ui_group",
+        "name": "RSSI",
+        "tab": "aba_mesh",
+        "order": 2,
+        "disp": true,
+        "width": 15,
+        "collapse": false
+    },
+    {
+        "id": "grupo_metrics",
+        "type": "ui_group",
+        "name": "Métricas",
+        "tab": "aba_mesh",
+        "order": 3,
+        "disp": true,
+        "width": 15,
+        "collapse": false
+    },
+    {
+        "id": "grupo_sensores",
+        "type": "ui_group",
+        "name": "Dados Sensores",
+        "tab": "aba_mesh",
+        "order": 1,
+        "disp": true,
+        "width": 15,
+        "collapse": false
+    },
+    {
+        "id": "c43853a14aa4af82",
+        "type": "ui_group",
+        "name": "Ações na Rede",
+        "tab": "aba_mesh",
+        "order": 4,
+        "disp": true,
+        "width": 15,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "d2ac2108109c5796",
+        "type": "ui_base",
+        "theme": {
+            "name": "theme-dark",
+            "lightTheme": {
+                "default": "#0094CE",
+                "baseColor": "#0094CE",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": true,
+                "reset": false
+            },
+            "darkTheme": {
+                "default": "#097479",
+                "baseColor": "#640c19",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": true,
+                "reset": false
+            },
+            "customTheme": {
+                "name": "Untitled Theme 1",
+                "default": "#4B7930",
+                "baseColor": "#4B7930",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+            },
+            "themeState": {
+                "base-color": {
+                    "default": "#097479",
+                    "value": "#640c19",
+                    "edited": true
+                },
+                "page-titlebar-backgroundColor": {
+                    "value": "#640c19",
+                    "edited": false
+                },
+                "page-backgroundColor": {
+                    "value": "#111111",
+                    "edited": false
+                },
+                "page-sidebar-backgroundColor": {
+                    "value": "#333333",
+                    "edited": false
+                },
+                "group-textColor": {
+                    "value": "#a8142a",
+                    "edited": false
+                },
+                "group-borderColor": {
+                    "value": "#555555",
+                    "edited": false
+                },
+                "group-backgroundColor": {
+                    "value": "#333333",
+                    "edited": false
+                },
+                "widget-textColor": {
+                    "value": "#eeeeee",
+                    "edited": false
+                },
+                "widget-backgroundColor": {
+                    "value": "#640c19",
+                    "edited": false
+                },
+                "widget-borderColor": {
+                    "value": "#333333",
+                    "edited": false
+                },
+                "base-font": {
+                    "value": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+                }
+            },
+            "angularTheme": {
+                "primary": "indigo",
+                "accents": "blue",
+                "warn": "red",
+                "background": "grey",
+                "palette": "light"
+            }
+        },
+        "site": {
+            "name": "Node-RED Dashboard",
+            "hideToolbar": "false",
+            "allowSwipe": "false",
+            "lockMenu": "false",
+            "allowTempTheme": "true",
+            "dateFormat": "DD/MM/YYYY",
+            "sizes": {
+                "sx": 100,
+                "sy": 50,
+                "gx": 6,
+                "gy": 6,
+                "cx": 6,
+                "cy": 6,
+                "px": 0,
+                "py": 0
+            }
+        }
     },
     {
         "id": "mqtt_rssi",
@@ -125,16 +337,6 @@
                 }
             },
             {
-                "field": "RTT",
-                "title": "RTT",
-                "width": "",
-                "align": "left",
-                "formatter": "plaintext",
-                "formatterParams": {
-                    "target": "_blank"
-                }
-            },
-            {
                 "field": "Camadas",
                 "title": "Camadas",
                 "width": "",
@@ -167,16 +369,6 @@
             {
                 "field": "Ult. Troca",
                 "title": "Ult. Troca",
-                "width": "",
-                "align": "left",
-                "formatter": "plaintext",
-                "formatterParams": {
-                    "target": "_blank"
-                }
-            },
-            {
-                "field": "Retransmissões",
-                "title": "Retransmissões",
                 "width": "",
                 "align": "left",
                 "formatter": "plaintext",
@@ -325,7 +517,7 @@
         "type": "function",
         "z": "tab1",
         "name": "metricas",
-        "func": "msg.payload = [{\n  \"Camadas\": msg.payload.layer,\n  \"Sucesso\": msg.payload.success_rate,\n  \"Perda\": msg.payload.packet_loss_rate,\n  \"RTT\": msg.payload.rtt_ms,\n  \"Nós na Rede\": msg.payload.children_count,\n  \"Trocas Pai\": msg.payload.parent_changes,\n  \"Ult. Troca\": msg.payload.last_parent_change_ms,\n  \"Retransmissões\": msg.payload.retransmission_count\n}];\nreturn msg;\n\n",
+        "func": "msg.payload = [{\n  \"Camadas\": msg.payload.layer,\n  \"Sucesso\": msg.payload.success_rate,\n  \"Perda\": msg.payload.packet_loss_rate,\n  \"Nós na Rede\": msg.payload.children_count,\n  \"Trocas Pai\": msg.payload.parent_changes,\n  \"Ult. Troca\": msg.payload.last_parent_change_ms\n}];\nreturn msg;\n\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -654,7 +846,7 @@
         "type": "function",
         "z": "tab1",
         "name": "metrics",
-        "func": "const p = msg.payload;\n\nmsg.topic = `INSERT INTO metrics (\n    sucesso, perda, layer, nos, rtt, trocas_pai, ult_troca, retransmissoes\n) VALUES (\n    ${parseFloat(p.success_rate)},\n    ${parseFloat(p.packet_loss_rate)},\n    ${parseInt(p.layer, 10)},\n    ${parseInt(p.children_count, 10)},\n    ${parseInt(p.rtt_ms, 10)},\n    ${parseInt(p.parent_changes, 10)},\n    ${parseInt(p.last_parent_change_ms, 10)},\n    ${parseInt(p.retransmission_count, 10)}\n);`;\n\nreturn msg;\n",
+        "func": "const p = msg.payload;\n\nmsg.topic = `INSERT INTO metrics (\n    sucesso, perda, layer, nos, trocas_pai, ult_troca\n) VALUES (\n    ${parseFloat(p.success_rate)},\n    ${parseFloat(p.packet_loss_rate)},\n    ${parseInt(p.layer, 10)},\n    ${parseInt(p.children_count, 10)},\n    ${parseInt(p.parent_changes, 10)},\n    ${parseInt(p.last_parent_change_ms, 10)}\n);`;\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -751,7 +943,8 @@
         "y": 500,
         "wires": [
             [
-                "4cb3038b43f8a4af"
+                "4cb3038b43f8a4af",
+                "88e23af130b2bd4c"
             ]
         ]
     },
@@ -760,7 +953,7 @@
         "type": "function",
         "z": "tab1",
         "name": "data_sensor",
-        "func": "const payload = msg.payload;\n\n// Extrai e formata os valores\nconst macAddress = payload.mac;\nconst temperature = parseFloat(payload.temp).toFixed(2);\nconst humidity = parseFloat(payload.hum).toFixed(2);\nconst timestamp_ms = (parseInt(payload.latency_ms, 10));  // timestamp enviado pelo nó sensor (campo que você deve incluir)\nconst saltos = payload.hops; \n\nmsg.topic = `INSERT INTO mesh_sensor_data (mac, temperatura, umidade, latencia, hops) VALUES ('${macAddress}', ${temperature}, ${humidity}, ${timestamp_ms}, ${saltos});`;\n\nreturn msg;\n",
+        "func": "const payload = msg.payload;\n\n// Extrai e formata os valores\nconst macAddress = payload.mac;\nconst temperature = parseFloat(payload.temp).toFixed(2);\nconst humidity = parseFloat(payload.hum).toFixed(2);\nconst latency_ms = parseInt(payload.latency_ms, 10);\nconst hops = parseInt(payload.hops, 10);\n\n// Monta o comando SQL para inserir na tabela de sensores\nmsg.topic = `\nINSERT INTO mesh_sensor_data (mac, temperatura, umidade, latencia, hops)\nVALUES ('${macAddress}', ${temperature}, ${humidity}, ${latency_ms}, ${hops});\n`;\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -896,109 +1089,186 @@
         "wires": []
     },
     {
-        "id": "6ec4dcef.913b24",
-        "type": "mqtt-broker",
-        "name": "mosquitto publico",
-        "broker": "mqtt://test.mosquitto.org",
-        "port": "1883",
-        "clientid": "",
-        "autoConnect": true,
-        "usetls": false,
-        "protocolVersion": "4",
-        "keepalive": "15",
-        "cleansession": true,
-        "autoUnsubscribe": true,
-        "birthTopic": "",
-        "birthQos": "0",
-        "birthPayload": "",
-        "birthMsg": {},
-        "closeTopic": "",
-        "closePayload": "",
-        "closeMsg": {},
-        "willTopic": "",
-        "willQos": "0",
-        "willPayload": "",
-        "willMsg": {},
-        "userProps": "",
-        "sessionExpiry": ""
+        "id": "f10e7470d5b9cc85",
+        "type": "mqtt in",
+        "z": "tab1",
+        "name": "",
+        "topic": "/topic/mesh/sistema_root",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "6ec4dcef.913b24",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 1130,
+        "y": 880,
+        "wires": [
+            [
+                "1f551a5c6e85ebf5"
+            ]
+        ]
     },
     {
-        "id": "grupo_rssi",
-        "type": "ui_group",
-        "name": "RSSI",
-        "tab": "aba_mesh",
-        "order": 2,
-        "disp": true,
-        "width": 15,
-        "collapse": false
+        "id": "1f551a5c6e85ebf5",
+        "type": "function",
+        "z": "tab1",
+        "name": "sistema_root",
+        "func": "const payload = msg.payload;\n\n// Extrai e formata os valores\nconst macAddress = payload.mac;\nconst temp_interna = parseFloat(payload.temp_interna).toFixed(2);\nconst free_heap = parseInt(payload.free_heap, 10);\nconst cpu_total = parseFloat(payload.cpu).toFixed(2);\nconst cpu_idle = parseFloat(payload.cpu_idle).toFixed(2);\n\n// Monta o comando SQL para inserir os dados\nmsg.topic = `\nINSERT INTO system_metrics (mac, temp_interna, free_heap, cpu_total, cpu_idle)\nVALUES ('${macAddress}', ${temp_interna}, ${free_heap}, ${cpu_total}, ${cpu_idle});\n`;\n\nreturn msg;\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1390,
+        "y": 900,
+        "wires": [
+            [
+                "a1f578ba9cea857a",
+                "8c520510e9755013"
+            ]
+        ]
     },
     {
-        "id": "grupo_metrics",
-        "type": "ui_group",
-        "name": "Métricas",
-        "tab": "aba_mesh",
-        "order": 3,
-        "disp": true,
-        "width": 15,
-        "collapse": false
+        "id": "a1f578ba9cea857a",
+        "type": "delay",
+        "z": "tab1",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "5",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1630,
+        "y": 900,
+        "wires": [
+            [
+                "f71071bc6b816aae"
+            ]
+        ]
     },
     {
-        "id": "grupo_sensores",
-        "type": "ui_group",
-        "name": "Dados Sensores",
-        "tab": "aba_mesh",
-        "order": 1,
-        "disp": true,
-        "width": 15,
-        "collapse": false
+        "id": "f71071bc6b816aae",
+        "type": "sqlite",
+        "z": "tab1",
+        "mydb": "b931a41ca7c16188",
+        "sqlquery": "msg.topic",
+        "sql": "",
+        "name": "sistema_root",
+        "x": 1810,
+        "y": 900,
+        "wires": [
+            []
+        ]
     },
     {
-        "id": "mqtt_broker",
-        "type": "mqtt-broker",
-        "name": "Broker MQTT",
-        "broker": "localhost",
-        "port": "1883",
-        "clientid": "",
-        "autoConnect": true,
-        "usetls": false,
-        "compatmode": false,
-        "protocolVersion": 4,
-        "keepalive": "60",
-        "cleansession": true,
-        "autoUnsubscribe": true,
-        "birthTopic": "",
-        "birthQos": "0",
-        "birthPayload": "",
-        "closeTopic": "",
-        "closePayload": "",
-        "willTopic": "",
-        "willQos": "0",
-        "willPayload": ""
+        "id": "8c520510e9755013",
+        "type": "debug",
+        "z": "tab1",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1560,
+        "y": 980,
+        "wires": []
     },
     {
-        "id": "c43853a14aa4af82",
-        "type": "ui_group",
-        "name": "Ações na Rede",
-        "tab": "aba_mesh",
-        "order": 4,
-        "disp": true,
-        "width": 15,
-        "collapse": false,
-        "className": ""
+        "id": "88e23af130b2bd4c",
+        "type": "function",
+        "z": "tab1",
+        "name": "metricas_nos_filhos",
+        "func": "const payload = msg.payload;\n\n// Extrai e formata os valores\nconst macAddress = payload.mac;\nconst temp_interna = parseFloat(payload.temp_interna).toFixed(2);\nconst free_heap = parseInt(payload.free_heap, 10);\nconst cpu_total = parseFloat(payload.cpu).toFixed(2);\nconst cpu_idle = parseFloat(payload.cpu_idle).toFixed(2);\n\n// Monta o comando SQL para inserir os dados\nmsg.topic = `\nINSERT INTO system_metrics (mac, temp_interna, free_heap, cpu_total, cpu_idle)\nVALUES ('${macAddress}', ${temp_interna}, ${free_heap}, ${cpu_total}, ${cpu_idle});\n`;\n\nreturn msg;\n\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1260,
+        "y": 720,
+        "wires": [
+            [
+                "d7464d70fb8810a4",
+                "ac0b5811cd7b10e3"
+            ]
+        ]
     },
     {
-        "id": "b931a41ca7c16188",
-        "type": "sqlitedb",
-        "db": "C:/Users/grazi/TCC/rede_mesh.db",
-        "mode": "RWC"
+        "id": "d7464d70fb8810a4",
+        "type": "delay",
+        "z": "tab1",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "5",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1570,
+        "y": 720,
+        "wires": [
+            [
+                "e287d718a0e6cb9d"
+            ]
+        ]
     },
     {
-        "id": "aba_mesh",
-        "type": "ui_tab",
-        "name": "Painel Mesh",
-        "icon": "dashboard",
-        "order": 1,
-        "disabled": false,
-        "hidden": false
+        "id": "e287d718a0e6cb9d",
+        "type": "sqlite",
+        "z": "tab1",
+        "mydb": "b931a41ca7c16188",
+        "sqlquery": "msg.topic",
+        "sql": "",
+        "name": "metricas_nos_filhos",
+        "x": 1820,
+        "y": 720,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ac0b5811cd7b10e3",
+        "type": "debug",
+        "z": "tab1",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1480,
+        "y": 820,
+        "wires": []
+    },
+    {
+        "id": "c76fc1e4c40c8577",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-node-sqlite": "1.1.0",
+            "node-red-dashboard": "3.6.5",
+            "node-red-node-ui-table": "0.4.5"
+        }
     }
 ]

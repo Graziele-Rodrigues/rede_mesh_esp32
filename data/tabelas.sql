@@ -28,3 +28,13 @@ CREATE TABLE mesh_sensor_data (
     latencia INTEGER, 
     hops INTEGER
 );
+
+CREATE TABLE system_metrics (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+    mac TEXT,
+    temp_interna FLOAT,
+    free_heap INTEGER,
+    cpu_total FLOAT,
+    cpu_idle FLOAT
+);
