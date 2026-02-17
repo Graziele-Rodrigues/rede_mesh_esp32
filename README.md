@@ -1,76 +1,271 @@
-# Rede Mesh com MQTT - ESP32
+# ESP32 Wi-Fi Mesh com Coleta de Métricas, Sensores e MQTT
 
-Este código é um exemplo de comunicação interna em uma malha (mesh) utilizando a plataforma **ESP-IDF**. Ele demonstra como criar e gerenciar uma rede mesh, processar eventos de rede, enviar e receber dados entre nós da malha e integrar com o protocolo MQTT para publicação de informações de rede.
+Este projeto implementa uma rede **Wi-Fi Mesh utilizando ESP32**, com coleta de dados de sensores, métricas de rede e sistema, sincronização de tempo via NTP e publicação em um broker MQTT.
 
-## Funcionalidades
+O sistema permite monitorar em tempo real o desempenho da rede mesh, incluindo latência, RSSI, taxa de sucesso, perda de pacotes, uso de CPU e memória.
 
-- **Comunicação entre nós**: Permite a troca de mensagens entre os nós da malha usando protocolos binários.
-- **Detecção de pressionamento de botão**: Quando um botão é pressionado, o nó envia uma mensagem de evento para outros nós na malha, informando que o botão foi acionado.
-- **Tabela de Roteamento**: O código envia periodicamente a tabela de roteamento de cada nó para os outros nós e para um servidor MQTT.
-- **Integração com MQTT**: Publica informações sobre o estado da rede, como o IP atual, a tabela de roteamento e métricas de desempenho, para um broker MQTT.
+## 📌 Funcionalidades
 
-## Estrutura do Código
+* Criação de rede Wi-Fi Mesh com ESP32
+* Comunicação entre nós utilizando protocolo personalizado
+* Publicação de dados via MQTT
+* Coleta de métricas da rede:
 
-### Principais Componentes
+  * RSSI
+  * Latência
+  * Número de saltos (hops)
+  * Taxa de entrega e perda de pacotes
+  * Número de filhos
+  * Trocas de nó pai
+* Monitoramento do sistema:
 
-1. **Funções de comunicação**:
-   - `update_parent_rssi()`: Atualiza e publica o valor RSSI do nó pai (indicando a qualidade do sinal entre nós).
-   - `send_with_timestamp()`: Envia dados com um timestamp, permitindo o cálculo da latência de comunicação.
-   - `calculate_latency()`: Calcula e publica a latência entre nós.
-   - `calculate_success_rate()`: Calcula a taxa de sucesso de envio de pacotes e publica.
-   - `calculate_packet_loss()`: Calcula e publica a taxa de perda de pacotes.
-   - `publish_network_load()`: Publica a carga de rede, incluindo os bytes enviados e recebidos.
-   - `publish_hops()`: Publica o número de saltos (hops) na rede mesh.
-   - `send_routing_table()`: Envia a tabela de roteamento para os outros nós da rede mesh.
+  * Temperatura interna do ESP32
+  * Memória heap livre
+  * Uso de CPU
+* Sincronização de tempo via SNTP/NTP
+* Sincronização de horário entre os nós da malha
+* CRC-16 para integridade dos dados
+* Tabela de roteamento da mesh
 
-2. **Função de Botão**:
-   - `check_button()`: Monitora um botão configurado e, ao ser pressionado, envia uma mensagem via MQTT e propaga o evento para outros nós na rede.
 
-3. **MQTT**:
-   - A tarefa `esp_mesh_mqtt_task()` publica periodicamente informações de rede (como IP, tabela de roteamento e métricas) para um broker MQTT.
+## 🧱 Arquitetura da Rede
 
-### Comandos de Comunicação
+A rede é composta por três tipos de nós:
 
-- **CMD_KEYPRESSED (0x55)**: Envia um evento indicando que um botão foi pressionado. O payload contém o endereço MAC do nó que enviou o evento.
-- **CMD_ROUTE_TABLE (0x56)**: Envia a tabela de roteamento da malha. O payload é uma lista de endereços MAC de todos os nós na tabela.
+* **Root node**
 
-## Como Usar
+  * Conectado ao Wi-Fi e MQTT broker
+  * Recebe dados dos demais nós
+  * Publica dados no MQTT
+  * Sincroniza o horário
 
-### 1. Configuração do ambiente
+* **Intermediate nodes**
 
-Certifique-se de ter o **ESP-IDF** instalado em seu sistema. Para isso, siga as instruções na [documentação oficial](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/index.html).
+  * Roteiam dados
+  * Enviam métricas e sensores
 
-### 2. Compilação e Flash
+* **Leaf nodes**
 
-- Compile o código com o comando:
-  ```bash
-  idf.py build
-  ```
-- Faça o upload do firmware para o dispositivo com:
-  ```bash
-  idf.py -p PORT flash
-  ```
+  * Enviam dados de sensores
+  * Não possuem filhos
 
-### 3. Monitoramento
+---
 
-Use o comando a seguir para monitorar a saída do dispositivo:
+## 📡 Estrutura do Pacote
 
-```bash
-idf.py -p PORT monitor
+O protocolo utiliza a seguinte estrutura:
+
+```c
+typedef struct {
+    uint8_t mac[6];
+    uint8_t id;
+    uint16_t num_bytes;
+    uint8_t payload[1024];
+    uint16_t crc;
+} mesh_packet_t;
 ```
 
-Isso permitirá que você visualize as mensagens enviadas e recebidas, como a tabela de roteamento e a detecção de eventos de pressionamento de botão.
+Tipos de comando:
 
-### 4. Teste do Botão
+| ID              | Descrição              |
+| --------------- | ---------------------- |
+| CMD_SENSOR      | Dados de sensor        |
+| CMD_METRICS     | Métricas RSSI e pai    |
+| CMD_ROUTE_TABLE | Tabela de roteamento   |
+| CMD_SYNC_TIME   | Sincronização de tempo |
+| CMD_RTT         | Medição de RTT         |
 
-Ao pressionar o botão configurado no dispositivo, um evento será enviado para todos os nós da malha. A tabela de roteamento será publicada periodicamente pelo nó raiz, e as métricas de rede, como latência e taxa de sucesso, serão enviadas para o broker MQTT.
+---
 
-## Exemplo de Uso
+## 📊 Dados Publicados no MQTT
 
-Quando o botão configurado é pressionado, um evento será enviado para todos os nós da malha. As informações da rede, como o IP e a tabela de roteamento, serão periodicamente publicadas no broker MQTT. O código também calcula e publica métricas importantes da rede, como a latência de comunicação, taxa de sucesso de pacotes e carga de rede.
+### Sensor
 
-## Considerações
+Tópico:
 
-- Certifique-se de configurar corretamente o MQTT para que os tópicos possam ser acessados e visualizados corretamente.
-- A comunicação entre os nós é feita de forma transparente utilizando a rede Mesh, sem a necessidade de configurações adicionais.
-- A publicação de dados de rede é feita em intervalos regulares (5 segundos), mas pode ser ajustada conforme necessário.
+```
+/topic/mesh/sensor
+```
+
+Exemplo:
+
+```json
+{
+  "mac":"24:6f:28:aa:bb:cc",
+  "temp":25.3,
+  "hum":60.1,
+  "latency_ms":45,
+  "hops":2,
+  "temp_interna":36.2,
+  "free_heap":198432,
+  "cpu":23.5,
+  "cpu_idle":76.5
+}
+```
+
+---
+
+### RSSI
+
+```
+/topic/mesh/rssi
+```
+
+---
+
+### Métricas da rede
+
+```
+/topic/mesh/metricas
+```
+
+Exemplo:
+
+```json
+{
+  "layer":3,
+  "success_rate":98.2,
+  "packet_loss_rate":1.8,
+  "children_count":4,
+  "parent_changes":2,
+  "last_parent_change_ms":1500
+}
+```
+
+
+### Sistema Root
+
+```
+/topic/mesh/sistema_root
+```
+
+
+## ⏱ Frequência de envio
+
+| Tipo                   | Intervalo |
+| ---------------------- | --------- |
+| Sensor                 | 5 minutos |
+| Métricas               | 5 minutos |
+| Sincronização de tempo | 1 minuto  |
+
+
+## 🧮 Métricas calculadas
+
+* Taxa de sucesso:
+
+```
+success_rate = total_received / total_sent
+```
+
+* Perda de pacotes:
+
+```
+packet_loss = 100 − success_rate
+```
+
+* Latência:
+
+```
+latency = timestamp_recebido − timestamp_enviado
+```
+
+
+## 🕒 Sincronização de Tempo
+
+O nó root sincroniza com NTP:
+
+```
+pool.ntp.org
+```
+
+E distribui o horário para todos os nós da malha.
+
+
+## 🔐 Integridade dos dados
+
+Utiliza CRC-16 (MODBUS):
+
+```c
+uint16_t calculate_crc16(...)
+```
+
+---
+
+## 🧵 Tasks FreeRTOS utilizadas
+
+| Task              | Função               |
+| ----------------- | -------------------- |
+| sensor_send_task  | envia dados sensores |
+| metrics_send_task | envia métricas       |
+| sync_time_task    | sincroniza horário   |
+| ping_send_task    | mede RTT             |
+
+---
+
+## ⚙️ Requisitos
+
+### Hardware
+
+* ESP32 (qualquer versão compatível com ESP-MESH)
+* Sensor interno de temperatura (built-in ESP32)
+
+### Software
+
+* ESP-IDF v5.x ou superior
+* MQTT broker (ex: Mosquitto)
+* Wi-Fi
+
+
+## 📦 Dependências ESP-IDF
+
+Bibliotecas utilizadas:
+
+```
+esp_wifi
+esp_mesh
+esp_event
+esp_netif
+esp_sntp
+mqtt
+freertos
+nvs_flash
+driver
+```
+
+
+## 🚀 Como usar
+
+### 1. Configurar ESP-IDF
+
+```bash
+idf.py menuconfig
+```
+
+Configure:
+
+* WiFi SSID
+* WiFi Password
+* MQTT broker
+
+
+### 2. Compilar
+
+```bash
+idf.py build
+```
+
+### 3. Gravar no ESP32
+
+```bash
+idf.py flash monitor
+```
+
+
+## 📈 Aplicações
+
+* Monitoramento de redes IoT
+* Redes industriais (IIoT)
+* Sistemas distribuídos
+* Redes resilientes
+* Pesquisa acadêmica em redes mesh
+
